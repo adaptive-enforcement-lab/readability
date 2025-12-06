@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.6.0...0.7.0) (2025-12-06)
+
+
+### Features
+
+* add floating version tag aliases after release ([#31](https://github.com/adaptive-enforcement-lab/readability/issues/31)) ([733cf04](https://github.com/adaptive-enforcement-lab/readability/commit/733cf04a51602019fbb9d1a884473b8c64277caa))
+
 ## [0.6.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.5.0...0.6.0) (2025-12-06)
 
 
