@@ -11,6 +11,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// version is set via ldflags at build time
+var version = "dev"
+
 var (
 	formatFlag   string
 	verboseFlag  bool
@@ -23,9 +26,10 @@ var (
 
 func main() {
 	rootCmd := &cobra.Command{
-		Use:   "readability [path]",
-		Short: "Analyze markdown documentation for readability and structure",
-		Long: `A tool for analyzing documentation quality, readability, and structure.
+		Use:     "readability [path]",
+		Short:   "Analyze markdown documentation for readability and structure",
+		Version: version,
+		Long:    `A tool for analyzing documentation quality, readability, and structure.
 
 Computes readability metrics (Flesch-Kincaid, ARI, Coleman-Liau, etc.),
 structural analysis (headings, line counts), and content composition.
