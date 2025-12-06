@@ -129,11 +129,12 @@ runs:
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
 
-        # Generate formatted markdown table
-        MARKDOWN_TABLE=$(echo "$OUTPUT" | jq -r '
-          "| File | Grade | ARI | Fog | Ease | Status |",
-          "|------|-------|-----|-----|------|--------|",
-          (.[] | "| \(.file) | \(.readability.flesch_kincaid_grade | . * 10 | round / 10) | \(.readability.ari | . * 10 | round / 10) | \(.readability.gunning_fog | . * 10 | round / 10) | \(.readability.flesch_reading_ease | . * 10 | round / 10) | \(.status) |")
+        # Generate formatted markdown table with metric links to docs
+        DOCS_BASE="https://readability.adaptive-enforcement-lab.com/latest/metrics"
+        MARKDOWN_TABLE=$(echo "$OUTPUT" | jq -r --arg docs "$DOCS_BASE" '
+          "| File | Lines | Read | [Grade](\($docs)/grade-level/#flesch-kincaid-grade-level) | [ARI](\($docs)/grade-level/#ari-automated-readability-index) | [Fog](\($docs)/grade-level/#gunning-fog-index) | [Ease](\($docs)/flesch-reading-ease/) | Status |",
+          "|------|------:|-----:|------:|----:|----:|-----:|--------|",
+          (.[] | "| \(.file) | \(.structural.lines) | \(if .structural.words < 200 then "<1m" else "\(.structural.words / 200 | floor)m" end) | \(.readability.flesch_kincaid_grade | . * 10 | round / 10) | \(.readability.ari | . * 10 | round / 10) | \(.readability.gunning_fog | . * 10 | round / 10) | \(.readability.flesch_reading_ease | . * 10 | round / 10) | \(.status) |")
         ' 2>/dev/null || echo "$OUTPUT")
 
         # Write to job summary if enabled
