@@ -35,6 +35,14 @@ inputs:
     description: 'Maximum lines per file'
     required: false
     default: ''
+  summary:
+    description: 'Write formatted report to job summary (default: true)'
+    required: false
+    default: 'true'
+  summary-title:
+    description: 'Title for the job summary section'
+    required: false
+    default: 'Documentation Readability Report'
 
 outputs:
   report:
@@ -121,18 +129,32 @@ runs:
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
 
-        # Generate formatted output for display
+        # Generate formatted markdown table
+        MARKDOWN_TABLE=$(echo "$OUTPUT" | jq -r '
+          "| File | Grade | ARI | Fog | Ease | Status |",
+          "|------|-------|-----|-----|------|--------|",
+          (.[] | "| \(.file) | \(.readability.flesch_kincaid_grade | . * 10 | round / 10) | \(.readability.ari | . * 10 | round / 10) | \(.readability.gunning_fog | . * 10 | round / 10) | \(.readability.flesch_reading_ease | . * 10 | round / 10) | \(.status) |")
+        ' 2>/dev/null || echo "$OUTPUT")
+
+        # Write to job summary if enabled
+        if [ "${{ inputs.summary }}" = "true" ] && [ -n "$GITHUB_STEP_SUMMARY" ]; then
+          {
+            echo "## ${{ inputs.summary-title }}"
+            echo ""
+            echo "$MARKDOWN_TABLE"
+            echo ""
+            echo "_Files analyzed: ${FILES_ANALYZED} | Passed: $((FILES_ANALYZED - FAILED_COUNT)) | Failed: ${FAILED_COUNT}_"
+          } >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        # Generate formatted output for display (stdout)
         FORMAT="${{ inputs.format }}"
         case "$FORMAT" in
           json)
             echo "$OUTPUT"
             ;;
           markdown|report)
-            echo "$OUTPUT" | jq -r '
-              "| File | Grade | ARI | Fog | Ease | Status |",
-              "|------|-------|-----|-----|------|--------|",
-              (.[] | "| \(.file) | \(.readability.flesch_kincaid_grade | . * 10 | round / 10) | \(.readability.ari | . * 10 | round / 10) | \(.readability.gunning_fog | . * 10 | round / 10) | \(.readability.flesch_reading_ease | . * 10 | round / 10) | \(.status) |")
-            ' 2>/dev/null || echo "$OUTPUT"
+            echo "$MARKDOWN_TABLE"
             ;;
           summary)
             echo "$OUTPUT" | jq -r '
