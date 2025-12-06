@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.4.0...0.5.0) (2025-12-06)
+
+
+### Features
+
+* enhance summary table with lines, reading time, and metric links ([#25](https://github.com/adaptive-enforcement-lab/readability/issues/25)) ([cf62405](https://github.com/adaptive-enforcement-lab/readability/commit/cf62405c31cafe4663df46c017c2fca52762eeaa))
+
 ## [0.4.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.3.2...0.4.0) (2025-12-06)
 
 
