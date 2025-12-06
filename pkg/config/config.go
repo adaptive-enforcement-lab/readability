@@ -101,7 +101,7 @@ func FindConfigFile(startDir string) string {
 
 // ThresholdsForPath returns the appropriate thresholds for a given file path.
 func (c *Config) ThresholdsForPath(filePath string) Thresholds {
-	// Normalize path separators and strip relative prefixes
+	// Normalize path separators
 	normalizedPath := filepath.ToSlash(filePath)
 
 	// Strip leading ../ sequences (for when running from subdirectory)
@@ -114,7 +114,10 @@ func (c *Config) ThresholdsForPath(filePath string) Thresholds {
 	// Check overrides in order (first match wins)
 	for _, override := range c.Overrides {
 		overridePath := filepath.ToSlash(override.Path)
-		if strings.HasPrefix(normalizedPath, overridePath) {
+		// Check if override path appears anywhere in the file path
+		// This handles both relative paths (docs/guide.md) and
+		// absolute paths (/home/runner/work/repo/docs/guide.md)
+		if strings.HasPrefix(normalizedPath, overridePath) || strings.Contains(normalizedPath, "/"+overridePath) {
 			// Merge with defaults - override only specified values
 			return mergeThresholds(c.Thresholds, override.Thresholds)
 		}
@@ -124,8 +127,10 @@ func (c *Config) ThresholdsForPath(filePath string) Thresholds {
 }
 
 // mergeThresholds returns base thresholds with non-zero override values applied.
-// Note: MinEase uses != 0 to allow negative values (for disabling the check).
-// Note: MinAdmonitions uses != 0 to allow explicit 0 (for disabling the check).
+// Zero values in the override are treated as "not specified" and inherit from base.
+// To explicitly disable a check via override, use a negative value:
+//   - MinEase: use any negative value (e.g., -100) to allow very low readability
+//   - MinAdmonitions: use -1 to disable the admonition requirement
 func mergeThresholds(base, override Thresholds) Thresholds {
 	result := base
 	if override.MaxGrade > 0 {
