@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.8.0...0.9.0) (2025-12-06)
+
+
+### Features
+
+* add MkDocs-style admonition detection and threshold check ([#47](https://github.com/adaptive-enforcement-lab/readability/issues/47)) ([9a41aac](https://github.com/adaptive-enforcement-lab/readability/commit/9a41aac9004438bc3ef3542d0573c33aa5a9ff33))
+
 ## [0.8.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.7.2...0.8.0) (2025-12-06)
 
 
