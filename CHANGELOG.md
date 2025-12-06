@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.7.2...0.8.0) (2025-12-06)
+
+
+### Features
+
+* add readability improvement hints on check failure ([2d5fc16](https://github.com/adaptive-enforcement-lab/readability/commit/2d5fc169cd12a6b66ed9bc8164b9026e81a55219))
+* add warning to split files instead of removing content ([035ebed](https://github.com/adaptive-enforcement-lab/readability/commit/035ebed63245dd5e2085014a2df07b4aea1e2bb8))
+
 ## [0.7.2](https://github.com/adaptive-enforcement-lab/readability/compare/0.7.1...0.7.2) (2025-12-06)
 
 
