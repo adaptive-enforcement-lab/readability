@@ -38,11 +38,14 @@ inputs:
 
 outputs:
   report:
-    description: 'Analysis report in specified format'
+    description: 'Analysis report in JSON format'
+    value: ${{ steps.analyze.outputs.report }}
   passed:
     description: 'Whether all thresholds were met (true/false)'
+    value: ${{ steps.analyze.outputs.passed }}
   files-analyzed:
     description: 'Number of files analyzed'
+    value: ${{ steps.analyze.outputs.files-analyzed }}
 
 runs:
   using: 'composite'
