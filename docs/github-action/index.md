@@ -30,6 +30,7 @@ jobs:
 - Multiple output formats
 - Threshold enforcement
 - Configuration file support
+- Automatic job summary with clickable metric links
 
 ## Next Steps
 
