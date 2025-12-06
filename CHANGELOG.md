@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/adaptive-enforcement-lab/readability/compare/v0.3.0...0.3.1) (2025-12-06)
+
+
+### Maintenance
+
+* remove v prefix from release tags ([#18](https://github.com/adaptive-enforcement-lab/readability/issues/18)) ([b431939](https://github.com/adaptive-enforcement-lab/readability/commit/b43193980346a87efa000977bc94523ac63cd9a4))
+* rename CI to Build and run on PRs only ([#17](https://github.com/adaptive-enforcement-lab/readability/issues/17)) ([8f9c13e](https://github.com/adaptive-enforcement-lab/readability/commit/8f9c13e485336f56c24d320cd75ea3fed35532b5))
+
 ## [0.3.0](https://github.com/adaptive-enforcement-lab/readability/compare/v0.2.0...v0.3.0) (2025-12-06)
 
 
