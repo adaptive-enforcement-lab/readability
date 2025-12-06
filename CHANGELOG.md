@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.3.2...0.4.0) (2025-12-06)
+
+
+### Features
+
+* add automatic job summary generation ([#23](https://github.com/adaptive-enforcement-lab/readability/issues/23)) ([315d631](https://github.com/adaptive-enforcement-lab/readability/commit/315d6317f6bbd6c28ea4c0276b99e5faa76deb30)), closes [#22](https://github.com/adaptive-enforcement-lab/readability/issues/22)
+
 ## [0.3.2](https://github.com/adaptive-enforcement-lab/readability/compare/0.3.1...0.3.2) (2025-12-06)
 
 
