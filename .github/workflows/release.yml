@@ -214,6 +214,18 @@ jobs:
         run: |
           mike deploy --push dev
 
+      - name: Ensure CNAME file
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          if [ ! -f CNAME ]; then
+            echo "readability.adaptive-enforcement-lab.com" > CNAME
+            git add CNAME
+            git commit -m "chore: add CNAME for custom domain"
+            git push origin gh-pages
+          fi
+          git checkout main
+
   release-status:
     name: Release Status
     runs-on: ubuntu-latest
