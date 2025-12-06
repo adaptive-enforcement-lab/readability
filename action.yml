@@ -65,11 +65,15 @@ runs:
       run: |
         ARGS=""
 
+        # Auto-detect config file if not specified
         if [ -n "${{ inputs.config }}" ]; then
           ARGS="$ARGS --config ${{ inputs.config }}"
+        elif [ -f ".readability.yml" ]; then
+          ARGS="$ARGS --config .readability.yml"
         fi
 
-        ARGS="$ARGS --format ${{ inputs.format }}"
+        # Always use JSON for capturing outputs, then convert for display
+        ARGS="$ARGS --format json"
 
         if [ "${{ inputs.check }}" = "true" ]; then
           ARGS="$ARGS --check"
@@ -87,4 +91,57 @@ runs:
           ARGS="$ARGS --max-lines ${{ inputs.max-lines }}"
         fi
 
-        ${{ github.action_path }}/readability $ARGS ${{ inputs.path }}
+        # Run analysis and capture output
+        set +e
+        OUTPUT=$(${{ github.action_path }}/readability $ARGS ${{ inputs.path }} 2>&1)
+        EXIT_CODE=$?
+        set -e
+
+        # Parse JSON output for metrics
+        FILES_ANALYZED=$(echo "$OUTPUT" | jq -r 'if type == "array" then length else 0 end' 2>/dev/null || echo "0")
+        FAILED_COUNT=$(echo "$OUTPUT" | jq -r '[.[] | select(.status == "fail")] | length' 2>/dev/null || echo "0")
+
+        if [ "$FAILED_COUNT" -eq 0 ]; then
+          PASSED="true"
+        else
+          PASSED="false"
+        fi
+
+        # Set outputs
+        echo "files-analyzed=$FILES_ANALYZED" >> "$GITHUB_OUTPUT"
+        echo "passed=$PASSED" >> "$GITHUB_OUTPUT"
+
+        # Store full report
+        {
+          echo "report<<EOF"
+          echo "$OUTPUT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+        # Generate formatted output for display
+        FORMAT="${{ inputs.format }}"
+        case "$FORMAT" in
+          json)
+            echo "$OUTPUT"
+            ;;
+          markdown|report)
+            echo "$OUTPUT" | jq -r '
+              "| File | Grade | ARI | Fog | Ease | Status |",
+              "|------|-------|-----|-----|------|--------|",
+              (.[] | "| \(.file) | \(.readability.flesch_kincaid_grade | . * 10 | round / 10) | \(.readability.ari | . * 10 | round / 10) | \(.readability.gunning_fog | . * 10 | round / 10) | \(.readability.flesch_reading_ease | . * 10 | round / 10) | \(.status) |")
+            ' 2>/dev/null || echo "$OUTPUT"
+            ;;
+          summary)
+            echo "$OUTPUT" | jq -r '
+              "Files analyzed: \(length)",
+              "Passed: \([.[] | select(.status == "pass")] | length)",
+              "Failed: \([.[] | select(.status == "fail")] | length)"
+            ' 2>/dev/null || echo "$OUTPUT"
+            ;;
+          *)
+            echo "$OUTPUT" | jq -r '.[] | "\(.file): Grade=\(.readability.flesch_kincaid_grade | . * 10 | round / 10), Status=\(.status)"' 2>/dev/null || echo "$OUTPUT"
+            ;;
+        esac
+
+        # Exit with original code to respect --check
+        exit $EXIT_CODE

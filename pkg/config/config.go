@@ -68,12 +68,15 @@ func LoadOrDefault(path string) *Config {
 	return cfg
 }
 
-// FindConfigFile searches for .content-analyzer.yml in the given directory
+// ConfigFileName is the default configuration file name.
+const ConfigFileName = ".readability.yml"
+
+// FindConfigFile searches for .readability.yml in the given directory
 // and parent directories up to the git root.
 func FindConfigFile(startDir string) string {
 	dir := startDir
 	for {
-		configPath := filepath.Join(dir, ".content-analyzer.yml")
+		configPath := filepath.Join(dir, ConfigFileName)
 		if _, err := os.Stat(configPath); err == nil {
 			return configPath
 		}
@@ -81,11 +84,7 @@ func FindConfigFile(startDir string) string {
 		// Check for git root (stop searching)
 		gitDir := filepath.Join(dir, ".git")
 		if _, err := os.Stat(gitDir); err == nil {
-			// We're at git root, check one more time then stop
-			configPath := filepath.Join(dir, ".content-analyzer.yml")
-			if _, err := os.Stat(configPath); err == nil {
-				return configPath
-			}
+			// We're at git root, already checked above
 			return ""
 		}
 
