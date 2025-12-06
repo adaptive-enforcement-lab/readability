@@ -17,7 +17,7 @@ Add to your `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/adaptive-enforcement-lab/readability
-    rev: 0.5.0  # Use latest release
+    rev: 0.6.0  # Use latest release
     hooks:
       - id: readability
         # Optionally check only docs/ directory:
