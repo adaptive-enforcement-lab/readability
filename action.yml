@@ -1,0 +1,93 @@
+name: 'Readability'
+description: 'Analyze documentation readability and content quality metrics'
+author: 'Adaptive Enforcement Lab'
+
+branding:
+  icon: 'book-open'
+  color: 'blue'
+
+inputs:
+  path:
+    description: 'Path to analyze (file or directory)'
+    required: false
+    default: 'docs/'
+  format:
+    description: 'Output format (table, markdown, json)'
+    required: false
+    default: 'markdown'
+  config:
+    description: 'Path to config file'
+    required: false
+    default: ''
+  check:
+    description: 'Enable check mode (fail on threshold violations)'
+    required: false
+    default: 'false'
+  threshold-flesch:
+    description: 'Minimum Flesch Reading Ease score'
+    required: false
+    default: '30'
+  threshold-grade:
+    description: 'Maximum grade level'
+    required: false
+    default: '12'
+  threshold-words:
+    description: 'Maximum words per file'
+    required: false
+    default: '3000'
+  recursive:
+    description: 'Analyze directories recursively'
+    required: false
+    default: 'true'
+
+outputs:
+  report:
+    description: 'Analysis report in specified format'
+  passed:
+    description: 'Whether all thresholds were met (true/false)'
+  files-analyzed:
+    description: 'Number of files analyzed'
+  average-flesch:
+    description: 'Average Flesch Reading Ease score'
+  average-grade:
+    description: 'Average grade level'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+        cache: false
+
+    - name: Build readability
+      shell: bash
+      run: |
+        cd ${{ github.action_path }}
+        go build -o readability ./cmd/readability
+
+    - name: Run analysis
+      id: analyze
+      shell: bash
+      run: |
+        ARGS=""
+
+        if [ -n "${{ inputs.config }}" ]; then
+          ARGS="$ARGS --config ${{ inputs.config }}"
+        fi
+
+        ARGS="$ARGS --format ${{ inputs.format }}"
+
+        if [ "${{ inputs.recursive }}" = "true" ]; then
+          ARGS="$ARGS --recursive"
+        fi
+
+        if [ "${{ inputs.check }}" = "true" ]; then
+          ARGS="$ARGS --check"
+          ARGS="$ARGS --threshold-flesch ${{ inputs.threshold-flesch }}"
+          ARGS="$ARGS --threshold-grade ${{ inputs.threshold-grade }}"
+          ARGS="$ARGS --threshold-words ${{ inputs.threshold-words }}"
+        fi
+
+        ${{ github.action_path }}/readability $ARGS ${{ inputs.path }}
