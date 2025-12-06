@@ -149,11 +149,15 @@ func run(cmd *cobra.Command, args []string) error {
 	if checkFlag {
 		failed := 0
 		tooLong := 0
+		lowReadability := 0
 		for _, r := range results {
 			if r.Status == "fail" {
 				failed++
 				if r.Structural.Lines > 375 {
 					tooLong++
+				}
+				if r.Readability.FleschKincaidGrade > 14 || r.Readability.ARI > 14 || r.Readability.FleschReadingEase < 30 {
+					lowReadability++
 				}
 			}
 		}
@@ -162,6 +166,16 @@ func run(cmd *cobra.Command, args []string) error {
 				fmt.Fprintln(os.Stderr, "")
 				fmt.Fprintln(os.Stderr, "IMPORTANT: Files exceeding line limits should be SPLIT into smaller documents.")
 				fmt.Fprintln(os.Stderr, "Do NOT remove content to meet thresholds. Split logically by topic or section.")
+				fmt.Fprintln(os.Stderr, "")
+			}
+			if lowReadability > 0 {
+				fmt.Fprintln(os.Stderr, "")
+				fmt.Fprintln(os.Stderr, "READABILITY: High grade level indicates complex sentence structure or dense vocabulary.")
+				fmt.Fprintln(os.Stderr, "- Break long sentences into shorter ones (aim for 15-20 words per sentence)")
+				fmt.Fprintln(os.Stderr, "- Replace jargon with plain language where possible")
+				fmt.Fprintln(os.Stderr, "- Add brief introductory sentences before bullet lists, code blocks, or admonitions")
+				fmt.Fprintln(os.Stderr, "- Use transitional phrases to connect dense technical sections")
+				fmt.Fprintln(os.Stderr, "Do NOT remove technical content. Rewrite for clarity while preserving accuracy.")
 				fmt.Fprintln(os.Stderr, "")
 			}
 			return fmt.Errorf("%d file(s) failed readability checks", failed)
