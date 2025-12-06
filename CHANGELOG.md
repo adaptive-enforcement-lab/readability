@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/adaptive-enforcement-lab/readability/compare/0.3.1...0.3.2) (2025-12-06)
+
+
+### Bug Fixes
+
+* add value mappings for composite action outputs ([#20](https://github.com/adaptive-enforcement-lab/readability/issues/20)) ([99cfb35](https://github.com/adaptive-enforcement-lab/readability/commit/99cfb35f4c469dd3d60d0f450dc98ab6477b1c21))
+
 ## [0.3.1](https://github.com/adaptive-enforcement-lab/readability/compare/v0.3.0...0.3.1) (2025-12-06)
 
 
