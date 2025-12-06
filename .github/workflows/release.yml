@@ -214,10 +214,43 @@ jobs:
         run: |
           mike deploy --push dev
 
+  update-tags:
+    name: Update Tag Aliases
+    runs-on: ubuntu-latest
+    needs: [release-please, upload-release-assets]
+    if: needs.release-please.outputs.release_created == 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update floating version tags
+        run: |
+          MAJOR="${{ needs.release-please.outputs.major }}"
+          TAG_NAME="${{ needs.release-please.outputs.tag_name }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Update major version tag (e.g., 0 -> 0.6.0)
+          git tag -fa "${MAJOR}" "${TAG_NAME}" -m "Alias for ${TAG_NAME}"
+          git push origin "${MAJOR}" --force
+
+          # Update 'latest' tag
+          git tag -fa "latest" "${TAG_NAME}" -m "Alias for ${TAG_NAME}"
+          git push origin "latest" --force
+
+          echo "## Tag Aliases Updated" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Alias | Points To |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|-----------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| ${MAJOR} | ${TAG_NAME} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| latest | ${TAG_NAME} |" >> "$GITHUB_STEP_SUMMARY"
+
   release-status:
     name: Release Status
     runs-on: ubuntu-latest
-    needs: [release-please, detect-changes, build-go, upload-release-assets, build-docs]
+    needs: [release-please, detect-changes, build-go, upload-release-assets, build-docs, update-tags]
     if: always()
     steps:
       - name: Check release results
