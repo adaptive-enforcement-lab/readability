@@ -730,6 +730,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#job_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_table_columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary Table Columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disabling_the_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disabling the Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom_title" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Title
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1153,6 +1203,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#job_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Job Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_table_columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary Table Columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disabling_the_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disabling the Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom_title" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Title
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1264,6 +1364,16 @@
 <td>Maximum lines per file</td>
 <td>(from config)</td>
 </tr>
+<tr>
+<td><code>summary</code></td>
+<td>Write formatted report to job summary</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>summary-title</code></td>
+<td>Title for the job summary section</td>
+<td><code>Documentation Readability Report</code></td>
+</tr>
 </tbody>
 </table>
 <h2 id="outputs">Outputs<a class="headerlink" href="#outputs" title="Link">&para;</a></h2>
@@ -1324,6 +1434,67 @@
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">max-grade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">max-ari</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span>
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">max-lines</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">summary-title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Documentation Readability Report</span>
+</span></code></pre></div>
+<h2 id="job_summary">Job Summary<a class="headerlink" href="#job_summary" title="Link">&para;</a></h2>
+<p>The action automatically writes a formatted report to the GitHub Actions job summary. This is enabled by default (<code>summary: true</code>).</p>
+<h3 id="summary_table_columns">Summary Table Columns<a class="headerlink" href="#summary_table_columns" title="Link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>File</strong></td>
+<td>Path to the analyzed file</td>
+</tr>
+<tr>
+<td><strong>Lines</strong></td>
+<td>Number of lines in the file</td>
+</tr>
+<tr>
+<td><strong>Read</strong></td>
+<td>Estimated reading time (e.g., <code>&lt;1m</code>, <code>2m</code>, <code>5m</code>)</td>
+</tr>
+<tr>
+<td><strong>Grade</strong></td>
+<td><a href="../../metrics/grade-level/#flesch-kincaid-grade-level">Flesch-Kincaid Grade Level</a></td>
+</tr>
+<tr>
+<td><strong>ARI</strong></td>
+<td><a href="../../metrics/grade-level/#ari-automated-readability-index">Automated Readability Index</a></td>
+</tr>
+<tr>
+<td><strong>Fog</strong></td>
+<td><a href="../../metrics/grade-level/#gunning-fog-index">Gunning Fog Index</a></td>
+</tr>
+<tr>
+<td><strong>Ease</strong></td>
+<td><a href="../../metrics/flesch-reading-ease/">Flesch Reading Ease</a> score</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td><code>pass</code> or <code>fail</code> based on configured thresholds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="disabling_the_summary">Disabling the Summary<a class="headerlink" href="#disabling_the_summary" title="Link">&para;</a></h3>
+<p>To disable the job summary:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">adaptive-enforcement-lab/readability@v1</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span></code></pre></div>
+<h3 id="custom_title">Custom Title<a class="headerlink" href="#custom_title" title="Link">&para;</a></h3>
+<p>Change the summary section title:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">adaptive-enforcement-lab/readability@v1</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">summary-title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Docs</span><span class="nv"> </span><span class="s">Quality</span><span class="nv"> </span><span class="s">Check&quot;</span>
 </span></code></pre></div>
 
 
