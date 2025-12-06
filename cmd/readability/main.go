@@ -148,12 +148,22 @@ func run(cmd *cobra.Command, args []string) error {
 	// Check mode: exit with error if any files failed
 	if checkFlag {
 		failed := 0
+		tooLong := 0
 		for _, r := range results {
 			if r.Status == "fail" {
 				failed++
+				if r.Structural.Lines > 375 {
+					tooLong++
+				}
 			}
 		}
 		if failed > 0 {
+			if tooLong > 0 {
+				fmt.Fprintln(os.Stderr, "")
+				fmt.Fprintln(os.Stderr, "IMPORTANT: Files exceeding line limits should be SPLIT into smaller documents.")
+				fmt.Fprintln(os.Stderr, "Do NOT remove content to meet thresholds. Split logically by topic or section.")
+				fmt.Fprintln(os.Stderr, "")
+			}
 			return fmt.Errorf("%d file(s) failed readability checks", failed)
 		}
 	}
