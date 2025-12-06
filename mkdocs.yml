@@ -4,6 +4,8 @@ site_url: https://readability.adaptive-enforcement-lab.com
 site_description: >-
   Documentation readability analyzer - GitHub Action and CLI tool for measuring
   content quality metrics including Flesch-Kincaid, ARI, and more.
+repo_url: https://github.com/adaptive-enforcement-lab/readability
+repo_name: adaptive-enforcement-lab/readability
 copyright: |
   &copy; 2025 <a href="https://adaptive-enforcement-lab.com" target="_blank" rel="noopener">Adaptive Enforcement Lab</a>
 extra:
