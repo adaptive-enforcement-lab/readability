@@ -11,6 +11,8 @@
 | `max-grade` | Maximum Flesch-Kincaid grade level | (from config) |
 | `max-ari` | Maximum ARI score | (from config) |
 | `max-lines` | Maximum lines per file | (from config) |
+| `summary` | Write formatted report to job summary | `true` |
+| `summary-title` | Title for the job summary section | `Documentation Readability Report` |
 
 ## Outputs
 
@@ -65,4 +67,45 @@ Access the action outputs in subsequent steps:
     max-grade: 12
     max-ari: 14
     max-lines: 500
+    summary: true
+    summary-title: Documentation Readability Report
+```
+
+## Job Summary
+
+The action automatically writes a formatted report to the GitHub Actions job summary. This is enabled by default (`summary: true`).
+
+### Summary Table Columns
+
+| Column | Description |
+|--------|-------------|
+| **File** | Path to the analyzed file |
+| **Lines** | Number of lines in the file |
+| **Read** | Estimated reading time (e.g., `<1m`, `2m`, `5m`) |
+| **Grade** | [Flesch-Kincaid Grade Level](../metrics/grade-level.md#flesch-kincaid-grade-level) |
+| **ARI** | [Automated Readability Index](../metrics/grade-level.md#ari-automated-readability-index) |
+| **Fog** | [Gunning Fog Index](../metrics/grade-level.md#gunning-fog-index) |
+| **Ease** | [Flesch Reading Ease](../metrics/flesch-reading-ease.md) score |
+| **Status** | `pass` or `fail` based on configured thresholds |
+
+### Disabling the Summary
+
+To disable the job summary:
+
+```yaml
+- uses: adaptive-enforcement-lab/readability@v1
+  with:
+    path: docs/
+    summary: false
+```
+
+### Custom Title
+
+Change the summary section title:
+
+```yaml
+- uses: adaptive-enforcement-lab/readability@v1
+  with:
+    path: docs/
+    summary-title: "Docs Quality Check"
 ```
