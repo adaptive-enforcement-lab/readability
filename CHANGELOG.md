@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.9.0...0.9.1) (2025-12-06)
+
+
+### Bug Fixes
+
+* handle absolute paths in override path matching ([#49](https://github.com/adaptive-enforcement-lab/readability/issues/49)) ([105c5c0](https://github.com/adaptive-enforcement-lab/readability/commit/105c5c01f779b38ec61f329f87e22564fc09eadd))
+
 ## [0.9.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.8.0...0.9.0) (2025-12-06)
 
 
