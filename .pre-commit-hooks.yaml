@@ -1,0 +1,17 @@
+- id: readability
+  name: readability
+  description: Check documentation readability metrics
+  entry: readability --check
+  language: golang
+  files: \.md$
+  pass_filenames: true
+  types: [markdown]
+
+- id: readability-docs
+  name: readability (docs only)
+  description: Check documentation readability metrics for docs/ directory
+  entry: readability --check docs/
+  language: golang
+  files: ^docs/.*\.md$
+  pass_filenames: false
+  types: [markdown]

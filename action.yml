@@ -43,6 +43,10 @@ inputs:
     description: 'Title for the job summary section'
     required: false
     default: 'Documentation Readability Report'
+  version:
+    description: 'Version of readability to use (default: latest)'
+    required: false
+    default: 'latest'
 
 outputs:
   report:
@@ -58,17 +62,40 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Setup Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.23'
-        cache: false
-
-    - name: Build readability
+    - name: Download readability binary
+      id: download
       shell: bash
       run: |
-        cd ${{ github.action_path }}
-        go build -o readability ./cmd/readability
+        VERSION="${{ inputs.version }}"
+
+        # Get latest version if not specified
+        if [ "$VERSION" = "latest" ]; then
+          VERSION=$(curl -sL "https://api.github.com/repos/adaptive-enforcement-lab/readability/releases/latest" | jq -r '.tag_name // empty')
+          if [ -z "$VERSION" ]; then
+            echo "::error::Failed to fetch latest version"
+            exit 1
+          fi
+        fi
+
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+        # Detect platform
+        OS="linux"
+        ARCH="amd64"
+        if [ "$RUNNER_ARCH" = "ARM64" ]; then
+          ARCH="arm64"
+        fi
+
+        # Download and extract
+        URL="https://github.com/adaptive-enforcement-lab/readability/releases/download/${VERSION}/readability_${OS}_${ARCH}.tar.gz"
+        echo "Downloading readability ${VERSION} from ${URL}"
+
+        curl -sL "$URL" -o /tmp/readability.tar.gz
+        tar -xzf /tmp/readability.tar.gz -C /tmp
+        chmod +x /tmp/readability_${OS}_${ARCH}
+        mv /tmp/readability_${OS}_${ARCH} /tmp/readability
+
+        echo "Downloaded readability ${VERSION}"
 
     - name: Run analysis
       id: analyze
@@ -104,7 +131,7 @@ runs:
 
         # Run analysis and capture output
         set +e
-        OUTPUT=$(${{ github.action_path }}/readability $ARGS ${{ inputs.path }} 2>&1)
+        OUTPUT=$(/tmp/readability $ARGS ${{ inputs.path }} 2>&1)
         EXIT_CODE=$?
         set -e
 
