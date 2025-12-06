@@ -7,14 +7,11 @@ import (
 	"github.com/adaptive-enforcement-lab/readability/pkg/analyzer"
 )
 
-// JSON writes results as JSON.
+// JSON writes results as JSON array.
 func JSON(w io.Writer, results []*analyzer.Result) error {
 	encoder := json.NewEncoder(w)
 	encoder.SetIndent("", "  ")
 
-	if len(results) == 1 {
-		return encoder.Encode(results[0])
-	}
-
+	// Always return an array for consistent parsing
 	return encoder.Encode(results)
 }

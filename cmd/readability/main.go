@@ -31,7 +31,7 @@ Computes readability metrics (Flesch-Kincaid, ARI, Coleman-Liau, etc.),
 structural analysis (headings, line counts), and content composition.
 
 Configuration:
-  Reads .content-analyzer.yml from the target directory or git root.
+  Reads .readability.yml from the target directory or git root.
   CLI flags override config file values.
 
 Examples:
@@ -40,7 +40,7 @@ Examples:
   readability docs/ --format json
   readability docs/ --format markdown
   readability docs/ --check
-  readability docs/ --config .content-analyzer.yml`,
+  readability docs/ --config .readability.yml`,
 		Args: cobra.ExactArgs(1),
 		RunE: run,
 	}
@@ -48,7 +48,7 @@ Examples:
 	rootCmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "Output format: table, json, markdown, summary, report")
 	rootCmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "Show all metrics")
 	rootCmd.Flags().BoolVar(&checkFlag, "check", false, "Check against thresholds (exit 1 on failure)")
-	rootCmd.Flags().StringVarP(&configFlag, "config", "c", "", "Path to config file (default: auto-detect .content-analyzer.yml)")
+	rootCmd.Flags().StringVarP(&configFlag, "config", "c", "", "Path to config file (default: auto-detect .readability.yml)")
 	rootCmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "Maximum Flesch-Kincaid grade level (overrides config)")
 	rootCmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "Maximum ARI score (overrides config)")
 	rootCmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "Maximum lines per file (overrides config, 0 to disable)")
