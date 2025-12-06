@@ -129,15 +129,21 @@ runs:
           ARGS="$ARGS --max-lines ${{ inputs.max-lines }}"
         fi
 
-        # Run analysis and capture output
+        # Run analysis and capture output (stderr separate from stdout)
         set +e
-        OUTPUT=$(/tmp/readability $ARGS ${{ inputs.path }} 2>&1)
+        OUTPUT=$(/tmp/readability $ARGS ${{ inputs.path }} 2>/dev/null)
         EXIT_CODE=$?
         set -e
 
-        # Parse JSON output for metrics
-        FILES_ANALYZED=$(echo "$OUTPUT" | jq -r 'if type == "array" then length else 0 end' 2>/dev/null || echo "0")
-        FAILED_COUNT=$(echo "$OUTPUT" | jq -r '[.[] | select(.status == "fail")] | length' 2>/dev/null || echo "0")
+        # Parse JSON output for metrics (ensure single-line numeric values)
+        FILES_ANALYZED=$(echo "$OUTPUT" | jq -r 'if type == "array" then length else 0 end' 2>/dev/null | head -1 || echo "0")
+        FAILED_COUNT=$(echo "$OUTPUT" | jq -r '[.[] | select(.status == "fail")] | length' 2>/dev/null | head -1 || echo "0")
+
+        # Ensure numeric values (fallback to 0 if not)
+        FILES_ANALYZED="${FILES_ANALYZED:-0}"
+        FAILED_COUNT="${FAILED_COUNT:-0}"
+        [[ "$FILES_ANALYZED" =~ ^[0-9]+$ ]] || FILES_ANALYZED=0
+        [[ "$FAILED_COUNT" =~ ^[0-9]+$ ]] || FAILED_COUNT=0
 
         if [ "$FAILED_COUNT" -eq 0 ]; then
           PASSED="true"
@@ -176,25 +182,33 @@ runs:
         fi
 
         # Generate formatted output for display (stdout)
+        # Skip verbose stdout if summary is enabled and format is markdown (already in summary)
         FORMAT="${{ inputs.format }}"
-        case "$FORMAT" in
-          json)
-            echo "$OUTPUT"
-            ;;
-          markdown|report)
-            echo "$MARKDOWN_TABLE"
-            ;;
-          summary)
-            echo "$OUTPUT" | jq -r '
-              "Files analyzed: \(length)",
-              "Passed: \([.[] | select(.status == "pass")] | length)",
-              "Failed: \([.[] | select(.status == "fail")] | length)"
-            ' 2>/dev/null || echo "$OUTPUT"
-            ;;
-          *)
-            echo "$OUTPUT" | jq -r '.[] | "\(.file): Grade=\(.readability.flesch_kincaid_grade | . * 10 | round / 10), Status=\(.status)"' 2>/dev/null || echo "$OUTPUT"
-            ;;
-        esac
+        SUMMARY_ENABLED="${{ inputs.summary }}"
+
+        if [ "$SUMMARY_ENABLED" = "true" ] && [ "$FORMAT" = "markdown" ]; then
+          # Only output a brief status line when markdown goes to summary
+          echo "Readability analysis complete: ${FILES_ANALYZED} files, ${FAILED_COUNT} failed"
+        else
+          case "$FORMAT" in
+            json)
+              echo "$OUTPUT"
+              ;;
+            markdown|report)
+              echo "$MARKDOWN_TABLE"
+              ;;
+            summary)
+              echo "$OUTPUT" | jq -r '
+                "Files analyzed: \(length)",
+                "Passed: \([.[] | select(.status == "pass")] | length)",
+                "Failed: \([.[] | select(.status == "fail")] | length)"
+              ' 2>/dev/null || echo "$OUTPUT"
+              ;;
+            *)
+              echo "$OUTPUT" | jq -r '.[] | "\(.file): Grade=\(.readability.flesch_kincaid_grade | . * 10 | round / 10), Status=\(.status)"' 2>/dev/null || echo "$OUTPUT"
+              ;;
+          esac
+        fi
 
         # Exit with original code to respect --check
         exit $EXIT_CODE
