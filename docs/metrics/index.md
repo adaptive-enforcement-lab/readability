@@ -27,3 +27,4 @@ Readability calculates several standard readability metrics to help you understa
 - [Flesch Reading Ease](flesch-reading-ease.md) - The most common readability score
 - [Grade Level Scores](grade-level.md) - Understanding grade-level metrics
 - [Thresholds](thresholds.md) - Setting appropriate limits
+- [Admonitions](admonitions.md) - MkDocs-style callout detection

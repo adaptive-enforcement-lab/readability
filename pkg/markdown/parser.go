@@ -11,12 +11,19 @@ import (
 
 // ParseResult contains extracted content from a markdown file.
 type ParseResult struct {
-	Prose      string
-	CodeBlocks []string
-	Headings   []Heading
-	TotalLines int
-	CodeLines  int
-	EmptyLines int
+	Prose       string
+	CodeBlocks  []string
+	Headings    []Heading
+	Admonitions []Admonition
+	TotalLines  int
+	CodeLines   int
+	EmptyLines  int
+}
+
+// Admonition represents a MkDocs-style admonition block.
+type Admonition struct {
+	Type  string // note, warning, tip, etc.
+	Title string // optional custom title
 }
 
 // Heading represents a markdown heading.
@@ -32,8 +39,9 @@ func Parse(content []byte) (*ParseResult, error) {
 	doc := md.Parser().Parse(reader)
 
 	result := &ParseResult{
-		CodeBlocks: make([]string, 0),
-		Headings:   make([]Heading, 0),
+		CodeBlocks:  make([]string, 0),
+		Headings:    make([]Heading, 0),
+		Admonitions: make([]Admonition, 0),
 	}
 
 	var proseBuilder strings.Builder
@@ -99,7 +107,7 @@ func Parse(content []byte) (*ParseResult, error) {
 	lines := bytes.Split(content, []byte("\n"))
 	result.TotalLines = len(lines)
 
-	// Count code lines and empty lines
+	// Count code lines, empty lines, and detect admonitions
 	inCodeBlock := false
 	for _, line := range lines {
 		trimmed := bytes.TrimSpace(line)
@@ -113,9 +121,51 @@ func Parse(content []byte) (*ParseResult, error) {
 		} else if len(trimmed) == 0 {
 			result.EmptyLines++
 		}
+
+		// Detect MkDocs-style admonitions: !!! type or !!! type "title"
+		if !inCodeBlock && bytes.HasPrefix(trimmed, []byte("!!!")) {
+			admonition := parseAdmonition(string(trimmed))
+			if admonition != nil {
+				result.Admonitions = append(result.Admonitions, *admonition)
+			}
+		}
 	}
 
 	return result, nil
+}
+
+// parseAdmonition parses a MkDocs-style admonition line.
+// Formats: !!! note, !!! warning "Custom Title", !!! tip inline
+func parseAdmonition(line string) *Admonition {
+	// Remove the !!! prefix
+	line = strings.TrimPrefix(line, "!!!")
+	line = strings.TrimSpace(line)
+
+	if line == "" {
+		return nil
+	}
+
+	adm := &Admonition{}
+
+	// Check for quoted title: !!! type "title"
+	if idx := strings.Index(line, "\""); idx != -1 {
+		adm.Type = strings.TrimSpace(line[:idx])
+		rest := line[idx+1:]
+		if endIdx := strings.Index(rest, "\""); endIdx != -1 {
+			adm.Title = rest[:endIdx]
+		}
+	} else {
+		// No title, just type (may include modifiers like "inline")
+		parts := strings.Fields(line)
+		if len(parts) > 0 {
+			adm.Type = parts[0]
+		}
+	}
+
+	// Normalize type (remove "inline" modifier if present)
+	adm.Type = strings.TrimSuffix(adm.Type, "+")
+
+	return adm
 }
 
 // isInsideCodeBlock checks if a node is inside a code block.

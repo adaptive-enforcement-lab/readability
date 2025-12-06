@@ -16,12 +16,13 @@ type Config struct {
 
 // Thresholds defines limits for pass/fail checks.
 type Thresholds struct {
-	MaxGrade  float64 `yaml:"max_grade"`
-	MaxARI    float64 `yaml:"max_ari"`
-	MaxFog    float64 `yaml:"max_fog"`
-	MinEase   float64 `yaml:"min_ease"`
-	MaxLines  int     `yaml:"max_lines"`
-	MinWords  int     `yaml:"min_words"`  // Skip readability checks if below this
+	MaxGrade       float64 `yaml:"max_grade"`
+	MaxARI         float64 `yaml:"max_ari"`
+	MaxFog         float64 `yaml:"max_fog"`
+	MinEase        float64 `yaml:"min_ease"`
+	MaxLines       int     `yaml:"max_lines"`
+	MinWords       int     `yaml:"min_words"`       // Skip readability checks if below this
+	MinAdmonitions int     `yaml:"min_admonitions"` // Minimum MkDocs-style admonitions required
 }
 
 // PathOverride allows different thresholds for specific paths.
@@ -34,12 +35,13 @@ type PathOverride struct {
 func DefaultConfig() *Config {
 	return &Config{
 		Thresholds: Thresholds{
-			MaxGrade: 16.0,  // College senior
-			MaxARI:   16.0,
-			MaxFog:   18.0,
-			MinEase:  25.0,
-			MaxLines: 375,
-			MinWords: 100,   // Skip readability for very short/code-heavy docs
+			MaxGrade:       16.0, // College senior
+			MaxARI:         16.0,
+			MaxFog:         18.0,
+			MinEase:        25.0,
+			MaxLines:       375,
+			MinWords:       100, // Skip readability for very short/code-heavy docs
+			MinAdmonitions: 1,   // Require at least one MkDocs-style admonition
 		},
 	}
 }
@@ -123,6 +125,7 @@ func (c *Config) ThresholdsForPath(filePath string) Thresholds {
 
 // mergeThresholds returns base thresholds with non-zero override values applied.
 // Note: MinEase uses != 0 to allow negative values (for disabling the check).
+// Note: MinAdmonitions uses != 0 to allow explicit 0 (for disabling the check).
 func mergeThresholds(base, override Thresholds) Thresholds {
 	result := base
 	if override.MaxGrade > 0 {
@@ -142,6 +145,9 @@ func mergeThresholds(base, override Thresholds) Thresholds {
 	}
 	if override.MinWords > 0 {
 		result.MinWords = override.MinWords
+	}
+	if override.MinAdmonitions != 0 {
+		result.MinAdmonitions = override.MinAdmonitions
 	}
 	return result
 }

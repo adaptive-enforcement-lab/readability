@@ -7,7 +7,14 @@ type Result struct {
 	Headings    Headings    `json:"headings"`
 	Readability Readability `json:"readability"`
 	Composition Composition `json:"composition"`
+	Admonitions Admonitions `json:"admonitions"`
 	Status      string      `json:"status"`
+}
+
+// Admonitions contains admonition counts and details.
+type Admonitions struct {
+	Count int      `json:"count"`
+	Types []string `json:"types,omitempty"`
 }
 
 // Structural contains basic document metrics.
