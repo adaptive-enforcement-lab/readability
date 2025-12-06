@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.7.0...0.7.1) (2025-12-06)
+
+
+### Maintenance
+
+* add MIT license ([098e115](https://github.com/adaptive-enforcement-lab/readability/commit/098e115fa2ec30c2cfd24df09cb7d6decafeb757))
+
 ## [0.7.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.6.0...0.7.0) (2025-12-06)
 
 
