@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.7.2](https://github.com/adaptive-enforcement-lab/readability/compare/0.7.1...0.7.2) (2025-12-06)
+
+
+### Maintenance
+
+* add site/ to gitignore ([37bc3af](https://github.com/adaptive-enforcement-lab/readability/commit/37bc3afa4e3045370a17163a46c50a3d5b80ba00))
+* **deps:** update actions/checkout action to v6 ([#40](https://github.com/adaptive-enforcement-lab/readability/issues/40)) ([edc40d1](https://github.com/adaptive-enforcement-lab/readability/commit/edc40d1cb49ac607c2b8b8098a6cf09bff617ee6))
+* **deps:** update actions/setup-go action to v6 ([#41](https://github.com/adaptive-enforcement-lab/readability/issues/41)) ([9276f52](https://github.com/adaptive-enforcement-lab/readability/commit/9276f52e9e0ea05ef70f569eaad4c3993667d1fd))
+* **deps:** update actions/setup-python action to v6 ([#42](https://github.com/adaptive-enforcement-lab/readability/issues/42)) ([cc545e4](https://github.com/adaptive-enforcement-lab/readability/commit/cc545e405a12b85a71a715e28b4871ac580c09b0))
+* **deps:** update dependency go to 1.25 ([#36](https://github.com/adaptive-enforcement-lab/readability/issues/36)) ([9754456](https://github.com/adaptive-enforcement-lab/readability/commit/9754456098823a64532982cd8ed97c788a21b358))
+* **deps:** update dependency python to 3.14 ([#37](https://github.com/adaptive-enforcement-lab/readability/issues/37)) ([6c8abbe](https://github.com/adaptive-enforcement-lab/readability/commit/6c8abbe768e219f0797b36e65b8daefe75a5eb9b))
+* **deps:** update github artifact actions ([#43](https://github.com/adaptive-enforcement-lab/readability/issues/43)) ([f498a0e](https://github.com/adaptive-enforcement-lab/readability/commit/f498a0e3e4a82cc87187cfa6af0a43efae648f84))
+* **deps:** update golangci/golangci-lint-action action to v9 ([#44](https://github.com/adaptive-enforcement-lab/readability/issues/44)) ([4a57751](https://github.com/adaptive-enforcement-lab/readability/commit/4a57751e0734850aff04e99462c1260d5fd61426))
+* **deps:** update tj-actions/changed-files action to v47 ([#45](https://github.com/adaptive-enforcement-lab/readability/issues/45)) ([4333c5e](https://github.com/adaptive-enforcement-lab/readability/commit/4333c5eb13f5c6b39a416daed40af2f55c08c417))
+
 ## [0.7.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.7.0...0.7.1) (2025-12-06)
 
 
