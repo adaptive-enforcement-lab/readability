@@ -12,7 +12,7 @@ inputs:
     required: false
     default: 'docs/'
   format:
-    description: 'Output format (table, markdown, json)'
+    description: 'Output format (table, markdown, json, summary, report)'
     required: false
     default: 'markdown'
   config:
@@ -23,22 +23,18 @@ inputs:
     description: 'Enable check mode (fail on threshold violations)'
     required: false
     default: 'false'
-  threshold-flesch:
-    description: 'Minimum Flesch Reading Ease score'
+  max-grade:
+    description: 'Maximum Flesch-Kincaid grade level'
     required: false
-    default: '30'
-  threshold-grade:
-    description: 'Maximum grade level'
+    default: ''
+  max-ari:
+    description: 'Maximum ARI score'
     required: false
-    default: '12'
-  threshold-words:
-    description: 'Maximum words per file'
+    default: ''
+  max-lines:
+    description: 'Maximum lines per file'
     required: false
-    default: '3000'
-  recursive:
-    description: 'Analyze directories recursively'
-    required: false
-    default: 'true'
+    default: ''
 
 outputs:
   report:
@@ -47,10 +43,6 @@ outputs:
     description: 'Whether all thresholds were met (true/false)'
   files-analyzed:
     description: 'Number of files analyzed'
-  average-flesch:
-    description: 'Average Flesch Reading Ease score'
-  average-grade:
-    description: 'Average grade level'
 
 runs:
   using: 'composite'
@@ -79,15 +71,20 @@ runs:
 
         ARGS="$ARGS --format ${{ inputs.format }}"
 
-        if [ "${{ inputs.recursive }}" = "true" ]; then
-          ARGS="$ARGS --recursive"
-        fi
-
         if [ "${{ inputs.check }}" = "true" ]; then
           ARGS="$ARGS --check"
-          ARGS="$ARGS --threshold-flesch ${{ inputs.threshold-flesch }}"
-          ARGS="$ARGS --threshold-grade ${{ inputs.threshold-grade }}"
-          ARGS="$ARGS --threshold-words ${{ inputs.threshold-words }}"
+        fi
+
+        if [ -n "${{ inputs.max-grade }}" ]; then
+          ARGS="$ARGS --max-grade ${{ inputs.max-grade }}"
+        fi
+
+        if [ -n "${{ inputs.max-ari }}" ]; then
+          ARGS="$ARGS --max-ari ${{ inputs.max-ari }}"
+        fi
+
+        if [ -n "${{ inputs.max-lines }}" ]; then
+          ARGS="$ARGS --max-lines ${{ inputs.max-lines }}"
         fi
 
         ${{ github.action_path }}/readability $ARGS ${{ inputs.path }}

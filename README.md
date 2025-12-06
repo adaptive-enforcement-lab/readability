@@ -7,7 +7,7 @@ Documentation readability analyzer - GitHub Action and CLI tool for measuring co
 - **Flesch Reading Ease** - How easy is your content to read?
 - **Grade Level Scores** - Flesch-Kincaid, Gunning Fog, Coleman-Liau, SMOG, ARI
 - **Word & Sentence Metrics** - Count, averages, complexity indicators
-- **Multiple Output Formats** - Table, Markdown, JSON
+- **Multiple Output Formats** - Table, Markdown, JSON, Summary, Report
 - **Threshold Enforcement** - Fail CI when quality drops
 
 ## Quick Start
@@ -20,7 +20,7 @@ Documentation readability analyzer - GitHub Action and CLI tool for measuring co
     path: docs/
     format: markdown
     check: true
-    threshold-flesch: 30
+    max-grade: 12
 ```
 
 ### CLI
@@ -30,13 +30,16 @@ Documentation readability analyzer - GitHub Action and CLI tool for measuring co
 go install github.com/adaptive-enforcement-lab/readability/cmd/readability@latest
 
 # Analyze a directory
-readability --recursive docs/
+readability docs/
 
 # Check with thresholds
-readability --check --threshold-flesch 30 docs/
+readability --check --max-grade 12 docs/
 
 # Output as JSON
 readability --format json docs/
+
+# Use a config file
+readability --config .readability.yml docs/
 ```
 
 ## Metrics
@@ -52,30 +55,47 @@ readability --format json docs/
 
 ## Configuration
 
-Create `.readability.yml` in your repo:
+Create `.content-analyzer.yml` in your repo:
 
 ```yaml
 thresholds:
-  flesch: 30
-  grade: 12
-  words: 3000
+  max_grade: 12
+  max_ari: 12
+  max_fog: 12
+  min_ease: 30
+  max_lines: 500
+  min_words: 100
 
-ignore:
-  - "docs/api/**"
-  - "CHANGELOG.md"
+overrides:
+  - pattern: "docs/api/**"
+    thresholds:
+      max_grade: 14
+      max_lines: 1000
 ```
 
 ## Action Inputs
 
 | Input | Description | Default |
 |-------|-------------|---------|
-| `path` | Path to analyze | `docs/` |
-| `format` | Output format (table, markdown, json) | `markdown` |
+| `path` | Path to analyze (file or directory) | `docs/` |
+| `format` | Output format (table, markdown, json, summary, report) | `markdown` |
+| `config` | Path to config file | (auto-detect) |
 | `check` | Fail on threshold violations | `false` |
-| `threshold-flesch` | Minimum Flesch score | `30` |
-| `threshold-grade` | Maximum grade level | `12` |
-| `threshold-words` | Maximum words per file | `3000` |
-| `recursive` | Analyze subdirectories | `true` |
+| `max-grade` | Maximum Flesch-Kincaid grade level | (from config) |
+| `max-ari` | Maximum ARI score | (from config) |
+| `max-lines` | Maximum lines per file | (from config) |
+
+## CLI Flags
+
+| Flag | Description |
+|------|-------------|
+| `--format, -f` | Output format: table, json, markdown, summary, report |
+| `--verbose, -v` | Show all metrics |
+| `--check` | Check against thresholds (exit 1 on failure) |
+| `--config, -c` | Path to config file |
+| `--max-grade` | Maximum Flesch-Kincaid grade level |
+| `--max-ari` | Maximum ARI score |
+| `--max-lines` | Maximum lines per file (0 to disable) |
 
 ## License
 

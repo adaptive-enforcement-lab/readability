@@ -23,7 +23,7 @@ var (
 
 func main() {
 	rootCmd := &cobra.Command{
-		Use:   "content-analyzer [path]",
+		Use:   "readability [path]",
 		Short: "Analyze markdown documentation for readability and structure",
 		Long: `A tool for analyzing documentation quality, readability, and structure.
 
@@ -35,12 +35,12 @@ Configuration:
   CLI flags override config file values.
 
 Examples:
-  content-analyzer docs/quickstart.md
-  content-analyzer docs/
-  content-analyzer docs/ --format json
-  content-analyzer docs/ --format markdown
-  content-analyzer docs/ --check
-  content-analyzer docs/ --config .content-analyzer.yml`,
+  readability docs/quickstart.md
+  readability docs/
+  readability docs/ --format json
+  readability docs/ --format markdown
+  readability docs/ --check
+  readability docs/ --config .content-analyzer.yml`,
 		Args: cobra.ExactArgs(1),
 		RunE: run,
 	}

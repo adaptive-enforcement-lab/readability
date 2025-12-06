@@ -39,7 +39,7 @@ func Parse(content []byte) (*ParseResult, error) {
 	var proseBuilder strings.Builder
 
 	// Walk the AST to extract content
-	ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
+	_ = ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
 		if !entering {
 			return ast.WalkContinue, nil
 		}
@@ -48,7 +48,7 @@ func Parse(content []byte) (*ParseResult, error) {
 		case *ast.Heading:
 			heading := Heading{
 				Level: n.Level,
-				Text:  string(n.Text(content)),
+				Text:  extractHeadingText(n, content),
 			}
 			result.Headings = append(result.Headings, heading)
 
@@ -128,4 +128,16 @@ func isInsideCodeBlock(node ast.Node) bool {
 		node = node.Parent()
 	}
 	return false
+}
+
+// extractHeadingText extracts the text content from a heading node.
+// This replaces the deprecated n.Text() method.
+func extractHeadingText(n *ast.Heading, source []byte) string {
+	var buf bytes.Buffer
+	for child := n.FirstChild(); child != nil; child = child.NextSibling() {
+		if text, ok := child.(*ast.Text); ok {
+			buf.Write(text.Segment.Value(source))
+		}
+	}
+	return buf.String()
 }
