@@ -95,6 +95,7 @@ func (a *Analyzer) Analyze(path string, content []byte) (*Result, error) {
 			EmptyLines:     parsed.EmptyLines,
 			CodeBlockRatio: calculateRatio(parsed.CodeLines, parsed.TotalLines),
 		},
+		Admonitions: countAdmonitions(parsed.Admonitions),
 	}
 
 	result.Status = a.checkStatus(result)
@@ -141,7 +142,7 @@ func (a *Analyzer) AnalyzeDirectory(dir string) ([]*Result, error) {
 func (a *Analyzer) checkStatus(r *Result) string {
 	// Get path-specific thresholds if config is available
 	var maxGrade, maxARI, maxFog, minEase float64
-	var maxLines, minWords int
+	var maxLines, minWords, minAdmonitions int
 
 	if a.Config != nil {
 		t := a.Config.ThresholdsForPath(r.File)
@@ -151,6 +152,7 @@ func (a *Analyzer) checkStatus(r *Result) string {
 		minEase = t.MinEase
 		maxLines = t.MaxLines
 		minWords = t.MinWords
+		minAdmonitions = t.MinAdmonitions
 	} else {
 		maxGrade = a.Thresholds.MaxFleschKincaidGrade
 		maxARI = a.Thresholds.MaxARI
@@ -158,6 +160,7 @@ func (a *Analyzer) checkStatus(r *Result) string {
 		minEase = a.Thresholds.MinFleschReadingEase
 		maxLines = a.Thresholds.MaxLines
 		minWords = 100 // Default minimum
+		minAdmonitions = 1
 	}
 
 	// Skip readability checks for very short/code-heavy documents
@@ -183,6 +186,12 @@ func (a *Analyzer) checkStatus(r *Result) string {
 	if maxLines > 0 && r.Structural.Lines > maxLines {
 		return "fail"
 	}
+
+	// Admonition check: ensure minimum MkDocs-style admonitions
+	if minAdmonitions > 0 && r.Admonitions.Count < minAdmonitions {
+		return "fail"
+	}
+
 	return "pass"
 }
 
@@ -259,4 +268,20 @@ func countHeadings(headings []markdown.Heading) Headings {
 		}
 	}
 	return h
+}
+
+// countAdmonitions extracts admonition count and types.
+func countAdmonitions(admonitions []markdown.Admonition) Admonitions {
+	result := Admonitions{
+		Count: len(admonitions),
+		Types: make([]string, 0, len(admonitions)),
+	}
+	seen := make(map[string]bool)
+	for _, adm := range admonitions {
+		if adm.Type != "" && !seen[adm.Type] {
+			result.Types = append(result.Types, adm.Type)
+			seen[adm.Type] = true
+		}
+	}
+	return result
 }

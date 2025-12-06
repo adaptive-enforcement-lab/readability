@@ -15,13 +15,14 @@ import (
 var version = "dev"
 
 var (
-	formatFlag   string
-	verboseFlag  bool
-	checkFlag    bool
-	configFlag   string
-	maxGradeFlag float64
-	maxARIFlag   float64
-	maxLinesFlag int
+	formatFlag        string
+	verboseFlag       bool
+	checkFlag         bool
+	configFlag        string
+	maxGradeFlag      float64
+	maxARIFlag        float64
+	maxLinesFlag      int
+	minAdmonitionsFlag int
 )
 
 func main() {
@@ -56,6 +57,7 @@ Examples:
 	rootCmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "Maximum Flesch-Kincaid grade level (overrides config)")
 	rootCmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "Maximum ARI score (overrides config)")
 	rootCmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "Maximum lines per file (overrides config, 0 to disable)")
+	rootCmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "Minimum MkDocs-style admonitions (overrides config, 0 to disable)")
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
@@ -99,6 +101,9 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 	if cmd.Flags().Changed("max-lines") {
 		cfg.Thresholds.MaxLines = maxLinesFlag
+	}
+	if cmd.Flags().Changed("min-admonitions") {
+		cfg.Thresholds.MinAdmonitions = minAdmonitionsFlag
 	}
 
 	a := analyzer.NewWithConfig(cfg)
@@ -150,6 +155,8 @@ func run(cmd *cobra.Command, args []string) error {
 		failed := 0
 		tooLong := 0
 		lowReadability := 0
+		missingAdmonitions := 0
+		minAdm := cfg.Thresholds.MinAdmonitions
 		for _, r := range results {
 			if r.Status == "fail" {
 				failed++
@@ -158,6 +165,9 @@ func run(cmd *cobra.Command, args []string) error {
 				}
 				if r.Readability.FleschKincaidGrade > 14 || r.Readability.ARI > 14 || r.Readability.FleschReadingEase < 30 {
 					lowReadability++
+				}
+				if minAdm > 0 && r.Admonitions.Count < minAdm {
+					missingAdmonitions++
 				}
 			}
 		}
@@ -176,6 +186,22 @@ func run(cmd *cobra.Command, args []string) error {
 				fmt.Fprintln(os.Stderr, "- Add brief introductory sentences before bullet lists, code blocks, or admonitions")
 				fmt.Fprintln(os.Stderr, "- Use transitional phrases to connect dense technical sections")
 				fmt.Fprintln(os.Stderr, "Do NOT remove technical content. Rewrite for clarity while preserving accuracy.")
+				fmt.Fprintln(os.Stderr, "")
+			}
+			if missingAdmonitions > 0 {
+				fmt.Fprintln(os.Stderr, "")
+				fmt.Fprintln(os.Stderr, "ADMONITIONS: Files are missing MkDocs-style admonitions (note, warning, tip, etc.).")
+				fmt.Fprintln(os.Stderr, "Admonitions improve documentation by highlighting important information:")
+				fmt.Fprintln(os.Stderr, "- Use !!! note for supplementary information")
+				fmt.Fprintln(os.Stderr, "- Use !!! warning for potential pitfalls or breaking changes")
+				fmt.Fprintln(os.Stderr, "- Use !!! tip for best practices or shortcuts")
+				fmt.Fprintln(os.Stderr, "- Use !!! example for code samples or use cases")
+				fmt.Fprintln(os.Stderr, "")
+				fmt.Fprintln(os.Stderr, "Example syntax:")
+				fmt.Fprintln(os.Stderr, "  !!! note \"Optional Title\"")
+				fmt.Fprintln(os.Stderr, "      Content indented by 4 spaces.")
+				fmt.Fprintln(os.Stderr, "")
+				fmt.Fprintln(os.Stderr, "Do NOT add empty or meaningless admonitions. Add value with relevant context.")
 				fmt.Fprintln(os.Stderr, "")
 			}
 			return fmt.Errorf("%d file(s) failed readability checks", failed)

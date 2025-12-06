@@ -21,12 +21,13 @@ readability --config /path/to/.readability.yml docs/
 ```yaml
 # .readability.yml
 thresholds:
-  max_grade: 12      # Maximum Flesch-Kincaid grade level
-  max_ari: 12        # Maximum Automated Readability Index
-  max_fog: 14        # Maximum Gunning Fog index
-  min_ease: 30       # Minimum Flesch Reading Ease (0-100)
-  max_lines: 500     # Maximum lines per file
-  min_words: 100     # Skip readability check if below this word count
+  max_grade: 12        # Maximum Flesch-Kincaid grade level
+  max_ari: 12          # Maximum Automated Readability Index
+  max_fog: 14          # Maximum Gunning Fog index
+  min_ease: 30         # Minimum Flesch Reading Ease (0-100)
+  max_lines: 500       # Maximum lines per file
+  min_words: 100       # Skip readability check if below this word count
+  min_admonitions: 1   # Require at least one MkDocs-style admonition
 
 overrides:
   # API reference docs can be more technical
@@ -35,13 +36,15 @@ overrides:
       max_grade: 16
       max_ari: 16
       max_lines: 1000
+      min_admonitions: 0  # API docs don't need admonitions
 
-  # Tutorials should be beginner-friendly
+  # Tutorials should be beginner-friendly with callouts
   - path: docs/tutorials/
     thresholds:
       max_grade: 8
       max_ari: 8
       min_ease: 60
+      min_admonitions: 2  # Tutorials benefit from more callouts
 
   # Reference docs with lots of lists/tables break formulas
   - path: docs/reference/
@@ -61,6 +64,7 @@ overrides:
 | `min_ease` | Minimum Flesch Reading Ease score | `25.0` |
 | `max_lines` | Maximum lines per file | `375` |
 | `min_words` | Skip readability checks if word count is below this | `100` |
+| `min_admonitions` | Minimum MkDocs-style admonitions required | `1` |
 
 ### Understanding the Defaults
 
@@ -81,9 +85,10 @@ Use extreme values to effectively disable specific checks:
 
 ```yaml
 thresholds:
-  max_grade: 50      # Effectively no grade limit
-  min_ease: -100     # Negative values disable ease check
-  max_lines: 0       # Zero disables line limit (via CLI only)
+  max_grade: 50        # Effectively no grade limit
+  min_ease: -100       # Negative values disable ease check
+  max_lines: 0         # Zero disables line limit (via CLI only)
+  min_admonitions: 0   # Disable admonition requirement
 ```
 
 ## Path Overrides
