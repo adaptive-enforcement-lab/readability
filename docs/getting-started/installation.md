@@ -10,6 +10,38 @@ The GitHub Action requires no installation - just add it to your workflow:
     path: docs/
 ```
 
+## Pre-commit Hook
+
+Add to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/adaptive-enforcement-lab/readability
+    rev: 0.5.0  # Use latest release
+    hooks:
+      - id: readability
+        # Optionally check only docs/ directory:
+        # id: readability-docs
+```
+
+Then install and run:
+
+```bash
+pre-commit install
+pre-commit run readability --all-files
+```
+
+### Available Hooks
+
+| Hook ID | Description |
+|---------|-------------|
+| `readability` | Check all markdown files passed by pre-commit |
+| `readability-docs` | Check only `docs/` directory (ignores filenames) |
+
+### Configuration
+
+Create `.readability.yml` in your repository root to configure thresholds. See [Configuration File](../cli/config-file.md) for details.
+
 ## CLI Tool
 
 ### Go Install (Recommended)
