@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.5.0...0.6.0) (2025-12-06)
+
+
+### Features
+
+* use pre-built binary and add pre-commit hook support ([#28](https://github.com/adaptive-enforcement-lab/readability/issues/28)) ([6e7bfc7](https://github.com/adaptive-enforcement-lab/readability/commit/6e7bfc7586f5e120c67f3138101d835826a24e75))
+
 ## [0.5.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.4.0...0.5.0) (2025-12-06)
 
 
