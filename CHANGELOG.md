@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/adaptive-enforcement-lab/readability/compare/0.9.1...0.9.2) (2025-12-07)
+
+
+### Bug Fixes
+
+* **action:** resolve bash syntax errors and stdout duplication ([#51](https://github.com/adaptive-enforcement-lab/readability/issues/51)) ([8f26ed6](https://github.com/adaptive-enforcement-lab/readability/commit/8f26ed634971abc83f921b9f0ce9306925b12eff))
+
 ## [0.9.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.9.0...0.9.1) (2025-12-06)
 
 
