@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -98,7 +99,8 @@ func (a *Analyzer) Analyze(path string, content []byte) (*Result, error) {
 		Admonitions: countAdmonitions(parsed.Admonitions),
 	}
 
-	result.Status = a.checkStatus(result)
+	result.Diagnostics = a.collectDiagnostics(result)
+	result.Status = a.determineStatus(result.Diagnostics)
 
 	return result, nil
 }
@@ -138,8 +140,10 @@ func (a *Analyzer) AnalyzeDirectory(dir string) ([]*Result, error) {
 	return results, err
 }
 
-// checkStatus determines pass/fail based on thresholds.
-func (a *Analyzer) checkStatus(r *Result) string {
+// collectDiagnostics gathers all issues found during analysis.
+func (a *Analyzer) collectDiagnostics(r *Result) []Diagnostic {
+	var diagnostics []Diagnostic
+
 	// Get path-specific thresholds if config is available
 	var maxGrade, maxARI, maxFog, minEase float64
 	var maxLines, minWords, minAdmonitions int
@@ -169,29 +173,75 @@ func (a *Analyzer) checkStatus(r *Result) string {
 
 	if !skipReadability {
 		if r.Readability.FleschKincaidGrade > maxGrade {
-			return "fail"
+			diagnostics = append(diagnostics, Diagnostic{
+				Line:     1,
+				Severity: SeverityError,
+				Rule:     "readability/grade-level",
+				Message:  fmt.Sprintf("Flesch-Kincaid grade %.1f exceeds threshold %.1f", r.Readability.FleschKincaidGrade, maxGrade),
+			})
 		}
 		if r.Readability.ARI > maxARI {
-			return "fail"
+			diagnostics = append(diagnostics, Diagnostic{
+				Line:     1,
+				Severity: SeverityError,
+				Rule:     "readability/ari",
+				Message:  fmt.Sprintf("ARI %.1f exceeds threshold %.1f", r.Readability.ARI, maxARI),
+			})
 		}
 		if r.Readability.GunningFog > maxFog {
-			return "fail"
+			diagnostics = append(diagnostics, Diagnostic{
+				Line:     1,
+				Severity: SeverityError,
+				Rule:     "readability/gunning-fog",
+				Message:  fmt.Sprintf("Gunning Fog %.1f exceeds threshold %.1f", r.Readability.GunningFog, maxFog),
+			})
 		}
 		if r.Readability.FleschReadingEase < minEase {
-			return "fail"
+			diagnostics = append(diagnostics, Diagnostic{
+				Line:     1,
+				Severity: SeverityError,
+				Rule:     "readability/flesch-ease",
+				Message:  fmt.Sprintf("Flesch Reading Ease %.1f below threshold %.1f", r.Readability.FleschReadingEase, minEase),
+			})
 		}
 	}
 
 	// Line limit always applies
 	if maxLines > 0 && r.Structural.Lines > maxLines {
-		return "fail"
+		diagnostics = append(diagnostics, Diagnostic{
+			Line:     1,
+			Severity: SeverityError,
+			Rule:     "structure/max-lines",
+			Message:  fmt.Sprintf("%d lines exceeds threshold %d", r.Structural.Lines, maxLines),
+		})
 	}
 
 	// Admonition check: ensure minimum MkDocs-style admonitions
 	if minAdmonitions > 0 && r.Admonitions.Count < minAdmonitions {
-		return "fail"
+		diagnostics = append(diagnostics, Diagnostic{
+			Line:     1,
+			Severity: SeverityWarning,
+			Rule:     "content/admonitions",
+			Message:  fmt.Sprintf("Found %d admonitions, minimum required is %d", r.Admonitions.Count, minAdmonitions),
+		})
 	}
 
+	return diagnostics
+}
+
+// determineStatus returns pass/fail based on diagnostics.
+func (a *Analyzer) determineStatus(diagnostics []Diagnostic) string {
+	for _, d := range diagnostics {
+		if d.Severity == SeverityError {
+			return "fail"
+		}
+	}
+	// Warnings also cause failure (to maintain backward compatibility)
+	for _, d := range diagnostics {
+		if d.Severity == SeverityWarning {
+			return "fail"
+		}
+	}
 	return "pass"
 }
 

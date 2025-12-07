@@ -50,7 +50,7 @@ Examples:
 		RunE: run,
 	}
 
-	rootCmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "Output format: table, json, markdown, summary, report")
+	rootCmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "Output format: table, json, markdown, summary, report, diagnostic")
 	rootCmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "Show all metrics")
 	rootCmd.Flags().BoolVar(&checkFlag, "check", false, "Check against thresholds (exit 1 on failure)")
 	rootCmd.Flags().StringVarP(&configFlag, "config", "c", "", "Path to config file (default: auto-detect .readability.yml)")
@@ -146,6 +146,9 @@ func run(cmd *cobra.Command, args []string) error {
 		output.Summary(os.Stdout, results)
 	case "report":
 		output.Report(os.Stdout, results)
+	case "diagnostic":
+		output.Diagnostic(os.Stdout, results)
+		output.DiagnosticSummary(os.Stdout, results)
 	default:
 		output.Table(os.Stdout, results, verboseFlag)
 	}
