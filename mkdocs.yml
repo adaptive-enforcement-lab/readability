@@ -111,6 +111,7 @@ nav:
       - cli/index.md
       - Commands: cli/commands.md
       - Configuration File: cli/config-file.md
+      - Diagnostic Output: cli/diagnostic-output.md
   - Metrics:
       - metrics/index.md
       - Flesch Reading Ease: metrics/flesch-reading-ease.md
