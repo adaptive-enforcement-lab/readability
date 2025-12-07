@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.9.2...0.10.0) (2025-12-07)
+
+
+### Features
+
+* add linter-style diagnostic output format ([#55](https://github.com/adaptive-enforcement-lab/readability/issues/55)) ([2e756e1](https://github.com/adaptive-enforcement-lab/readability/commit/2e756e139e6ddf4b98a3efd6a7310e6cdabdb85d))
+
 ## [0.9.2](https://github.com/adaptive-enforcement-lab/readability/compare/0.9.1...0.9.2) (2025-12-07)
 
 
