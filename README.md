@@ -7,8 +7,10 @@ Documentation readability analyzer - GitHub Action and CLI tool for measuring co
 - **Flesch Reading Ease** - How easy is your content to read?
 - **Grade Level Scores** - Flesch-Kincaid, Gunning Fog, Coleman-Liau, SMOG, ARI
 - **Word & Sentence Metrics** - Count, averages, complexity indicators
+- **MkDocs Admonitions** - Detect and require `!!! note`, `!!! warning`, etc.
 - **Multiple Output Formats** - Table, Markdown, JSON, Summary, Report
 - **Threshold Enforcement** - Fail CI when quality drops
+- **Job Summary** - Automatic GitHub Actions job summary with formatted report
 
 ## Quick Start
 
@@ -55,7 +57,7 @@ readability --config .readability.yml docs/
 
 ## Configuration
 
-Create `.content-analyzer.yml` in your repo:
+Create `.readability.yml` in your repo:
 
 ```yaml
 thresholds:
@@ -65,12 +67,14 @@ thresholds:
   min_ease: 30
   max_lines: 500
   min_words: 100
+  min_admonitions: 1  # Require at least one MkDocs admonition
 
 overrides:
-  - pattern: "docs/api/**"
+  - path: docs/api/
     thresholds:
       max_grade: 14
       max_lines: 1000
+      min_admonitions: -1  # Disable admonition requirement
 ```
 
 ## Action Inputs
@@ -84,6 +88,17 @@ overrides:
 | `max-grade` | Maximum Flesch-Kincaid grade level | (from config) |
 | `max-ari` | Maximum ARI score | (from config) |
 | `max-lines` | Maximum lines per file | (from config) |
+| `summary` | Write formatted report to job summary | `true` |
+| `summary-title` | Title for the job summary section | `Documentation Readability Report` |
+| `version` | Version of readability to use | `latest` |
+
+## Action Outputs
+
+| Output | Description |
+|--------|-------------|
+| `report` | Analysis report in JSON format |
+| `passed` | Whether all thresholds were met (`true`/`false`) |
+| `files-analyzed` | Number of files analyzed |
 
 ## CLI Flags
 
@@ -96,6 +111,7 @@ overrides:
 | `--max-grade` | Maximum Flesch-Kincaid grade level |
 | `--max-ari` | Maximum ARI score |
 | `--max-lines` | Maximum lines per file (0 to disable) |
+| `--min-admonitions` | Minimum MkDocs-style admonitions required (-1 to disable) |
 
 ## License
 
