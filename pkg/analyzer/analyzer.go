@@ -282,12 +282,13 @@ func countSentences(text string) int {
 }
 
 // calculateReadingTime estimates reading time at 200 WPM for technical content.
+// Uses ceiling division to round up (201 words = 2 minutes, not 1).
 func calculateReadingTime(words int) int {
-	minutes := words / 200
-	if minutes == 0 && words > 0 {
-		return 1
+	if words <= 0 {
+		return 0
 	}
-	return minutes
+	// Ceiling division: (words + 199) / 200
+	return (words + 199) / 200
 }
 
 // calculateRatio safely calculates a ratio.

@@ -83,11 +83,13 @@ func Markdown(w io.Writer, results []*analyzer.Result) {
 }
 
 // readingTime formats word count as reading time estimate.
+// Uses 200 WPM for technical content with ceiling division.
 func readingTime(words int) string {
-	minutes := words / 200
-	if minutes < 1 {
+	if words <= 0 {
 		return "<1m"
 	}
+	// Ceiling division: (words + 199) / 200
+	minutes := (words + 199) / 200
 	return fmt.Sprintf("%dm", minutes)
 }
 
