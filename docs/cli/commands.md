@@ -15,7 +15,7 @@ Analyze markdown files for readability metrics.
 #### Output Options
 
 `--format, -f`
-:   Output format. Options: `table`, `json`, `markdown`, `summary`, `report`, `diagnostic`. Default: `table`.
+:   Output format. Options: `table`, `json`, `markdown`, `summary`, `report`, `diagnostic`. Default: `table`. See [Diagnostic Output](diagnostic-output.md) for linter-style format details.
 
 `--verbose, -v`
 :   Show all available metrics in output.

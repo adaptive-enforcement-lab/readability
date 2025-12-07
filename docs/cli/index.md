@@ -38,3 +38,4 @@ readability --format json docs/
 
 - [Commands](commands.md) - Detailed command reference
 - [Configuration File](config-file.md) - Config file format
+- [Diagnostic Output](diagnostic-output.md) - Linter-style output for IDE/CI integration
