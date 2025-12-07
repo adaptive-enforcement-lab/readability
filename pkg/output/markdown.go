@@ -47,7 +47,7 @@ func Markdown(w io.Writer, results []*analyzer.Result) {
 	m.printf("| Failed | %d |\n", failed)
 	m.printf("| Words | %d |\n", totalWords)
 	m.printf("| Lines | %d |\n", totalLines)
-	m.printf("| Reading time | %d min |\n", totalWords/200)
+	m.printf("| Reading time | %d min |\n", (totalWords+199)/200)
 	m.println()
 
 	// Sort by status (failed first), then by file path
@@ -114,7 +114,7 @@ func Summary(w io.Writer, results []*analyzer.Result) {
 	m.printf("| Failed | %d |\n", failed)
 	m.printf("| Words | %d |\n", totalWords)
 	m.printf("| Lines | %d |\n", totalLines)
-	m.printf("| Reading time | %d min |\n", totalWords/200)
+	m.printf("| Reading time | %d min |\n", (totalWords+199)/200)
 	m.println()
 
 	// Failed files list if any
@@ -174,7 +174,7 @@ func Report(w io.Writer, results []*analyzer.Result) {
 	m.printf("| Failed | %d |\n", failed)
 	m.printf("| Words | %d |\n", totalWords)
 	m.printf("| Lines | %d |\n", totalLines)
-	m.printf("| Reading time | ~%d min |\n", totalWords/200)
+	m.printf("| Reading time | ~%d min |\n", (totalWords+199)/200)
 	m.println()
 
 	// Only show failed files in report (keep it concise)
