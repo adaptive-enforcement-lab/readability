@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.10.1...0.11.0) (2025-12-07)
+
+
+### Features
+
+* add Issues column to markdown results table ([#60](https://github.com/adaptive-enforcement-lab/readability/issues/60)) ([692b522](https://github.com/adaptive-enforcement-lab/readability/commit/692b522350e4a37e63d4dc81559846814befde2b))
+
 ## [0.10.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.10.0...0.10.1) (2025-12-07)
 
 
