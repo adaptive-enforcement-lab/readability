@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.10.0...0.10.1) (2025-12-07)
+
+
+### Bug Fixes
+
+* complete reading time ceiling division fixes ([#59](https://github.com/adaptive-enforcement-lab/readability/issues/59)) ([cfd4cdb](https://github.com/adaptive-enforcement-lab/readability/commit/cfd4cdbb84903596a3f1e29f6bf31cd216a1d0f9))
+* use ceiling division for reading time calculation ([#57](https://github.com/adaptive-enforcement-lab/readability/issues/57)) ([2e8b644](https://github.com/adaptive-enforcement-lab/readability/commit/2e8b644262e95d519b6e557ddb5fedb78c97890a))
+
 ## [0.10.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.9.2...0.10.0) (2025-12-07)
 
 
