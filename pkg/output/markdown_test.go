@@ -1,6 +1,10 @@
 package output
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/adaptive-enforcement-lab/readability/pkg/analyzer"
+)
 
 func TestReadingTime(t *testing.T) {
 	tests := []struct {
@@ -27,6 +31,71 @@ func TestReadingTime(t *testing.T) {
 			got := readingTime(tt.words)
 			if got != tt.want {
 				t.Errorf("readingTime(%d) = %q, want %q", tt.words, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIdentifyIssues(t *testing.T) {
+	tests := []struct {
+		name        string
+		diagnostics []analyzer.Diagnostic
+		want        string
+	}{
+		{
+			name:        "no diagnostics",
+			diagnostics: nil,
+			want:        "Threshold exceeded",
+		},
+		{
+			name: "single issue - grade",
+			diagnostics: []analyzer.Diagnostic{
+				{Rule: "readability/grade-level"},
+			},
+			want: "Grade",
+		},
+		{
+			name: "multiple readability issues",
+			diagnostics: []analyzer.Diagnostic{
+				{Rule: "readability/grade-level"},
+				{Rule: "readability/ari"},
+				{Rule: "readability/gunning-fog"},
+				{Rule: "readability/flesch-ease"},
+			},
+			want: "Grade, ARI, Fog, Ease",
+		},
+		{
+			name: "structure and content issues",
+			diagnostics: []analyzer.Diagnostic{
+				{Rule: "structure/max-lines"},
+				{Rule: "content/admonitions"},
+			},
+			want: "Lines, Admonitions",
+		},
+		{
+			name: "all issue types",
+			diagnostics: []analyzer.Diagnostic{
+				{Rule: "readability/grade-level"},
+				{Rule: "readability/ari"},
+				{Rule: "content/admonitions"},
+			},
+			want: "Grade, ARI, Admonitions",
+		},
+		{
+			name: "unknown rule uses rule ID",
+			diagnostics: []analyzer.Diagnostic{
+				{Rule: "custom/unknown-rule"},
+			},
+			want: "custom/unknown-rule",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &analyzer.Result{Diagnostics: tt.diagnostics}
+			got := identifyIssues(r)
+			if got != tt.want {
+				t.Errorf("identifyIssues() = %q, want %q", got, tt.want)
 			}
 		})
 	}
