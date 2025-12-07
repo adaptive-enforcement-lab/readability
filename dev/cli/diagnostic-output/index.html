@@ -10,13 +10,9 @@
       
       
       
-        <link rel="canonical" href="https://readability.adaptive-enforcement-lab.com/dev/cli/commands/">
+        <link rel="canonical" href="https://readability.adaptive-enforcement-lab.com/dev/cli/diagnostic-output/">
       
       
-        <link rel="prev" href="../">
-      
-      
-        <link rel="next" href="../config-file/">
       
       
         
@@ -27,7 +23,7 @@
     
     
       
-        <title>Commands - Readability</title>
+        <title>Diagnostic Output Format - Readability</title>
       
     
     
@@ -80,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#commands" class="md-skip">
+        <a href="#diagnostic_output_format" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Commands
+              Diagnostic Output Format
             
           </span>
         </div>
@@ -303,12 +299,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../" class="md-tabs__link">
           
   
@@ -695,8 +689,6 @@
       
   
   
-    
-  
   
   
     
@@ -714,19 +706,16 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -748,13 +737,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -771,37 +760,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Commands
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../commands/" class="md-nav__link">
         
   
   
@@ -817,87 +779,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#readability_path" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        readability [path]
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="readability [path]">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#arguments" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Arguments
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#flags" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flags
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Examples
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#exit_codes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Exit Codes
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1129,22 +1010,77 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#readability_path" class="md-nav__link">
+  <a href="#format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        readability [path]
+        Format
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="readability [path]">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example_output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule_ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rule IDs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#severity_levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Severity Levels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ide_integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IDE Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IDE Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#arguments" class="md-nav__link">
+  <a href="#vs_code" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Arguments
+        VS Code
       
     </span>
   </a>
@@ -1152,10 +1088,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#flags" class="md-nav__link">
+  <a href="#vimneovim" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flags
+        Vim/Neovim
       
     </span>
   </a>
@@ -1163,10 +1099,38 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#pre-commit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Examples
+        Pre-commit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ci_integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CI Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github_actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Actions
       
     </span>
   </a>
@@ -1174,10 +1138,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#exit_codes" class="md-nav__link">
+  <a href="#generic_ci" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Exit Codes
+        Generic CI
       
     </span>
   </a>
@@ -1207,46 +1171,6 @@
   
 
 
-  <nav class="md-path" aria-label="Navigation" >
-    <ol class="md-path__list">
-      
-        
-  
-  
-    <li class="md-path__item">
-      <a href="../.." class="md-path__link">
-        
-  <span class="md-ellipsis">
-    Home
-  </span>
-
-      </a>
-    </li>
-  
-
-      
-      
-        
-  
-  
-    
-    
-      <li class="md-path__item">
-        <a href="../" class="md-path__link">
-          
-  <span class="md-ellipsis">
-    CLI Reference
-  </span>
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ol>
-  </nav>
-
               
               <article class="md-content__inner md-typeset">
                 
@@ -1257,82 +1181,161 @@
   
 
 
-<h1 id="commands">Commands<a class="headerlink" href="#commands" title="Link">&para;</a></h1>
-<h2 id="readability_path">readability [path]<a class="headerlink" href="#readability_path" title="Link">&para;</a></h2>
-<p>Analyze markdown files for readability metrics.</p>
-<h3 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>path</code></td>
-<td>File or directory to analyze (required)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="flags">Flags<a class="headerlink" href="#flags" title="Link">&para;</a></h3>
-<h4 id="output_options">Output Options<a class="headerlink" href="#output_options" title="Link">&para;</a></h4>
-<p><code>--format, -f</code>
-:   Output format. Options: <code>table</code>, <code>json</code>, <code>markdown</code>, <code>summary</code>, <code>report</code>, <code>diagnostic</code>. Default: <code>table</code>. See <a href="../diagnostic-output/">Diagnostic Output</a> for linter-style format details.</p>
-<p><code>--verbose, -v</code>
-:   Show all available metrics in output.</p>
-<h4 id="threshold_options">Threshold Options<a class="headerlink" href="#threshold_options" title="Link">&para;</a></h4>
-<p><code>--check</code>
-:   Enable check mode. Exit with code 1 if any file fails thresholds.</p>
-<p><code>--max-grade</code>
-:   Maximum Flesch-Kincaid grade level. Overrides config file.</p>
-<p><code>--max-ari</code>
-:   Maximum ARI score. Overrides config file.</p>
-<p><code>--max-lines</code>
-:   Maximum lines per file. Set to 0 to disable. Overrides config file.</p>
-<p><code>--min-admonitions</code>
-:   Minimum MkDocs-style admonitions required. Set to 0 to disable. Overrides config file.</p>
-<h4 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Link">&para;</a></h4>
-<p><code>--config, -c</code>
-:   Path to configuration file. Default: auto-detect <code>.readability.yml</code>.</p>
-<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Basic analysis</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>readability<span class="w"> </span>docs/
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># JSON output</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>readability<span class="w"> </span>--format<span class="w"> </span>json<span class="w"> </span>docs/
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Diagnostic output (linter-style)</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>readability<span class="w"> </span>--format<span class="w"> </span>diagnostic<span class="w"> </span>docs/
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Check with custom thresholds</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>readability<span class="w"> </span>--check<span class="w"> </span>--max-grade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--max-ari<span class="w"> </span><span class="m">12</span><span class="w"> </span>docs/
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Verbose output</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>readability<span class="w"> </span>-v<span class="w"> </span>docs/
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># Use specific config</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>readability<span class="w"> </span>-c<span class="w"> </span>.readability.yml<span class="w"> </span>docs/
+<h1 id="diagnostic_output_format">Diagnostic Output Format<a class="headerlink" href="#diagnostic_output_format" title="Link">&para;</a></h1>
+<p>The diagnostic output format provides linter-style output compatible with IDEs, editors, and CI tooling.</p>
+<h2 id="format">Format<a class="headerlink" href="#format" title="Link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>file:line:column: severity: message (rule-id)
 </span></code></pre></div>
-<h3 id="exit_codes">Exit Codes<a class="headerlink" href="#exit_codes" title="Link">&para;</a></h3>
+<p>Each issue is reported on a single line with:</p>
 <table>
 <thead>
 <tr>
-<th>Code</th>
+<th>Field</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0</td>
-<td>Success (all files pass or check mode disabled)</td>
+<td><code>file</code></td>
+<td>Relative path to the file</td>
 </tr>
 <tr>
-<td>1</td>
-<td>Failure (one or more files failed thresholds in check mode)</td>
+<td><code>line</code></td>
+<td>Line number (1-based)</td>
+</tr>
+<tr>
+<td><code>column</code></td>
+<td>Column number (1-based, defaults to 1)</td>
+</tr>
+<tr>
+<td><code>severity</code></td>
+<td>Issue severity: <code>error</code>, <code>warning</code>, or <code>info</code></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>Human-readable description of the issue</td>
+</tr>
+<tr>
+<td><code>rule-id</code></td>
+<td>Machine-readable rule identifier</td>
 </tr>
 </tbody>
 </table>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>readability<span class="w"> </span>--format<span class="w"> </span>diagnostic<span class="w"> </span>docs/
+</span></code></pre></div>
+<p>With check mode for CI:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>readability<span class="w"> </span>--check<span class="w"> </span>--format<span class="w"> </span>diagnostic<span class="w"> </span>docs/
+</span></code></pre></div>
+<h2 id="example_output">Example Output<a class="headerlink" href="#example_output" title="Link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docs/api/reference.md:1:1: error: Flesch-Kincaid grade 18.5 exceeds threshold 16.0 (readability/grade-level)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docs/api/reference.md:1:1: error: ARI 20.4 exceeds threshold 16.0 (readability/ari)
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>docs/api/reference.md:1:1: warning: Found 0 admonitions, minimum required is 1 (content/admonitions)
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>docs/getting-started.md:1:1: error: 450 lines exceeds threshold 375 (structure/max-lines)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>4 issue(s): 3 error(s), 1 warning(s)
+</span></code></pre></div>
+<h2 id="rule_ids">Rule IDs<a class="headerlink" href="#rule_ids" title="Link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Rule ID</th>
+<th>Severity</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readability/grade-level</code></td>
+<td>error</td>
+<td>Flesch-Kincaid grade level exceeds threshold</td>
+</tr>
+<tr>
+<td><code>readability/ari</code></td>
+<td>error</td>
+<td>Automated Readability Index exceeds threshold</td>
+</tr>
+<tr>
+<td><code>readability/gunning-fog</code></td>
+<td>error</td>
+<td>Gunning Fog index exceeds threshold</td>
+</tr>
+<tr>
+<td><code>readability/flesch-ease</code></td>
+<td>error</td>
+<td>Flesch Reading Ease below threshold</td>
+</tr>
+<tr>
+<td><code>structure/max-lines</code></td>
+<td>error</td>
+<td>File exceeds maximum line count</td>
+</tr>
+<tr>
+<td><code>content/admonitions</code></td>
+<td>warning</td>
+<td>File has fewer admonitions than required</td>
+</tr>
+</tbody>
+</table>
+<h2 id="severity_levels">Severity Levels<a class="headerlink" href="#severity_levels" title="Link">&para;</a></h2>
+<ul>
+<li><strong>error</strong>: Threshold violations that cause check mode to fail</li>
+<li><strong>warning</strong>: Issues that should be addressed but don't block CI</li>
+<li><strong>info</strong>: Informational messages (reserved for future use)</li>
+</ul>
+<h2 id="ide_integration">IDE Integration<a class="headerlink" href="#ide_integration" title="Link">&para;</a></h2>
+<p>The diagnostic format is designed to work with tools that parse compiler-style output.</p>
+<h3 id="vs_code">VS Code<a class="headerlink" href="#vs_code" title="Link">&para;</a></h3>
+<p>Use the "Problems" panel with a task that runs readability:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;tasks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Check Readability&quot;</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;readability --format diagnostic docs/&quot;</span><span class="p">,</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">&quot;problemMatcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;readability&quot;</span><span class="p">,</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="nt">&quot;fileLocation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;relative&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;${workspaceFolder}&quot;</span><span class="p">],</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="nt">&quot;pattern&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">          </span><span class="nt">&quot;regexp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;^(.+):(\\d+):(\\d+): (error|warning|info): (.+) \\((.+)\\)$&quot;</span><span class="p">,</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">          </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">          </span><span class="nt">&quot;line&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">          </span><span class="nt">&quot;column&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">          </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">          </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">          </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="vimneovim">Vim/Neovim<a class="headerlink" href="#vimneovim" title="Link">&para;</a></h3>
+<p>Add to your <code>errorformat</code>:</p>
+<div class="language-vim highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">set</span> <span class="nb">errorformat</span><span class="p">+=</span>%<span class="k">f</span>:%<span class="k">l</span>:%<span class="k">c</span>:\ %<span class="k">t</span>%*[^:]:\ %<span class="k">m</span>
+</span></code></pre></div>
+<h3 id="pre-commit">Pre-commit<a class="headerlink" href="#pre-commit" title="Link">&para;</a></h3>
+<p>The diagnostic format is the default for pre-commit hooks:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">repos</span><span class="p">:</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/adaptive-enforcement-lab/readability</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v0.9.0</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readability-docs</span>
+</span></code></pre></div>
+<h2 id="ci_integration">CI Integration<a class="headerlink" href="#ci_integration" title="Link">&para;</a></h2>
+<h3 id="github_actions">GitHub Actions<a class="headerlink" href="#github_actions" title="Link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check documentation readability</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">adaptive-enforcement-lab/readability@v1</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">diagnostic</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nt">check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+<h3 id="generic_ci">Generic CI<a class="headerlink" href="#generic_ci" title="Link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>readability<span class="w"> </span>--check<span class="w"> </span>--format<span class="w"> </span>diagnostic<span class="w"> </span>docs/<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+</span></code></pre></div>
+<p>The exit code is non-zero when any file fails thresholds, making it suitable for CI gates.</p>
 
 
 
@@ -1365,44 +1368,6 @@
       
         <footer class="md-footer">
   
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-          
-          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: CLI Reference">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              <div class="md-ellipsis">
-                CLI Reference
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../config-file/" class="md-footer__link md-footer__link--next" aria-label="Next: Configuration File">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Configuration File
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
     
   
   <div class="md-footer-meta md-typeset">
