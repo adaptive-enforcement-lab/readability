@@ -22,12 +22,14 @@ type ParseResult struct {
 
 // Admonition represents a MkDocs-style admonition block.
 type Admonition struct {
+	Line  int    // Line number (1-based)
 	Type  string // note, warning, tip, etc.
 	Title string // optional custom title
 }
 
 // Heading represents a markdown heading.
 type Heading struct {
+	Line  int // Line number (1-based)
 	Level int
 	Text  string
 }
@@ -54,7 +56,13 @@ func Parse(content []byte) (*ParseResult, error) {
 
 		switch n := node.(type) {
 		case *ast.Heading:
+			// Get line number from the heading's first line segment
+			line := 1
+			if n.Lines().Len() > 0 {
+				line = bytes.Count(content[:n.Lines().At(0).Start], []byte("\n")) + 1
+			}
 			heading := Heading{
+				Line:  line,
 				Level: n.Level,
 				Text:  extractHeadingText(n, content),
 			}
@@ -109,7 +117,7 @@ func Parse(content []byte) (*ParseResult, error) {
 
 	// Count code lines, empty lines, and detect admonitions
 	inCodeBlock := false
-	for _, line := range lines {
+	for lineNum, line := range lines {
 		trimmed := bytes.TrimSpace(line)
 		if bytes.HasPrefix(trimmed, []byte("```")) {
 			inCodeBlock = !inCodeBlock
@@ -126,6 +134,7 @@ func Parse(content []byte) (*ParseResult, error) {
 		if !inCodeBlock && bytes.HasPrefix(trimmed, []byte("!!!")) {
 			admonition := parseAdmonition(string(trimmed))
 			if admonition != nil {
+				admonition.Line = lineNum + 1 // 1-based line numbers
 				result.Admonitions = append(result.Admonitions, *admonition)
 			}
 		}

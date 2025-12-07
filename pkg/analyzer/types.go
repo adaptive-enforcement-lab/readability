@@ -2,13 +2,32 @@ package analyzer
 
 // Result contains all analysis metrics for a single file.
 type Result struct {
-	File        string      `json:"file"`
-	Structural  Structural  `json:"structural"`
-	Headings    Headings    `json:"headings"`
-	Readability Readability `json:"readability"`
-	Composition Composition `json:"composition"`
-	Admonitions Admonitions `json:"admonitions"`
-	Status      string      `json:"status"`
+	File        string       `json:"file"`
+	Structural  Structural   `json:"structural"`
+	Headings    Headings     `json:"headings"`
+	Readability Readability  `json:"readability"`
+	Composition Composition  `json:"composition"`
+	Admonitions Admonitions  `json:"admonitions"`
+	Diagnostics []Diagnostic `json:"diagnostics,omitempty"`
+	Status      string       `json:"status"`
+}
+
+// Severity represents the severity level of a diagnostic.
+type Severity string
+
+const (
+	SeverityError   Severity = "error"
+	SeverityWarning Severity = "warning"
+	SeverityInfo    Severity = "info"
+)
+
+// Diagnostic represents a single issue found during analysis.
+type Diagnostic struct {
+	Line     int      `json:"line"`               // Line number (1-based), 0 if not applicable
+	Column   int      `json:"column,omitempty"`   // Column number (1-based), 0 if not applicable
+	Severity Severity `json:"severity"`           // error, warning, info
+	Rule     string   `json:"rule"`               // Rule ID (e.g., "readability/grade-level")
+	Message  string   `json:"message"`            // Human-readable message
 }
 
 // Admonitions contains admonition counts and details.

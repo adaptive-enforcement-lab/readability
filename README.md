@@ -104,7 +104,7 @@ overrides:
 
 | Flag | Description |
 |------|-------------|
-| `--format, -f` | Output format: table, json, markdown, summary, report |
+| `--format, -f` | Output format: table, json, markdown, summary, report, diagnostic |
 | `--verbose, -v` | Show all metrics |
 | `--check` | Check against thresholds (exit 1 on failure) |
 | `--config, -c` | Path to config file |
