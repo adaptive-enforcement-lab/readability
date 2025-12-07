@@ -61,16 +61,18 @@ func Markdown(w io.Writer, results []*analyzer.Result) {
 	})
 
 	// Results table
-	m.println("| Status | File | Lines | Read | FK Grade | ARI | Flesch |")
-	m.println("|:------:|------|------:|-----:|---------:|----:|-------:|")
+	m.println("| Status | File | Lines | Read | FK Grade | ARI | Flesch | Issues |")
+	m.println("|:------:|------|------:|-----:|---------:|----:|-------:|--------|")
 
 	for _, r := range sorted {
 		status := "✅"
+		issues := ""
 		if r.Status == "fail" {
 			status = "❌"
+			issues = identifyIssues(r)
 		}
 		readTime := readingTime(r.Structural.Words)
-		m.printf("| %s | %s | %d | %s | %.1f | %.1f | %.1f |\n",
+		m.printf("| %s | %s | %d | %s | %.1f | %.1f | %.1f | %s |\n",
 			status,
 			cleanPath(r.File),
 			r.Structural.Lines,
@@ -78,6 +80,7 @@ func Markdown(w io.Writer, results []*analyzer.Result) {
 			r.Readability.FleschKincaidGrade,
 			r.Readability.ARI,
 			r.Readability.FleschReadingEase,
+			issues,
 		)
 	}
 }
@@ -91,6 +94,38 @@ func readingTime(words int) string {
 	// Ceiling division: (words + 199) / 200
 	minutes := (words + 199) / 200
 	return fmt.Sprintf("%dm", minutes)
+}
+
+// identifyIssues returns all failure reasons from diagnostics.
+func identifyIssues(r *analyzer.Result) string {
+	if len(r.Diagnostics) == 0 {
+		return "Threshold exceeded"
+	}
+
+	// Map rule IDs to short human-readable descriptions
+	ruleLabels := map[string]string{
+		"readability/grade-level": "Grade",
+		"readability/ari":         "ARI",
+		"readability/gunning-fog": "Fog",
+		"readability/flesch-ease": "Ease",
+		"structure/max-lines":     "Lines",
+		"content/admonitions":     "Admonitions",
+	}
+
+	seen := make(map[string]bool)
+	var issues []string
+	for _, d := range r.Diagnostics {
+		label, ok := ruleLabels[d.Rule]
+		if !ok {
+			label = d.Rule
+		}
+		if !seen[label] {
+			issues = append(issues, label)
+			seen[label] = true
+		}
+	}
+
+	return strings.Join(issues, ", ")
 }
 
 // Summary writes only an aggregate summary in markdown format.
