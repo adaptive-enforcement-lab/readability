@@ -15,7 +15,7 @@ Analyze markdown files for readability metrics.
 #### Output Options
 
 `--format, -f`
-:   Output format. Options: `table`, `json`, `markdown`, `summary`, `report`. Default: `table`.
+:   Output format. Options: `table`, `json`, `markdown`, `summary`, `report`, `diagnostic`. Default: `table`.
 
 `--verbose, -v`
 :   Show all available metrics in output.
@@ -34,10 +34,13 @@ Analyze markdown files for readability metrics.
 `--max-lines`
 :   Maximum lines per file. Set to 0 to disable. Overrides config file.
 
+`--min-admonitions`
+:   Minimum MkDocs-style admonitions required. Set to 0 to disable. Overrides config file.
+
 #### Configuration
 
 `--config, -c`
-:   Path to configuration file. Default: auto-detect `.content-analyzer.yml`.
+:   Path to configuration file. Default: auto-detect `.readability.yml`.
 
 ### Examples
 
@@ -47,6 +50,9 @@ readability docs/
 
 # JSON output
 readability --format json docs/
+
+# Diagnostic output (linter-style)
+readability --format diagnostic docs/
 
 # Check with custom thresholds
 readability --check --max-grade 10 --max-ari 12 docs/

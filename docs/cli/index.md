@@ -25,13 +25,14 @@ readability --format json docs/
 
 | Flag | Short | Description |
 |------|-------|-------------|
-| `--format` | `-f` | Output format: table, json, markdown, summary, report |
+| `--format` | `-f` | Output format: table, json, markdown, summary, report, diagnostic |
 | `--verbose` | `-v` | Show all metrics |
 | `--check` | | Check against thresholds (exit 1 on failure) |
 | `--config` | `-c` | Path to config file |
 | `--max-grade` | | Maximum Flesch-Kincaid grade level |
 | `--max-ari` | | Maximum ARI score |
 | `--max-lines` | | Maximum lines per file |
+| `--min-admonitions` | | Minimum MkDocs-style admonitions required |
 
 ## Next Steps
 
