@@ -65,6 +65,11 @@ plugins:
       separator: '[\s\-\.]+'
       lang:
         - en
+  - social:
+      cards_layout: default
+      cards_layout_options:
+        background_color: "#1565c0"
+        color: "#ffffff"
 markdown_extensions:
   - admonition
   - attr_list
@@ -118,6 +123,5 @@ nav:
       - metrics/index.md
       - Flesch Reading Ease: metrics/flesch-reading-ease.md
       - Grade Level Scores: metrics/grade-level.md
-      - Admonitions: metrics/admonitions.md
       - Thresholds: metrics/thresholds.md
       - Admonitions: metrics/admonitions.md
