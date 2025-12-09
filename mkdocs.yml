@@ -97,9 +97,10 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 nav:
-  - Home: index.md
-  - What is Readability?: introduction.md
-  - Who Is This For?: use-cases.md
+  - Home:
+      - index.md
+      - What is Readability?: introduction.md
+      - Who Is This For?: use-cases.md
   - Getting Started:
       - getting-started/index.md
       - Installation: getting-started/installation.md
