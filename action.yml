@@ -1,5 +1,5 @@
-name: 'Readability'
-description: 'Analyze documentation readability and content quality metrics'
+name: 'Documentation Readability Analyzer'
+description: 'Analyze documentation readability and content quality metrics including Flesch-Kincaid, ARI, Gunning Fog, and more. Enforce thresholds in CI.'
 author: 'Adaptive Enforcement Lab'
 
 branding:
