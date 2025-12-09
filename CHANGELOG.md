@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.11.0...0.11.1) (2025-12-09)
+
+
+### Bug Fixes
+
+* remove homepage override so logo links to docs site ([#62](https://github.com/adaptive-enforcement-lab/readability/issues/62)) ([772654e](https://github.com/adaptive-enforcement-lab/readability/commit/772654ee11a8da18df2af71aec770662e9f35b7c))
+
 ## [0.11.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.10.1...0.11.0) (2025-12-07)
 
 
