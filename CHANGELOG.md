@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.1.0...1.1.1) (2025-12-09)
+
+
+### Bug Fixes
+
+* add pillow and cairosvg for social cards in CI ([5cba44e](https://github.com/adaptive-enforcement-lab/readability/commit/5cba44e02abe1b68a5e4a412439f02de8ae9e37a))
+
 ## [1.1.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.0.0...1.1.0) (2025-12-09)
 
 
