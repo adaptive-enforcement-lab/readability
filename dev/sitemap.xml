@@ -2,66 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/cli/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/cli/commands/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/cli/config-file/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/cli/diagnostic-output/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/getting-started/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/getting-started/installation/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/getting-started/quick-start/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/github-action/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/github-action/configuration/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/github-action/examples/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/metrics/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/metrics/admonitions/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/metrics/flesch-reading-ease/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/metrics/grade-level/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
     <url>
          <loc>https://readability.adaptive-enforcement-lab.com/dev/metrics/thresholds/</loc>
-         <lastmod>2025-12-07</lastmod>
+         <lastmod>2025-12-09</lastmod>
     </url>
 </urlset>
