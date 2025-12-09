@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.1.1...1.2.0) (2025-12-09)
+
+
+### Features
+
+* publish to GitHub Marketplace ([#70](https://github.com/adaptive-enforcement-lab/readability/issues/70)) ([4577d6d](https://github.com/adaptive-enforcement-lab/readability/commit/4577d6d7c84b65adc0476c41133fbd53b76f2bed))
+
+
+### Bug Fixes
+
+* rename action for GitHub Marketplace uniqueness ([f3df887](https://github.com/adaptive-enforcement-lab/readability/commit/f3df887f1aa10378ce2841647d3d9cb1fe8496d7))
+* shorten action description for Marketplace limit ([e18fd8d](https://github.com/adaptive-enforcement-lab/readability/commit/e18fd8d0e38979b57b8ed3dcfd574ec65029cad2))
+
+
+### Maintenance
+
+* ignore .cache directory ([430480c](https://github.com/adaptive-enforcement-lab/readability/commit/430480c956a0fbd644976e6be6c58f5a8909c728))
+
 ## [1.1.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.1.0...1.1.1) (2025-12-09)
 
 
