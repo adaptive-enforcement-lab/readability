@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.0.0...1.1.0) (2025-12-09)
+
+
+### Features
+
+* add social cards plugin and fix duplicate nav entry ([7935b61](https://github.com/adaptive-enforcement-lab/readability/commit/7935b617b0538168ec3d718701a49edcb8735c04))
+
 ## [1.0.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.11.1...1.0.0) (2025-12-09)
 
 
