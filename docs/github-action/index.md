@@ -1,11 +1,13 @@
 # GitHub Action
 
-Integrate Readability into your CI/CD pipeline to automatically check documentation quality on every pull request.
+Check documentation readability on every pull request. No local setup needed.
 
-## Basic Usage
+## Quick Setup
+
+Add this to `.github/workflows/docs.yml`:
 
 ```yaml
-name: Documentation Quality
+name: Check Docs
 
 on:
   pull_request:
@@ -24,15 +26,28 @@ jobs:
           check: true
 ```
 
+!!! tip "What This Does"
+    Every PR that changes files in `docs/` will run a readability check. If any file fails, the PR shows a red X.
+
+## What You Get
+
+The action adds a summary to your workflow run:
+
+| File | Grade | ARI | Status |
+|------|-------|-----|--------|
+| docs/index.md | 8.2 | 9.1 | pass |
+| docs/api.md | 15.3 | 17.2 | fail |
+
+Click any run to see the full report.
+
 ## Features
 
-- Automatic Go installation and build
-- Multiple output formats
-- Threshold enforcement
-- Configuration file support
-- Automatic job summary with clickable metric links
+- Works out of the box
+- Shows results in GitHub's job summary
+- Reads your `.readability.yml` config
+- Fails the build when docs are too complex
 
-## Next Steps
+## Learn More
 
-- [Configuration](configuration.md) - All available inputs and outputs
-- [Examples](examples.md) - Common workflow patterns
+- [Configuration](configuration.md) - All inputs and outputs
+- [Examples](examples.md) - Common patterns

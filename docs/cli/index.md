@@ -1,41 +1,64 @@
 # CLI Reference
 
-The Readability CLI provides full access to all analysis features from the command line.
+Analyze Markdown files from the command line.
 
-## Installation
+## Install
 
 ```bash
 go install github.com/adaptive-enforcement-lab/readability/cmd/readability@latest
 ```
 
+!!! note "Other Options"
+    See [Installation](../getting-started/installation.md) for binaries and building from source.
+
 ## Basic Usage
 
 ```bash
-# Analyze a single file
-readability docs/index.md
+# Check a file
+readability README.md
 
-# Analyze a directory (recursive)
+# Check a folder
 readability docs/
 
-# Output as JSON
-readability --format json docs/
+# Fail if issues found (for CI)
+readability --check docs/
 ```
 
-## Quick Reference
+## Options
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--format` | `-f` | Output format: table, json, markdown, summary, report, diagnostic |
+| Flag | Short | Purpose |
+|------|-------|---------|
+| `--format` | `-f` | Output format |
+| `--check` | | Exit 1 on failures |
+| `--config` | `-c` | Config file path |
 | `--verbose` | `-v` | Show all metrics |
-| `--check` | | Check against thresholds (exit 1 on failure) |
-| `--config` | `-c` | Path to config file |
-| `--max-grade` | | Maximum Flesch-Kincaid grade level |
-| `--max-ari` | | Maximum ARI score |
-| `--max-lines` | | Maximum lines per file |
-| `--min-admonitions` | | Minimum MkDocs-style admonitions required |
 
-## Next Steps
+## Output Formats
 
-- [Commands](commands.md) - Detailed command reference
-- [Configuration File](config-file.md) - Config file format
-- [Diagnostic Output](diagnostic-output.md) - Linter-style output for IDE/CI integration
+| Format | Best For |
+|--------|----------|
+| `table` | Reading in terminal |
+| `markdown` | GitHub summaries |
+| `json` | Scripts |
+| `diagnostic` | IDEs and linters |
+
+## Threshold Flags
+
+Set limits from the command line:
+
+```bash
+readability --max-grade 12 --max-ari 12 docs/
+```
+
+| Flag | Controls |
+|------|----------|
+| `--max-grade` | Grade level limit |
+| `--max-ari` | ARI score limit |
+| `--max-lines` | File length limit |
+| `--min-admonitions` | Required callouts |
+
+## More Info
+
+- [Commands](commands.md) - All flags
+- [Config File](config-file.md) - Save settings
+- [Diagnostic Output](diagnostic-output.md) - IDE setup

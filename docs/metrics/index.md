@@ -1,30 +1,45 @@
-# Metrics
+# Understanding Metrics
 
-Readability calculates several standard readability metrics to help you understand how accessible your documentation is.
+This tool measures how easy your writing is to read. Here's what each score means.
 
-## Overview
+## The Key Numbers
 
-| Metric | Range | What It Measures |
-|--------|-------|------------------|
-| Flesch Reading Ease | 0-100 | Overall readability (higher = easier) |
-| Flesch-Kincaid Grade | 0-18+ | US grade level required |
-| ARI | 0-20+ | US grade level (character-based) |
-| Gunning Fog | 0-20+ | Years of education needed |
-| SMOG | 0-20+ | Years of education (based on polysyllables) |
-| Coleman-Liau | 0-20+ | US grade level (character-based) |
+| Metric | What It Tells You |
+|--------|-------------------|
+| **Grade Level** | School grade needed to understand |
+| **Reading Ease** | Comfort level (0-100, higher = easier) |
+| **ARI** | Another grade measure, based on characters |
+| **Fog Index** | Years of schooling needed |
 
-## Recommended Targets
+!!! tip "Quick Rule"
+    For most docs, aim for grade 10-14 and ease above 30.
 
-| Audience | Grade Level | Flesch Ease |
-|----------|-------------|-------------|
-| General public | 6-8 | 60-70 |
-| High school | 9-12 | 50-60 |
-| Technical professionals | 12-14 | 30-50 |
-| Academic/specialist | 14+ | 0-30 |
+## What's a Good Score?
+
+| Your Audience | Target Grade | Target Ease |
+|---------------|--------------|-------------|
+| Everyone | 6-8 | 60-70 |
+| High schoolers | 9-12 | 50-60 |
+| Tech workers | 12-14 | 30-50 |
+| Experts only | 14+ | Under 30 |
+
+## How to Improve
+
+Bad scores usually mean:
+
+- Sentences are too long
+- Words have too many syllables
+- Writing is passive instead of active
+
+**Fix it by:**
+
+1. Break long sentences into shorter ones
+2. Use simple words (say "use" not "utilize")
+3. Write "the API returns data" not "data is returned"
 
 ## Learn More
 
-- [Flesch Reading Ease](flesch-reading-ease.md) - The most common readability score
-- [Grade Level Scores](grade-level.md) - Understanding grade-level metrics
-- [Thresholds](thresholds.md) - Setting appropriate limits
-- [Admonitions](admonitions.md) - MkDocs-style callout detection
+- [Grade Level Scores](grade-level.md) - The main metrics
+- [Flesch Reading Ease](flesch-reading-ease.md) - The comfort score
+- [Thresholds](thresholds.md) - Picking limits
+- [Admonitions](admonitions.md) - Callout boxes

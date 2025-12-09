@@ -1,170 +1,126 @@
 # Configuration File
 
-Readability automatically looks for `.readability.yml` in the target directory or git root.
+Store your thresholds in a `.readability.yml` file instead of passing flags every time.
 
-## File Location
+## Quick Start
 
-The tool searches for the config file in this order:
-
-1. The directory being analyzed
-2. Parent directories up to the git root
-3. If not found, uses built-in defaults
-
-You can also specify a config file explicitly:
-
-```bash
-readability --config /path/to/.readability.yml docs/
-```
-
-## Complete Example
-
-```yaml
-# .readability.yml
-thresholds:
-  max_grade: 12        # Maximum Flesch-Kincaid grade level
-  max_ari: 12          # Maximum Automated Readability Index
-  max_fog: 14          # Maximum Gunning Fog index
-  min_ease: 30         # Minimum Flesch Reading Ease (0-100)
-  max_lines: 500       # Maximum lines per file
-  min_words: 100       # Skip readability check if below this word count
-  min_admonitions: 1   # Require at least one MkDocs-style admonition
-
-overrides:
-  # API reference docs can be more technical
-  - path: docs/api/
-    thresholds:
-      max_grade: 16
-      max_ari: 16
-      max_lines: 1000
-      min_admonitions: 0  # API docs don't need admonitions
-
-  # Tutorials should be beginner-friendly with callouts
-  - path: docs/tutorials/
-    thresholds:
-      max_grade: 8
-      max_ari: 8
-      min_ease: 60
-      min_admonitions: 2  # Tutorials benefit from more callouts
-
-  # Reference docs with lots of lists/tables break formulas
-  - path: docs/reference/
-    thresholds:
-      max_grade: 50
-      max_ari: 50
-      min_ease: -100  # Negative value disables this check
-```
-
-## Threshold Fields
-
-| Field | Description | Default |
-|-------|-------------|---------|
-| `max_grade` | Maximum Flesch-Kincaid grade level | `16.0` |
-| `max_ari` | Maximum Automated Readability Index | `16.0` |
-| `max_fog` | Maximum Gunning Fog index | `18.0` |
-| `min_ease` | Minimum Flesch Reading Ease score | `25.0` |
-| `max_lines` | Maximum lines per file | `375` |
-| `min_words` | Skip readability checks if word count is below this | `100` |
-| `min_admonitions` | Minimum MkDocs-style admonitions required | `1` |
-
-### Understanding the Defaults
-
-The defaults target **college senior level** reading comprehension:
-
-| Grade Level | Audience |
-|-------------|----------|
-| 6-8 | Middle school |
-| 8-10 | MIL-STD-38784 (military technical manuals) |
-| 10-12 | High school |
-| 12-14 | College freshman/sophomore |
-| 14-16 | College junior/senior |
-| 16+ | Graduate level |
-
-### Disabling Checks
-
-Use extreme values to effectively disable specific checks:
-
-```yaml
-thresholds:
-  max_grade: 50        # Effectively no grade limit
-  min_ease: -100       # Negative values disable ease check
-  max_lines: 0         # Zero disables line limit (via CLI only)
-  min_admonitions: 0   # Disable admonition requirement
-```
-
-## Path Overrides
-
-Use `overrides` to apply different thresholds to specific directories or files.
-
-### Matching Rules
-
-- Paths use **prefix matching**
-- First matching override wins (order matters)
-- Unmatched files use the base `thresholds`
-- Paths are normalized (leading `./` and `../` stripped)
-
-### Override Examples
-
-```yaml
-overrides:
-  # Match all files under docs/api/
-  - path: docs/api/
-    thresholds:
-      max_grade: 16
-
-  # Match a specific file
-  - path: docs/changelog.md
-    thresholds:
-      max_lines: 2000
-
-  # More specific paths should come first
-  - path: docs/guides/advanced/
-    thresholds:
-      max_grade: 14
-  - path: docs/guides/
-    thresholds:
-      max_grade: 10
-```
-
-### Partial Overrides
-
-Override only the thresholds you need; others inherit from the base:
+Create `.readability.yml` in your repository root:
 
 ```yaml
 thresholds:
   max_grade: 12
   max_ari: 12
-  max_lines: 500
+```
+
+That's it. The tool finds it automatically.
+
+!!! tip "Where to Put It"
+    Place the config file in your repository root. The tool searches from the target directory up to the git root.
+
+## All Options
+
+```yaml
+thresholds:
+  max_grade: 12       # Flesch-Kincaid grade level
+  max_ari: 12         # Automated Readability Index
+  max_fog: 14         # Gunning Fog index
+  min_ease: 40        # Flesch Reading Ease (0-100)
+  max_lines: 400      # Lines per file
+  min_words: 100      # Skip check if fewer words
+  min_admonitions: 1  # Required callout boxes
+```
+
+## What Each Threshold Means
+
+| Option | What It Controls | Default |
+|--------|------------------|---------|
+| `max_grade` | School grade needed to read | 16 |
+| `max_ari` | Similar to grade, different formula | 16 |
+| `max_fog` | Complexity from long words | 18 |
+| `min_ease` | Comfort level (higher = easier) | 25 |
+| `max_lines` | File length limit | 375 |
+| `min_words` | Skip short files | 100 |
+| `min_admonitions` | Notes, tips, warnings needed | 1 |
+
+!!! info "Grade Level Scale"
+    A grade of 12 means "high school senior" level. Most technical docs should target grades 10-14.
+
+## Different Rules for Different Folders
+
+Use `overrides` to apply stricter or looser rules to specific paths:
+
+```yaml
+thresholds:
+  max_grade: 12
 
 overrides:
+  # API docs can be more technical
   - path: docs/api/
     thresholds:
-      max_grade: 16  # Only override grade; ari and lines inherit
+      max_grade: 16
+      min_admonitions: 0
+
+  # Tutorials should be simple
+  - path: docs/tutorials/
+    thresholds:
+      max_grade: 8
 ```
 
-## CLI Overrides
+### How Path Matching Works
 
-Command-line flags take precedence over config file values:
+- Paths match from the start (prefix matching)
+- First matching rule wins
+- Put specific paths before general ones
+- Unmatched files use the base thresholds
+
+**Example order:**
+
+```yaml
+overrides:
+  # Specific path first
+  - path: docs/api/advanced/
+    thresholds:
+      max_grade: 18
+
+  # General path second
+  - path: docs/api/
+    thresholds:
+      max_grade: 16
+```
+
+## Disabling Checks
+
+Set extreme values to skip specific checks:
+
+```yaml
+thresholds:
+  max_grade: 100      # No grade limit
+  min_ease: -100      # No ease requirement
+  max_lines: 0        # No line limit (CLI only)
+  min_admonitions: 0  # No admonition requirement
+```
+
+## Command Line Overrides
+
+Flags override config file values for a single run:
 
 ```bash
-# Config says max_grade: 12, but use 10 for this run
+# Use grade 10 instead of config value
 readability --max-grade 10 docs/
 
-# Disable line limit for a single run
-readability --max-lines 0 docs/
-
 # Use a different config file
-readability --config custom-config.yml docs/
+readability --config strict.yml docs/
 ```
 
-## GitHub Action Usage
+## With GitHub Actions
 
-The GitHub Action automatically detects `.readability.yml`:
+The action finds `.readability.yml` automatically:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/
-    check: true  # Fail if thresholds exceeded
+    check: true
 ```
 
-See [GitHub Action Configuration](../github-action/configuration.md) for more options.
+See [GitHub Action Configuration](../github-action/configuration.md) for action-specific options.

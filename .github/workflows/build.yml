@@ -44,3 +44,16 @@ jobs:
         with:
           path: README.md
           format: markdown
+
+  check-docs:
+    name: Check Documentation Readability
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+
+      - name: Check docs readability
+        run: go run ./cmd/readability --check --format diagnostic docs/

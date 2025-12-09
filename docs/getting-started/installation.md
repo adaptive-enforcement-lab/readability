@@ -1,71 +1,90 @@
 # Installation
 
+Pick the installation method that matches how you want to use Readability.
+
 ## GitHub Action
 
-The GitHub Action requires no installation - just add it to your workflow:
+No installation needed. Add this step to any workflow file in `.github/workflows/`:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/
+    check: true
 ```
+
+!!! note "Version Pinning"
+    Use `@v1` for the latest stable release. This automatically updates to new minor versions while staying on major version 1.
 
 ## Pre-commit Hook
 
-Add to your `.pre-commit-config.yaml`:
+Pre-commit hooks run checks before each commit. This catches issues early, on your local machine.
+
+### Step 1: Add the Hook
+
+Create or update `.pre-commit-config.yaml` in your repository root:
 
 ```yaml
 repos:
   - repo: https://github.com/adaptive-enforcement-lab/readability
-    rev: 0.6.0  # Use latest release
+    rev: v0.11.0  # Check releases for latest version
     hooks:
-      - id: readability
-        # Optionally check only docs/ directory:
-        # id: readability-docs
+      - id: readability-docs
 ```
 
-Then install and run:
+### Step 2: Install and Test
 
 ```bash
 pre-commit install
-pre-commit run readability --all-files
+pre-commit run readability-docs --all-files
 ```
 
 ### Available Hooks
 
-| Hook ID | Description |
-|---------|-------------|
-| `readability` | Check all markdown files passed by pre-commit |
-| `readability-docs` | Check only `docs/` directory (ignores filenames) |
+| Hook ID | What It Checks |
+|---------|----------------|
+| `readability` | All markdown files in the commit |
+| `readability-docs` | Only files in the `docs/` folder |
 
-### Configuration
-
-Create `.readability.yml` in your repository root to configure thresholds. See [Configuration File](../cli/config-file.md) for details.
+!!! tip "Configuration"
+    Create a `.readability.yml` file to customize thresholds. See [Configuration File](../cli/config-file.md) for options.
 
 ## CLI Tool
 
-### Go Install (Recommended)
+The command-line tool lets you run checks manually or in scripts.
 
-If you have Go installed:
+### Option 1: Go Install
+
+If you have Go 1.21 or later:
 
 ```bash
 go install github.com/adaptive-enforcement-lab/readability/cmd/readability@latest
 ```
 
-### Binary Download
+Verify it works:
 
-Download pre-built binaries from the [releases page](https://github.com/adaptive-enforcement-lab/readability/releases).
+```bash
+readability --version
+```
 
-Available platforms:
+### Option 2: Download Binary
+
+Download a pre-built binary from the [releases page](https://github.com/adaptive-enforcement-lab/readability/releases).
+
+**Available platforms:**
 
 - Linux (amd64, arm64)
 - macOS (amd64, arm64)
 - Windows (amd64)
 
-### From Source
+### Option 3: Build from Source
 
 ```bash
 git clone https://github.com/adaptive-enforcement-lab/readability.git
 cd readability
 go build -o readability ./cmd/readability
 ```
+
+## Next Step
+
+Continue to [Quick Start](quick-start.md) to run your first analysis.

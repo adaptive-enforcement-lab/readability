@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: readability
+        name: Check documentation readability
+        entry: go run ./cmd/readability --check --format diagnostic
+        language: system
+        files: '^docs/.*\.md$'
+        pass_filenames: true
