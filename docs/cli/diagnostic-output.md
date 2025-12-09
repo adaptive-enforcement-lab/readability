@@ -1,71 +1,57 @@
-# Diagnostic Output Format
+# Diagnostic Output
 
-The diagnostic output format provides linter-style output compatible with IDEs, editors, and CI tooling.
+The diagnostic format produces linter-style output that IDEs and CI tools understand.
 
-## Format
+## The Format
 
 ```
 file:line:column: severity: message (rule-id)
 ```
 
-Each issue is reported on a single line with:
+Each issue gets one line. This format works with VS Code, Vim, and most CI systems.
 
-| Field | Description |
-|-------|-------------|
-| `file` | Relative path to the file |
-| `line` | Line number (1-based) |
-| `column` | Column number (1-based, defaults to 1) |
-| `severity` | Issue severity: `error`, `warning`, or `info` |
-| `message` | Human-readable description of the issue |
-| `rule-id` | Machine-readable rule identifier |
+!!! example "Sample Output"
+    ```
+    docs/api.md:1:1: error: Grade 18.5 exceeds threshold 16.0 (readability/grade-level)
+    docs/api.md:1:1: warning: Found 0 admonitions, minimum is 1 (content/admonitions)
+    ```
 
-## Usage
+## How to Use It
 
 ```bash
 readability --format diagnostic docs/
 ```
 
-With check mode for CI:
+For CI pipelines, add `--check` to fail on errors:
 
 ```bash
 readability --check --format diagnostic docs/
 ```
 
-## Example Output
-
-```
-docs/api/reference.md:1:1: error: Flesch-Kincaid grade 18.5 exceeds threshold 16.0 (readability/grade-level)
-docs/api/reference.md:1:1: error: ARI 20.4 exceeds threshold 16.0 (readability/ari)
-docs/api/reference.md:1:1: warning: Found 0 admonitions, minimum required is 1 (content/admonitions)
-docs/getting-started.md:1:1: error: 450 lines exceeds threshold 375 (structure/max-lines)
-
-4 issue(s): 3 error(s), 1 warning(s)
-```
-
 ## Rule IDs
 
-| Rule ID | Severity | Description |
-|---------|----------|-------------|
-| `readability/grade-level` | error | Flesch-Kincaid grade level exceeds threshold |
-| `readability/ari` | error | Automated Readability Index exceeds threshold |
-| `readability/gunning-fog` | error | Gunning Fog index exceeds threshold |
-| `readability/flesch-ease` | error | Flesch Reading Ease below threshold |
-| `structure/max-lines` | error | File exceeds maximum line count |
-| `content/admonitions` | warning | File has fewer admonitions than required |
+Each issue has a rule ID you can reference:
+
+| Rule ID | Level | What It Checks |
+|---------|-------|----------------|
+| `readability/grade-level` | error | Flesch-Kincaid grade |
+| `readability/ari` | error | ARI score |
+| `readability/gunning-fog` | error | Gunning Fog index |
+| `readability/flesch-ease` | error | Reading ease score |
+| `structure/max-lines` | error | File length |
+| `content/admonitions` | warning | Callout boxes |
 
 ## Severity Levels
 
-- **error**: Threshold violations that cause check mode to fail
-- **warning**: Issues that should be addressed but don't block CI
-- **info**: Informational messages (reserved for future use)
+- **error** - Fails the check, blocks CI
+- **warning** - Should fix, but won't block CI
+- **info** - Informational only (future use)
 
-## IDE Integration
-
-The diagnostic format is designed to work with tools that parse compiler-style output.
+## IDE Setup
 
 ### VS Code
 
-Use the "Problems" panel with a task that runs readability:
+Create `.vscode/tasks.json`:
 
 ```json
 {
@@ -79,7 +65,7 @@ Use the "Problems" panel with a task that runs readability:
         "owner": "readability",
         "fileLocation": ["relative", "${workspaceFolder}"],
         "pattern": {
-          "regexp": "^(.+):(\\d+):(\\d+): (error|warning|info): (.+) \\((.+)\\)$",
+          "regexp": "^(.+):(\\d+):(\\d+): (error|warning): (.+) \\((.+)\\)$",
           "file": 1,
           "line": 2,
           "column": 3,
@@ -93,32 +79,24 @@ Use the "Problems" panel with a task that runs readability:
 }
 ```
 
-### Vim/Neovim
+Run with **Terminal > Run Task > Check Readability**. Issues appear in the Problems panel.
 
-Add to your `errorformat`:
+### Vim / Neovim
+
+Add to your config:
 
 ```vim
 set errorformat+=%f:%l:%c:\ %t%*[^:]:\ %m
 ```
 
-### Pre-commit
-
-The diagnostic format is the default for pre-commit hooks:
-
-```yaml
-repos:
-  - repo: https://github.com/adaptive-enforcement-lab/readability
-    rev: v0.9.0
-    hooks:
-      - id: readability-docs
-```
+Then run `:make` with the readability command.
 
 ## CI Integration
 
 ### GitHub Actions
 
 ```yaml
-- name: Check documentation readability
+- name: Check docs
   uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/
@@ -129,7 +107,19 @@ repos:
 ### Generic CI
 
 ```bash
-readability --check --format diagnostic docs/ || exit 1
+readability --check --format diagnostic docs/
 ```
 
-The exit code is non-zero when any file fails thresholds, making it suitable for CI gates.
+The command exits with code 1 when errors are found. This fails the CI job.
+
+## Pre-commit Hooks
+
+The pre-commit hook uses diagnostic format by default:
+
+```yaml
+repos:
+  - repo: https://github.com/adaptive-enforcement-lab/readability
+    rev: v0.11.0
+    hooks:
+      - id: readability-docs
+```

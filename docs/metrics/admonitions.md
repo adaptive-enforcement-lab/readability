@@ -1,157 +1,104 @@
 # Admonitions
 
-Readability checks for MkDocs-style admonitions to ensure documentation includes helpful callouts for notes, warnings, tips, and examples.
+Admonitions are callout boxes. They highlight tips, warnings, and notes in your docs.
 
-## What Are Admonitions?
+## What They Look Like
 
-Admonitions are visually distinct callout blocks that highlight important information. They use the `!!!` syntax popularized by MkDocs and its Material theme:
+In MkDocs, you write them like this:
 
 ```markdown
-!!! note "Optional Title"
-    Content indented by 4 spaces.
+!!! tip "Pro Tip"
+    Use short sentences. They're easier to read.
 
 !!! warning
-    This is a warning without a custom title.
+    This breaks in version 2.0.
 ```
 
-## Why Check for Admonitions?
+!!! note "Why Check for These?"
+    Admonitions break up walls of text. They make docs easier to scan. This tool checks that you use at least one per file.
 
-Admonitions improve documentation quality by:
+## Common Types
 
-- Highlighting important information that readers might otherwise miss
-- Breaking up walls of text with visual variety
-- Providing contextual cues (warnings, tips, examples)
-- Improving scannability for readers seeking specific information
+| Type | When to Use |
+|------|-------------|
+| `note` | Extra info that's good to know |
+| `tip` | Best practices and shortcuts |
+| `warning` | Things that might cause problems |
+| `danger` | Critical issues to avoid |
+| `example` | Code samples and use cases |
+| `info` | Background context |
 
-## Supported Types
+## Setting the Minimum
 
-Readability detects these common admonition types:
+By default, each file needs at least one admonition.
 
-| Type | Purpose |
-|------|---------|
-| `note` | Supplementary information |
-| `warning` | Potential pitfalls or breaking changes |
-| `tip` | Best practices or shortcuts |
-| `example` | Code samples or use cases |
-| `info` | Additional context |
-| `danger` | Critical warnings |
-| `abstract` | Summary or overview |
-| `question` | FAQs or discussion points |
-
-Any word following `!!!` is detected as an admonition type.
-
-## Configuration
-
-### Default Threshold
-
-By default, readability requires **at least 1 admonition per file**. This encourages adding at least one helpful callout to each document.
-
-### Config File
-
-Set the minimum in `.readability.yml`:
+**In your config:**
 
 ```yaml
 thresholds:
-  min_admonitions: 1   # Require at least 1 admonition (default)
-  # min_admonitions: 0 # Disable admonition check
-  # min_admonitions: 2 # Require at least 2 admonitions
+  min_admonitions: 1  # Default
 ```
 
-### CLI Override
-
-Override via command line:
+**From the command line:**
 
 ```bash
-# Disable admonition check for this run
+# Turn off the check
 readability --min-admonitions 0 docs/
 
-# Require at least 3 admonitions
+# Require at least 3
 readability --min-admonitions 3 docs/
 ```
 
-### Path-Specific Overrides
+## Different Rules for Different Folders
 
-Different directories may have different requirements:
+Some content needs more callouts than others:
 
 ```yaml
 thresholds:
   min_admonitions: 1
 
 overrides:
-  # Changelog doesn't need admonitions
+  # Changelogs don't need callouts
   - path: docs/changelog.md
     thresholds:
       min_admonitions: 0
 
-  # Tutorials should have more callouts
+  # Tutorials need more
   - path: docs/tutorials/
     thresholds:
       min_admonitions: 3
 ```
 
-## Output
+## Do's and Don'ts
 
-### JSON Output
+**Do:**
 
-When using `--format json`, admonition data is included:
+- Add `!!! tip` for shortcuts readers might miss
+- Add `!!! warning` for common mistakes
+- Add `!!! example` to show real usage
 
-```json
-{
-  "admonitions": {
-    "count": 2,
-    "types": ["note", "warning"]
-  }
-}
-```
+**Don't:**
 
-### Check Mode Warning
+- Add empty admonitions just to pass the check
+- Put basic info in callouts (use regular text)
+- Overuse them (too many loses impact)
 
-When `--check` fails due to missing admonitions, you'll see:
+!!! warning "Quality Over Quantity"
+    The check counts admonitions. It can't judge if they're helpful. Don't game the metric with empty boxes.
 
-```
-ADMONITIONS: Files are missing MkDocs-style admonitions (note, warning, tip, etc.).
-Admonitions improve documentation by highlighting important information:
-- Use !!! note for supplementary information
-- Use !!! warning for potential pitfalls or breaking changes
-- Use !!! tip for best practices or shortcuts
-- Use !!! example for code samples or use cases
+## Syntax Guide
 
-Example syntax:
-  !!! note "Optional Title"
-      Content indented by 4 spaces.
-
-Do NOT add empty or meaningless admonitions. Add value with relevant context.
-```
-
-## Best Practices
-
-### Do
-
-- Use `!!! note` for supplementary context that adds value
-- Use `!!! warning` for potential pitfalls or breaking changes
-- Use `!!! tip` for best practices the reader might not discover on their own
-- Use `!!! example` to show real-world usage
-
-### Don't
-
-- Add admonitions just to pass the check
-- Use admonitions for routine information that belongs in regular text
-- Overuse admonitions (they lose impact if everything is a callout)
-
-## Syntax Variants
-
-Readability detects all these formats:
+All of these work:
 
 ```markdown
 !!! note
-    Basic admonition.
+    Basic callout.
 
-!!! warning "Custom Title"
+!!! warning "Watch Out"
     With a custom title.
 
 !!! tip inline
-    Inline modifier (title optional).
-
-!!! note+
-    Collapsible variant marker.
+    Flows with text.
 ```
+
+The tool detects any word after `!!!` as a valid type.

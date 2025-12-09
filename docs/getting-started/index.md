@@ -1,40 +1,31 @@
 # Getting Started
 
-This guide will help you get up and running with Readability in just a few minutes.
+Get Readability running in under five minutes. Choose the method that fits your workflow.
 
-## Choose Your Method
+## Choose Your Path
 
-Readability can be used in two ways:
+| Method | Best For | Setup Time |
+|--------|----------|------------|
+| **GitHub Action** | Automated CI/CD checks | 2 minutes |
+| **Pre-commit Hook** | Local checks before commits | 3 minutes |
+| **CLI Tool** | Manual analysis, scripting | 2 minutes |
 
-1. **GitHub Action** - Integrate into your CI/CD pipeline for automated checks
-2. **CLI Tool** - Run locally during development or in scripts
+!!! tip "New to Readability?"
+    Start with the **GitHub Action**. It requires no local installation and catches issues automatically on every pull request.
 
-## Quick Start
+## Quick Preview
 
-### GitHub Action (Recommended)
+Here's what you'll get - a clear report showing which files need attention:
 
-Add to your workflow:
+```
+docs/api-reference.md:1:1: error: Grade 14.5 exceeds threshold 12.0
+docs/getting-started.md:1:1: pass
+docs/index.md:1:1: pass
 
-```yaml
-- uses: adaptive-enforcement-lab/readability@v1
-  with:
-    path: docs/
-    check: true
+3 files analyzed: 2 passed, 1 failed
 ```
 
-### CLI Installation
+## Next Steps
 
-```bash
-go install github.com/adaptive-enforcement-lab/readability/cmd/readability@latest
-```
-
-Then run:
-
-```bash
-readability docs/
-```
-
-## What's Next?
-
-- [Installation](installation.md) - Detailed installation options
-- [Quick Start](quick-start.md) - Your first readability analysis
+1. **[Installation](installation.md)** - Set up your preferred method
+2. **[Quick Start](quick-start.md)** - Run your first analysis

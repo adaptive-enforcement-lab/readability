@@ -1,41 +1,72 @@
 # Readability
 
-Documentation readability analyzer - GitHub Action and CLI tool for measuring content quality metrics.
+Measure how easy your writing is to read. Get a score. Improve.
 
-## Overview
+## New Here?
 
-Readability analyzes your documentation and provides actionable metrics to help you write clearer, more accessible content. Whether you're maintaining technical documentation, writing blog posts, or creating user guides, Readability helps ensure your content is easy to understand.
+If you've never heard of "readability scores" before, start with these:
 
-## Features
+<div class="grid cards" markdown>
 
-- **Flesch Reading Ease** - How easy is your content to read?
-- **Grade Level Scores** - Flesch-Kincaid, Gunning Fog, Coleman-Liau, SMOG, ARI
-- **Word & Sentence Metrics** - Count, averages, complexity indicators
-- **Multiple Output Formats** - Table, Markdown, JSON, Summary, Report
-- **Threshold Enforcement** - Fail CI when quality drops
+- :material-book-open-variant: **[What is Readability?](introduction.md)**
 
-## Quick Example
+    How computers measure writing difficulty. The history, the math, and why it matters.
 
-### GitHub Action
+- :material-account-question: **[Who Is This For?](use-cases.md)**
+
+    Find your situation: blogger, tech writer, docs team, student, or just curious.
+
+</div>
+
+## The Short Version
+
+Readability formulas count words, sentences, and syllables. They output a grade level - the US school grade that can understand the text. A score of 8 means an eighth grader should follow it.
+
+This tool runs those formulas on your Markdown files and tells you:
+
+| Metric | What It Tells You |
+|--------|-------------------|
+| **Grade Level** | What school grade can read this |
+| **Reading Ease** | How comfortable it is (0-100, higher = easier) |
+| **Reading Time** | How long it takes at 200 words/minute |
+
+!!! example "What the Output Looks Like"
+    ```
+    $ readability docs/
+
+    ┌─────────────────┬───────┬──────┬───────┬───────┬───────┬──────┐
+    │ File            │ Lines │ Read │ Grade │ ARI   │ Ease  │ Stat │
+    ├─────────────────┼───────┼──────┼───────┼───────┼───────┼──────┤
+    │ docs/index.md   │   42  │ <1m  │  7.8  │  8.9  │ 65.2  │ pass │
+    │ docs/setup.md   │   89  │  2m  │ 11.2  │ 12.4  │ 48.1  │ pass │
+    │ docs/api.md     │  156  │  4m  │ 14.8  │ 16.1  │ 29.3  │ fail │
+    └─────────────────┴───────┴──────┴───────┴───────┴───────┴──────┘
+    ```
+
+## Two Ways to Run It
+
+### In CI (GitHub Action)
+
+Check every pull request automatically:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/
-    format: markdown
     check: true
-    max-grade: 12
 ```
 
-### CLI
+PRs with overly complex docs fail the check. Writers fix issues before merge.
+
+### Locally (Command Line)
+
+Check files while you write:
 
 ```bash
-# Analyze a directory
-readability docs/
-
-# Check with thresholds
-readability --check --max-grade 12 docs/
+readability docs/getting-started.md
 ```
+
+See scores instantly. Revise and re-run until you're happy.
 
 ## Next Steps
 
@@ -43,18 +74,18 @@ readability --check --max-grade 12 docs/
 
 - :material-rocket-launch: **[Getting Started](getting-started/index.md)**
 
-    Install and run your first analysis in minutes
+    Install and run your first check in under 5 minutes
 
 - :material-github: **[GitHub Action](github-action/index.md)**
 
-    Integrate readability checks into your CI/CD pipeline
+    Automate checks in your CI pipeline
 
 - :material-console: **[CLI Reference](cli/index.md)**
 
-    Full command-line interface documentation
+    All flags, options, and output formats
 
-- :material-chart-bar: **[Metrics](metrics/index.md)**
+- :material-chart-bar: **[Understanding Metrics](metrics/index.md)**
 
-    Understand the readability scores and what they mean
+    What each score means and how to improve it
 
 </div>

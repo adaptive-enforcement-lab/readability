@@ -1,10 +1,12 @@
 # Thresholds
 
-Setting appropriate thresholds helps enforce documentation quality without being overly restrictive.
+Thresholds are your limits. Set them too strict and everything fails. Too loose and bad docs slip through.
 
-## Recommended Thresholds
+## Starting Points
 
-### Technical Documentation
+Pick based on who reads your docs.
+
+### For Technical Docs
 
 ```yaml
 thresholds:
@@ -14,7 +16,10 @@ thresholds:
   max_lines: 500
 ```
 
-### User Guides
+!!! tip "This Is the Default"
+    These values work for most developer docs. Start here and adjust as needed.
+
+### For User Guides
 
 ```yaml
 thresholds:
@@ -24,7 +29,9 @@ thresholds:
   max_lines: 300
 ```
 
-### API Reference
+Stricter limits because non-technical readers need simpler text.
+
+### For API Reference
 
 ```yaml
 thresholds:
@@ -34,42 +41,62 @@ thresholds:
   max_lines: 1000
 ```
 
-## Content-Specific Overrides
+Looser limits because expert readers can handle dense content.
 
-Different content types need different thresholds:
+## Different Rules Per Folder
+
+Not all docs are alike. Use overrides:
 
 ```yaml
 thresholds:
   max_grade: 10
 
 overrides:
-  - pattern: "docs/api/**"
+  # API docs can be harder
+  - path: docs/api/
     thresholds:
       max_grade: 14
 
-  - pattern: "docs/tutorials/**"
+  # Tutorials must be easy
+  - path: docs/tutorials/
     thresholds:
       max_grade: 8
 ```
 
-## When to Skip Checks
+!!! note "Path Matching"
+    Paths are relative to your repo root. End folder paths with `/` to match all files inside.
 
-Set `min_words` to skip readability checks for very short documents:
+## Skip Short Files
+
+Very short docs give bad scores. The formulas need enough text to work well.
 
 ```yaml
 thresholds:
   min_words: 100
 ```
 
-Documents with fewer than 100 words won't fail readability checks (the formulas are unreliable with sparse content).
+Files under 100 words won't fail checks.
 
-## Line Limits
+## Limit File Length
 
-Use `max_lines` to encourage document splitting:
+Long files are hard to navigate. Set a line limit:
 
 ```yaml
 thresholds:
   max_lines: 500
 ```
 
-Long documents should typically be split into focused sections.
+!!! warning "Split Long Docs"
+    If a file hits this limit, break it into smaller focused pages. One topic per page works best.
+
+## All Available Thresholds
+
+| Setting | What It Limits | Default |
+|---------|----------------|---------|
+| `max_grade` | Flesch-Kincaid grade level | 12 |
+| `max_ari` | Automated Readability Index | 14 |
+| `min_ease` | Flesch Reading Ease (higher = easier) | 30 |
+| `max_fog` | Gunning Fog Index | 16 |
+| `max_lines` | Total lines in file | 500 |
+| `min_words` | Minimum words to check | 50 |
+| `min_admonitions` | Required callout boxes | 1 |

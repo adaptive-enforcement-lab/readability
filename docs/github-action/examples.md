@@ -1,19 +1,34 @@
 # Examples
 
-## Report Only (No Failure)
+Common patterns for using the GitHub Action.
 
-Generate a report without failing the build:
+## Report Only
+
+Show results without failing the build:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/
-    format: markdown
 ```
 
-## Strict Enforcement
+!!! tip "When to Use This"
+    Good for getting started. See the reports, then add `check: true` once you've fixed issues.
 
-Fail if any document exceeds thresholds:
+## Block Bad Docs
+
+Fail the PR if docs are too complex:
+
+```yaml
+- uses: adaptive-enforcement-lab/readability@v1
+  with:
+    path: docs/
+    check: true
+```
+
+## Custom Limits
+
+Set your own grade level:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
@@ -21,9 +36,12 @@ Fail if any document exceeds thresholds:
     path: docs/
     check: true
     max-grade: 10
+    max-ari: 10
 ```
 
-## JSON Output for Processing
+## Process Results in Script
+
+Get JSON output and use it:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
@@ -32,30 +50,65 @@ Fail if any document exceeds thresholds:
     path: docs/
     format: json
 
-- name: Process results
+- name: Show failed files
   run: |
-    echo "${{ steps.readability.outputs.report }}" | jq '.[] | select(.status == "fail")'
+    echo '${{ steps.readability.outputs.report }}' \
+      | jq '.[] | select(.status == "fail")'
 ```
 
-## Multiple Paths
+## Check Multiple Folders
+
+Run separate checks with different rules:
 
 ```yaml
-- uses: adaptive-enforcement-lab/readability@v1
-  with:
-    path: docs/api/
-
+# User guides: strict
 - uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/guides/
-    max-grade: 8  # Stricter for user guides
+    check: true
+    max-grade: 8
+
+# API docs: relaxed
+- uses: adaptive-enforcement-lab/readability@v1
+  with:
+    path: docs/api/
+    check: true
+    max-grade: 14
 ```
 
-## With Configuration File
+## With Config File
+
+Use a `.readability.yml` for settings:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
   with:
     path: docs/
-    config: .readability.yml
     check: true
+```
+
+The action finds the config file automatically.
+
+## Only on Doc Changes
+
+Run only when docs change:
+
+```yaml
+name: Check Docs
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '.readability.yml'
+
+jobs:
+  readability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: adaptive-enforcement-lab/readability@v1
+        with:
+          path: docs/
+          check: true
 ```

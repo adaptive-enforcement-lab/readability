@@ -1,0 +1,19 @@
+# Readability configuration for this repository's documentation
+# These thresholds ensure docs are accessible to newcomers
+
+thresholds:
+  # Grade level: Target high school reading level (grades 10-12)
+  max_grade: 14
+  max_ari: 14
+
+  # Flesch Reading Ease: 30+ is "difficult but accessible"
+  min_ease: 30
+
+  # Gunning Fog: 12-14 is ideal for technical documentation
+  max_fog: 16
+
+  # Structure limits
+  max_lines: 400
+
+  # Require at least one admonition per page for visual breaks
+  min_admonitions: 1
