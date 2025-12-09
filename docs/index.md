@@ -1,36 +1,53 @@
 # Readability
 
-Measure how easy your documentation is to read. Catch confusing content before your users do.
+Measure how easy your writing is to read. Get a score. Improve.
 
-## Why Measure Readability?
+## New Here?
 
-Good documentation should be easy to understand. But as writers, we often miss when our own writing becomes too complex. Technical jargon creeps in. Sentences grow longer. Before you know it, your docs require a PhD to decode.
+If you've never heard of "readability scores" before, start with these:
 
-Readability analysis gives you objective feedback. It answers questions like:
+<div class="grid cards" markdown>
 
-- Is this page too complex for my audience?
-- Which sections need simplification?
-- Are my sentences too long?
+- :material-book-open-variant: **[What is Readability?](introduction.md)**
 
-!!! tip "The Goal"
-    Most technical documentation should target a high school reading level. That's not "dumbing down" - it's respecting your reader's time.
+    How computers measure writing difficulty. The history, the math, and why it matters.
 
-## What You Get
+- :material-account-question: **[Who Is This For?](use-cases.md)**
 
-This tool analyzes your Markdown files and reports:
+    Find your situation: blogger, tech writer, docs team, student, or just curious.
 
-| Metric | What It Measures |
-|--------|------------------|
-| **Grade Level** | School grade needed to understand the text |
-| **Reading Ease** | How comfortable the text is to read (0-100 scale) |
-| **Word Count** | Total words and reading time estimate |
-| **Sentence Length** | Average words per sentence |
+</div>
 
-## Two Ways to Use It
+## The Short Version
 
-### GitHub Action
+Readability formulas count words, sentences, and syllables. They output a grade level - the US school grade that can understand the text. A score of 8 means an eighth grader should follow it.
 
-Add readability checks to your pull requests. Catch problems before they merge.
+This tool runs those formulas on your Markdown files and tells you:
+
+| Metric | What It Tells You |
+|--------|-------------------|
+| **Grade Level** | What school grade can read this |
+| **Reading Ease** | How comfortable it is (0-100, higher = easier) |
+| **Reading Time** | How long it takes at 200 words/minute |
+
+!!! example "What the Output Looks Like"
+    ```
+    $ readability docs/
+
+    ┌─────────────────┬───────┬──────┬───────┬───────┬───────┬──────┐
+    │ File            │ Lines │ Read │ Grade │ ARI   │ Ease  │ Stat │
+    ├─────────────────┼───────┼──────┼───────┼───────┼───────┼──────┤
+    │ docs/index.md   │   42  │ <1m  │  7.8  │  8.9  │ 65.2  │ pass │
+    │ docs/setup.md   │   89  │  2m  │ 11.2  │ 12.4  │ 48.1  │ pass │
+    │ docs/api.md     │  156  │  4m  │ 14.8  │ 16.1  │ 29.3  │ fail │
+    └─────────────────┴───────┴──────┴───────┴───────┴───────┴──────┘
+    ```
+
+## Two Ways to Run It
+
+### In CI (GitHub Action)
+
+Check every pull request automatically:
 
 ```yaml
 - uses: adaptive-enforcement-lab/readability@v1
@@ -39,13 +56,17 @@ Add readability checks to your pull requests. Catch problems before they merge.
     check: true
 ```
 
-### Command Line
+PRs with overly complex docs fail the check. Writers fix issues before merge.
 
-Run checks locally while you write.
+### Locally (Command Line)
+
+Check files while you write:
 
 ```bash
-readability docs/
+readability docs/getting-started.md
 ```
+
+See scores instantly. Revise and re-run until you're happy.
 
 ## Next Steps
 
@@ -53,18 +74,18 @@ readability docs/
 
 - :material-rocket-launch: **[Getting Started](getting-started/index.md)**
 
-    Install the tool and run your first check
+    Install and run your first check in under 5 minutes
 
 - :material-github: **[GitHub Action](github-action/index.md)**
 
-    Set up automated checks in your CI pipeline
+    Automate checks in your CI pipeline
 
 - :material-console: **[CLI Reference](cli/index.md)**
 
-    All command-line options and examples
+    All flags, options, and output formats
 
 - :material-chart-bar: **[Understanding Metrics](metrics/index.md)**
 
-    Learn what each score means and how to improve it
+    What each score means and how to improve it
 
 </div>
