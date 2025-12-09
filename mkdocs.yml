@@ -115,4 +115,5 @@ nav:
       - metrics/index.md
       - Flesch Reading Ease: metrics/flesch-reading-ease.md
       - Grade Level Scores: metrics/grade-level.md
+      - Admonitions: metrics/admonitions.md
       - Thresholds: metrics/thresholds.md

@@ -82,9 +82,9 @@ The action automatically writes a formatted report to the GitHub Actions job sum
 | **File** | Path to the analyzed file |
 | **Lines** | Number of lines in the file |
 | **Read** | Estimated reading time (e.g., `<1m`, `2m`, `5m`) |
-| **Grade** | [Flesch-Kincaid Grade Level](../metrics/grade-level.md#flesch-kincaid-grade-level) |
-| **ARI** | [Automated Readability Index](../metrics/grade-level.md#ari-automated-readability-index) |
-| **Fog** | [Gunning Fog Index](../metrics/grade-level.md#gunning-fog-index) |
+| **Grade** | [Flesch-Kincaid Grade Level](../metrics/grade-level.md#flesch_kincaid_grade_level) |
+| **ARI** | [Automated Readability Index](../metrics/grade-level.md#ari_automated_readability_index) |
+| **Fog** | [Gunning Fog Index](../metrics/grade-level.md#gunning_fog_index) |
 | **Ease** | [Flesch Reading Ease](../metrics/flesch-reading-ease.md) score |
 | **Status** | `pass` or `fail` based on configured thresholds |
 
