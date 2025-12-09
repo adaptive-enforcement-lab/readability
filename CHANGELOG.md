@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0](https://github.com/adaptive-enforcement-lab/readability/compare/0.11.1...1.0.0) (2025-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Documentation structure reorganized. New introduction and use-cases pages added. All existing documentation rewritten for clarity and accessibility.
+
+### Bug Fixes
+
+* add admonitions to nav and fix anchor links ([#64](https://github.com/adaptive-enforcement-lab/readability/issues/64)) ([e4f8c8f](https://github.com/adaptive-enforcement-lab/readability/commit/e4f8c8fe2615f33b80016b3e194b4fc62b6bcfa0))
+
+
+### Documentation
+
+* comprehensive documentation overhaul for newcomer accessibility ([#65](https://github.com/adaptive-enforcement-lab/readability/issues/65)) ([9d7e446](https://github.com/adaptive-enforcement-lab/readability/commit/9d7e446054dd30cfeb4dbbaf3024f4ea45b52faf))
+
 ## [0.11.1](https://github.com/adaptive-enforcement-lab/readability/compare/0.11.0...0.11.1) (2025-12-09)
 
 
