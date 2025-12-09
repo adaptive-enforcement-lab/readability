@@ -241,17 +241,20 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
   
   
     
   
   Home
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -402,9 +405,36 @@
   
   
   
-    <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href=".." class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -418,7 +448,87 @@
   
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Readability?
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who Is This For?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -881,6 +991,8 @@
       
         
       
+        
+      
     
     
     
@@ -1047,6 +1159,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/admonitions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admonitions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1081,10 +1221,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#basic_usage" class="md-nav__link">
+  <a href="#quick_setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Basic Usage
+        Quick Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what_you_get" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Get
       
     </span>
   </a>
@@ -1103,10 +1254,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next_steps" class="md-nav__link">
+  <a href="#learn_more" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Learn More
       
     </span>
   </a>
@@ -1128,48 +1279,6 @@
 
 
 
-  
-
-
-  <nav class="md-path" aria-label="Navigation" >
-    <ol class="md-path__list">
-      
-        
-  
-  
-    <li class="md-path__item">
-      <a href=".." class="md-path__link">
-        
-  <span class="md-ellipsis">
-    Home
-  </span>
-
-      </a>
-    </li>
-  
-
-      
-      
-        
-  
-  
-    
-    
-      <li class="md-path__item">
-        <a href="./" class="md-path__link">
-          
-  <span class="md-ellipsis">
-    GitHub Action
-  </span>
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ol>
-  </nav>
 
               
               <article class="md-content__inner md-typeset">
@@ -1182,9 +1291,10 @@
 
 
 <h1 id="github_action">GitHub Action<a class="headerlink" href="#github_action" title="Link">&para;</a></h1>
-<p>Integrate Readability into your CI/CD pipeline to automatically check documentation quality on every pull request.</p>
-<h2 id="basic_usage">Basic Usage<a class="headerlink" href="#basic_usage" title="Link">&para;</a></h2>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Documentation Quality</span>
+<p>Check documentation readability on every pull request. No local setup needed.</p>
+<h2 id="quick_setup">Quick Setup<a class="headerlink" href="#quick_setup" title="Link">&para;</a></h2>
+<p>Add this to <code>.github/workflows/docs.yml</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check Docs</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">on</span><span class="p">:</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
@@ -1202,18 +1312,48 @@
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/</span>
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">          </span><span class="nt">check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">What This Does</p>
+<p>Every PR that changes files in <code>docs/</code> will run a readability check. If any file fails, the PR shows a red X.</p>
+</div>
+<h2 id="what_you_get">What You Get<a class="headerlink" href="#what_you_get" title="Link">&para;</a></h2>
+<p>The action adds a summary to your workflow run:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Grade</th>
+<th>ARI</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docs/index.md</td>
+<td>8.2</td>
+<td>9.1</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>docs/api.md</td>
+<td>15.3</td>
+<td>17.2</td>
+<td>fail</td>
+</tr>
+</tbody>
+</table>
+<p>Click any run to see the full report.</p>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Link">&para;</a></h2>
 <ul>
-<li>Automatic Go installation and build</li>
-<li>Multiple output formats</li>
-<li>Threshold enforcement</li>
-<li>Configuration file support</li>
-<li>Automatic job summary with clickable metric links</li>
+<li>Works out of the box</li>
+<li>Shows results in GitHub's job summary</li>
+<li>Reads your <code>.readability.yml</code> config</li>
+<li>Fails the build when docs are too complex</li>
 </ul>
-<h2 id="next_steps">Next Steps<a class="headerlink" href="#next_steps" title="Link">&para;</a></h2>
+<h2 id="learn_more">Learn More<a class="headerlink" href="#learn_more" title="Link">&para;</a></h2>
 <ul>
-<li><a href="configuration/">Configuration</a> - All available inputs and outputs</li>
-<li><a href="examples/">Examples</a> - Common workflow patterns</li>
+<li><a href="configuration/">Configuration</a> - All inputs and outputs</li>
+<li><a href="examples/">Examples</a> - Common patterns</li>
 </ul>
 
 

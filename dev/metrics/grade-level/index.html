@@ -241,17 +241,20 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
   
   
     
   
   Home
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -402,9 +405,36 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -418,7 +448,87 @@
   
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Readability?
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who Is This For?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -878,6 +988,8 @@
       
         
       
+        
+      
     
     
     
@@ -1030,10 +1142,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#metrics_comparison" class="md-nav__link">
+  <a href="#the_four_metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Metrics Comparison
+        The Four Metrics
       
     </span>
   </a>
@@ -1074,10 +1186,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#which_to_use" class="md-nav__link">
+  <a href="#picking_the_right_metric" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Which to Use?
+        Picking the Right Metric
       
     </span>
   </a>
@@ -1149,6 +1261,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../admonitions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admonitions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1183,10 +1323,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#metrics_comparison" class="md-nav__link">
+  <a href="#the_four_metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Metrics Comparison
+        The Four Metrics
       
     </span>
   </a>
@@ -1227,10 +1367,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#which_to_use" class="md-nav__link">
+  <a href="#picking_the_right_metric" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Which to Use?
+        Picking the Right Metric
       
     </span>
   </a>
@@ -1252,48 +1392,6 @@
 
 
 
-  
-
-
-  <nav class="md-path" aria-label="Navigation" >
-    <ol class="md-path__list">
-      
-        
-  
-  
-    <li class="md-path__item">
-      <a href="../.." class="md-path__link">
-        
-  <span class="md-ellipsis">
-    Home
-  </span>
-
-      </a>
-    </li>
-  
-
-      
-      
-        
-  
-  
-    
-    
-      <li class="md-path__item">
-        <a href="../" class="md-path__link">
-          
-  <span class="md-ellipsis">
-    Metrics
-  </span>
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ol>
-  </nav>
 
               
               <article class="md-content__inner md-typeset">
@@ -1306,66 +1404,107 @@
 
 
 <h1 id="grade_level_scores">Grade Level Scores<a class="headerlink" href="#grade_level_scores" title="Link">&para;</a></h1>
-<p>Grade level metrics estimate the US school grade level required to understand the text.</p>
-<h2 id="metrics_comparison">Metrics Comparison<a class="headerlink" href="#metrics_comparison" title="Link">&para;</a></h2>
+<p>These scores estimate what school grade can read your text. A score of 8 means an 8th grader should understand it.</p>
+<h2 id="the_four_metrics">The Four Metrics<a class="headerlink" href="#the_four_metrics" title="Link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Metric</th>
-<th>Focus</th>
+<th>What It Measures</th>
 <th>Best For</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Flesch-Kincaid</td>
-<td>Sentence length, syllables</td>
-<td>General use</td>
+<td><strong>Flesch-Kincaid</strong></td>
+<td>Words per sentence, syllables</td>
+<td>General docs</td>
 </tr>
 <tr>
-<td>ARI</td>
+<td><strong>ARI</strong></td>
 <td>Characters per word</td>
-<td>Technical content</td>
+<td>Tech content</td>
 </tr>
 <tr>
-<td>Gunning Fog</td>
-<td>Complex words</td>
+<td><strong>Gunning Fog</strong></td>
+<td>Long words (3+ syllables)</td>
 <td>Business writing</td>
 </tr>
 <tr>
-<td>SMOG</td>
-<td>Polysyllables</td>
-<td>Healthcare/education</td>
-</tr>
-<tr>
-<td>Coleman-Liau</td>
+<td><strong>Coleman-Liau</strong></td>
 <td>Character counts</td>
-<td>Academic assessment</td>
+<td>Academic papers</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition tip">
+<p class="admonition-title">Which One?</p>
+<p>Start with Flesch-Kincaid. It works well for most content. Add ARI if you write technical docs with code terms.</p>
+</div>
 <h2 id="flesch-kincaid_grade_level">Flesch-Kincaid Grade Level<a class="headerlink" href="#flesch-kincaid_grade_level" title="Link">&para;</a></h2>
-<p>The most common grade-level metric.</p>
-<p><strong>Formula:</strong>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>0.39 × (words / sentences) + 11.8 × (syllables / words) - 15.59
-</span></code></pre></div></p>
-<h2 id="ari_automated_readability_index">ARI (Automated Readability Index)<a class="headerlink" href="#ari_automated_readability_index" title="Link">&para;</a></h2>
-<p>Uses characters instead of syllables, making it more consistent for technical content.</p>
-<p><strong>Formula:</strong>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>4.71 × (characters / words) + 0.5 × (words / sentences) - 21.43
-</span></code></pre></div></p>
-<h2 id="gunning_fog_index">Gunning Fog Index<a class="headerlink" href="#gunning_fog_index" title="Link">&para;</a></h2>
-<p>Focuses on "complex words" (3+ syllables, excluding common suffixes).</p>
-<p><strong>Formula:</strong>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>0.4 × ((words / sentences) + 100 × (complex words / words))
-</span></code></pre></div></p>
-<h2 id="which_to_use">Which to Use?<a class="headerlink" href="#which_to_use" title="Link">&para;</a></h2>
+<p>The most common metric. It looks at sentence length and syllable count.</p>
+<p><strong>What affects it:</strong></p>
 <ul>
-<li><strong>Technical documentation</strong>: Use ARI or Flesch-Kincaid</li>
-<li><strong>Business content</strong>: Use Gunning Fog</li>
-<li><strong>Healthcare/education</strong>: Use SMOG</li>
-<li><strong>General purpose</strong>: Use Flesch-Kincaid as primary</li>
+<li>Longer sentences raise the score</li>
+<li>Words with more syllables raise the score</li>
 </ul>
+<p><strong>Target:</strong> Grade 8-12 for most docs.</p>
+<h2 id="ari_automated_readability_index">ARI (Automated Readability Index)<a class="headerlink" href="#ari_automated_readability_index" title="Link">&para;</a></h2>
+<p>Uses character count instead of syllables. This makes it better for technical content. Code terms often have many characters but few syllables.</p>
+<p><strong>What affects it:</strong></p>
+<ul>
+<li>More characters per word raise the score</li>
+<li>Longer sentences raise the score</li>
+</ul>
+<p><strong>Target:</strong> Grade 10-14 for technical docs.</p>
+<div class="admonition info">
+<p class="admonition-title">Why ARI for Tech Docs?</p>
+<p>Words like "config" and "param" are short in syllables but long in characters. ARI catches this better than other metrics.</p>
+</div>
+<h2 id="gunning_fog_index">Gunning Fog Index<a class="headerlink" href="#gunning_fog_index" title="Link">&para;</a></h2>
+<p>Counts "complex words" - those with three or more syllables. Common endings like "-ing" and "-ed" don't count.</p>
+<p><strong>What affects it:</strong></p>
+<ul>
+<li>More complex words raise the score</li>
+<li>Longer sentences raise the score</li>
+</ul>
+<p><strong>Target:</strong> Grade 12-14 for business content.</p>
+<h2 id="picking_the_right_metric">Picking the Right Metric<a class="headerlink" href="#picking_the_right_metric" title="Link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Your Content</th>
+<th>Primary Metric</th>
+<th>Secondary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User guides</td>
+<td>Flesch-Kincaid</td>
+<td>-</td>
+</tr>
+<tr>
+<td>API docs</td>
+<td>ARI</td>
+<td>Flesch-Kincaid</td>
+</tr>
+<tr>
+<td>Business docs</td>
+<td>Gunning Fog</td>
+<td>Flesch-Kincaid</td>
+</tr>
+<tr>
+<td>Tutorials</td>
+<td>Flesch-Kincaid</td>
+<td>ARI</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Multiple Metrics</p>
+<p>You can check more than one. Use <code>max_grade</code> for Flesch-Kincaid and <code>max_ari</code> for ARI in your config.</p>
+</div>
 
 
 

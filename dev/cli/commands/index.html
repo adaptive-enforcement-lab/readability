@@ -241,17 +241,20 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
   
   
     
   
   Home
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -402,9 +405,36 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -418,7 +448,87 @@
   
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Readability?
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who Is This For?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -836,22 +946,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#readability_path" class="md-nav__link">
+  <a href="#synopsis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        readability [path]
+        Synopsis
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="readability [path]">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output_flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Output Flags">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#arguments" class="md-nav__link">
+  <a href="#--format_-f" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Arguments
+        --format, -f
       
     </span>
   </a>
@@ -859,10 +980,66 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#flags" class="md-nav__link">
+  <a href="#--verbose_-v" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flags
+        --verbose, -v
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Check Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#--check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --check
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threshold_flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threshold Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Threshold Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#--max-grade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --max-grade
       
     </span>
   </a>
@@ -870,10 +1047,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#--max-ari" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Examples
+        --max-ari
       
     </span>
   </a>
@@ -881,6 +1058,61 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#--max-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --max-lines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#--min-admonitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --min-admonitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#--config_-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --config, -c
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exit_codes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -890,9 +1122,15 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
   
 </li>
       
@@ -979,6 +1217,8 @@
       
         
           
+        
+      
         
       
         
@@ -1155,6 +1395,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../metrics/admonitions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admonitions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1189,22 +1457,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#readability_path" class="md-nav__link">
+  <a href="#synopsis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        readability [path]
+        Synopsis
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="readability [path]">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output_flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Output Flags">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#arguments" class="md-nav__link">
+  <a href="#--format_-f" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Arguments
+        --format, -f
       
     </span>
   </a>
@@ -1212,10 +1491,66 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#flags" class="md-nav__link">
+  <a href="#--verbose_-v" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flags
+        --verbose, -v
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Check Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#--check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --check
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threshold_flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threshold Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Threshold Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#--max-grade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --max-grade
       
     </span>
   </a>
@@ -1223,10 +1558,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#--max-ari" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Examples
+        --max-ari
       
     </span>
   </a>
@@ -1234,6 +1569,61 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#--max-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --max-lines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#--min-admonitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --min-admonitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#--config_-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --config, -c
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exit_codes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1243,9 +1633,15 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1264,48 +1660,6 @@
 
 
 
-  
-
-
-  <nav class="md-path" aria-label="Navigation" >
-    <ol class="md-path__list">
-      
-        
-  
-  
-    <li class="md-path__item">
-      <a href="../.." class="md-path__link">
-        
-  <span class="md-ellipsis">
-    Home
-  </span>
-
-      </a>
-    </li>
-  
-
-      
-      
-        
-  
-  
-    
-    
-      <li class="md-path__item">
-        <a href="../" class="md-path__link">
-          
-  <span class="md-ellipsis">
-    CLI Reference
-  </span>
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ol>
-  </nav>
 
               
               <article class="md-content__inner md-typeset">
@@ -1318,81 +1672,126 @@
 
 
 <h1 id="commands">Commands<a class="headerlink" href="#commands" title="Link">&para;</a></h1>
-<h2 id="readability_path">readability [path]<a class="headerlink" href="#readability_path" title="Link">&para;</a></h2>
-<p>Analyze markdown files for readability metrics.</p>
-<h3 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Link">&para;</a></h3>
+<p>Full reference for the <code>readability</code> command.</p>
+<h2 id="synopsis">Synopsis<a class="headerlink" href="#synopsis" title="Link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>readability<span class="w"> </span><span class="o">[</span>flags<span class="o">]</span><span class="w"> </span>&lt;path&gt;
+</span></code></pre></div>
+<p>The <code>path</code> argument is required. It can be a single file or a directory.</p>
+<div class="admonition info">
+<p class="admonition-title">Directory Scanning</p>
+<p>When given a directory, the tool recursively finds all <code>.md</code> files.</p>
+</div>
+<h2 id="output_flags">Output Flags<a class="headerlink" href="#output_flags" title="Link">&para;</a></h2>
+<h3 id="--format_-f">--format, -f<a class="headerlink" href="#--format_-f" title="Link">&para;</a></h3>
+<p>Choose how results are displayed.</p>
 <table>
 <thead>
 <tr>
-<th>Argument</th>
+<th>Value</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>path</code></td>
-<td>File or directory to analyze (required)</td>
+<td><code>table</code></td>
+<td>ASCII table (default)</td>
+</tr>
+<tr>
+<td><code>markdown</code></td>
+<td>Markdown table for GitHub</td>
+</tr>
+<tr>
+<td><code>json</code></td>
+<td>Machine-readable JSON</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Brief pass/fail summary</td>
+</tr>
+<tr>
+<td><code>report</code></td>
+<td>Detailed report with distribution</td>
+</tr>
+<tr>
+<td><code>diagnostic</code></td>
+<td>Linter-style <code>file:line:col</code> format</td>
 </tr>
 </tbody>
 </table>
-<h3 id="flags">Flags<a class="headerlink" href="#flags" title="Link">&para;</a></h3>
-<h4 id="output_options">Output Options<a class="headerlink" href="#output_options" title="Link">&para;</a></h4>
-<p><code>--format, -f</code>
-:   Output format. Options: <code>table</code>, <code>json</code>, <code>markdown</code>, <code>summary</code>, <code>report</code>, <code>diagnostic</code>. Default: <code>table</code>. See <a href="../diagnostic-output/">Diagnostic Output</a> for linter-style format details.</p>
-<p><code>--verbose, -v</code>
-:   Show all available metrics in output.</p>
-<h4 id="threshold_options">Threshold Options<a class="headerlink" href="#threshold_options" title="Link">&para;</a></h4>
-<p><code>--check</code>
-:   Enable check mode. Exit with code 1 if any file fails thresholds.</p>
-<p><code>--max-grade</code>
-:   Maximum Flesch-Kincaid grade level. Overrides config file.</p>
-<p><code>--max-ari</code>
-:   Maximum ARI score. Overrides config file.</p>
-<p><code>--max-lines</code>
-:   Maximum lines per file. Set to 0 to disable. Overrides config file.</p>
-<p><code>--min-admonitions</code>
-:   Minimum MkDocs-style admonitions required. Set to 0 to disable. Overrides config file.</p>
-<h4 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Link">&para;</a></h4>
-<p><code>--config, -c</code>
-:   Path to configuration file. Default: auto-detect <code>.readability.yml</code>.</p>
-<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Basic analysis</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>readability<span class="w"> </span>docs/
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># JSON output</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>readability<span class="w"> </span>--format<span class="w"> </span>json<span class="w"> </span>docs/
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Diagnostic output (linter-style)</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>readability<span class="w"> </span>--format<span class="w"> </span>diagnostic<span class="w"> </span>docs/
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Check with custom thresholds</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>readability<span class="w"> </span>--check<span class="w"> </span>--max-grade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--max-ari<span class="w"> </span><span class="m">12</span><span class="w"> </span>docs/
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Verbose output</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>readability<span class="w"> </span>-v<span class="w"> </span>docs/
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># Use specific config</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>readability<span class="w"> </span>-c<span class="w"> </span>.readability.yml<span class="w"> </span>docs/
+<p><strong>Example:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>readability<span class="w"> </span>-f<span class="w"> </span>markdown<span class="w"> </span>docs/
 </span></code></pre></div>
-<h3 id="exit_codes">Exit Codes<a class="headerlink" href="#exit_codes" title="Link">&para;</a></h3>
+<h3 id="--verbose_-v">--verbose, -v<a class="headerlink" href="#--verbose_-v" title="Link">&para;</a></h3>
+<p>Show all available metrics in the output, not just the defaults.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>readability<span class="w"> </span>-v<span class="w"> </span>docs/
+</span></code></pre></div>
+<h2 id="check_mode">Check Mode<a class="headerlink" href="#check_mode" title="Link">&para;</a></h2>
+<h3 id="--check">--check<a class="headerlink" href="#--check" title="Link">&para;</a></h3>
+<p>Enable check mode. The command exits with code 1 if any file exceeds thresholds.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>readability<span class="w"> </span>--check<span class="w"> </span>docs/
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">CI Usage</p>
+<p>Always use <code>--check</code> in CI pipelines. Without it, the command exits 0 even when files fail.</p>
+</div>
+<h2 id="threshold_flags">Threshold Flags<a class="headerlink" href="#threshold_flags" title="Link">&para;</a></h2>
+<p>Override thresholds from the config file. Useful for testing different limits.</p>
+<h3 id="--max-grade">--max-grade<a class="headerlink" href="#--max-grade" title="Link">&para;</a></h3>
+<p>Maximum Flesch-Kincaid grade level allowed.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>readability<span class="w"> </span>--max-grade<span class="w"> </span><span class="m">12</span><span class="w"> </span>docs/
+</span></code></pre></div>
+<h3 id="--max-ari">--max-ari<a class="headerlink" href="#--max-ari" title="Link">&para;</a></h3>
+<p>Maximum Automated Readability Index score allowed.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>readability<span class="w"> </span>--max-ari<span class="w"> </span><span class="m">12</span><span class="w"> </span>docs/
+</span></code></pre></div>
+<h3 id="--max-lines">--max-lines<a class="headerlink" href="#--max-lines" title="Link">&para;</a></h3>
+<p>Maximum lines per file. Set to 0 to disable this check.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>readability<span class="w"> </span>--max-lines<span class="w"> </span><span class="m">500</span><span class="w"> </span>docs/
+</span></code></pre></div>
+<h3 id="--min-admonitions">--min-admonitions<a class="headerlink" href="#--min-admonitions" title="Link">&para;</a></h3>
+<p>Minimum callout boxes (notes, warnings, tips) required per file. Set to 0 to disable.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>readability<span class="w"> </span>--min-admonitions<span class="w"> </span><span class="m">2</span><span class="w"> </span>docs/
+</span></code></pre></div>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Link">&para;</a></h2>
+<h3 id="--config_-c">--config, -c<a class="headerlink" href="#--config_-c" title="Link">&para;</a></h3>
+<p>Path to a config file. By default, the tool looks for <code>.readability.yml</code> in the target directory or git root.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>readability<span class="w"> </span>-c<span class="w"> </span>custom-config.yml<span class="w"> </span>docs/
+</span></code></pre></div>
+<h2 id="exit_codes">Exit Codes<a class="headerlink" href="#exit_codes" title="Link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Code</th>
-<th>Description</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0</td>
-<td>Success (all files pass or check mode disabled)</td>
+<td>All files pass (or check mode disabled)</td>
 </tr>
 <tr>
 <td>1</td>
-<td>Failure (one or more files failed thresholds in check mode)</td>
+<td>One or more files failed thresholds</td>
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Basic analysis with table output</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>readability<span class="w"> </span>docs/
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># JSON output for scripting</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>readability<span class="w"> </span>-f<span class="w"> </span>json<span class="w"> </span>docs/<span class="w"> </span>&gt;<span class="w"> </span>results.json
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># CI check with custom thresholds</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>readability<span class="w"> </span>--check<span class="w"> </span>--max-grade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--max-ari<span class="w"> </span><span class="m">10</span><span class="w"> </span>docs/
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Diagnostic output for IDE integration</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>readability<span class="w"> </span>-f<span class="w"> </span>diagnostic<span class="w"> </span>docs/
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="c1"># Verbose output showing all metrics</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>readability<span class="w"> </span>-v<span class="w"> </span>docs/
+</span></code></pre></div>
 
 
 
