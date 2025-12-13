@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.6.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.5.1...v1.6.0) (2025-12-13)
+
+
+### Features
+
+* add cosign signing for release artifacts ([#116](https://github.com/adaptive-enforcement-lab/readability/issues/116)) ([300bd9b](https://github.com/adaptive-enforcement-lab/readability/commit/300bd9b30d6dd5a2d6be9247a288ef5faeff7a38))
+
+
+### Bug Fixes
+
+* move workflow permissions to job level for least privilege ([#106](https://github.com/adaptive-enforcement-lab/readability/issues/106)) ([b168c1f](https://github.com/adaptive-enforcement-lab/readability/commit/b168c1ffeed27d4e34a0582f3d6ad32c64925115))
+* use version tag for scorecard-action (cannot pin to SHA) ([#111](https://github.com/adaptive-enforcement-lab/readability/issues/111)) ([d07300c](https://github.com/adaptive-enforcement-lab/readability/commit/d07300cf0a2df11e379dec9d711c0675a2e1f599))
+* use version tags for all actions in scorecard.yml ([#112](https://github.com/adaptive-enforcement-lab/readability/issues/112)) ([39ce338](https://github.com/adaptive-enforcement-lab/readability/commit/39ce338d46de276ba453e92cbfc1bddd51f750c4))
+
+
+### Maintenance
+
+* **deps:** update github/codeql-action action to v4 ([#104](https://github.com/adaptive-enforcement-lab/readability/issues/104)) ([8c0e6e3](https://github.com/adaptive-enforcement-lab/readability/commit/8c0e6e3864ce26cdfb3bc041c619a8049b3b505e))
+* **deps:** update github/codeql-action digest to 1b168cd ([#109](https://github.com/adaptive-enforcement-lab/readability/issues/109)) ([7dec92d](https://github.com/adaptive-enforcement-lab/readability/commit/7dec92d951ef565391564f5ea6ef8b9c719ced6a))
+* **deps:** update googleapis/release-please-action digest to 16a9c90 ([#110](https://github.com/adaptive-enforcement-lab/readability/issues/110)) ([1faf2e9](https://github.com/adaptive-enforcement-lab/readability/commit/1faf2e92bb72ccda6beb7171d1f03d9d63b2e33b))
+* **deps:** update ossf/scorecard-action action to v2.4.3 ([#103](https://github.com/adaptive-enforcement-lab/readability/issues/103)) ([6d3834a](https://github.com/adaptive-enforcement-lab/readability/commit/6d3834a04bb8d4ad3a25e7789fbf79ec0191b0a0))
+* improve OpenSSF Scorecard score ([#114](https://github.com/adaptive-enforcement-lab/readability/issues/114)) ([011a4d7](https://github.com/adaptive-enforcement-lab/readability/commit/011a4d73432583357c5fc58aec3436e9501f800e))
+* pin all GitHub Actions to commit SHAs ([#108](https://github.com/adaptive-enforcement-lab/readability/issues/108)) ([b9840c7](https://github.com/adaptive-enforcement-lab/readability/commit/b9840c71f8adcc20995624f541859f4f0271cb08))
+
 ## [1.5.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.5.0...v1.5.1) (2025-12-13)
 
 
