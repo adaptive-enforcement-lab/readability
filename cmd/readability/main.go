@@ -67,32 +67,62 @@ Examples:
 func run(cmd *cobra.Command, args []string) error {
 	path := args[0]
 
-	// Load configuration
-	var cfg *config.Config
+	cfg, err := loadConfig(path)
+	if err != nil {
+		return err
+	}
+
+	applyFlagOverrides(cmd, cfg)
+
+	results, err := analyzeTarget(cfg, path)
+	if err != nil {
+		return err
+	}
+
+	if len(results) == 0 {
+		fmt.Fprintln(os.Stderr, "No markdown files found")
+		return nil
+	}
+
+	if err := outputResults(results); err != nil {
+		return err
+	}
+
+	if checkFlag {
+		return checkResults(results, cfg)
+	}
+
+	return nil
+}
+
+// loadConfig loads configuration from file or returns defaults.
+func loadConfig(path string) (*config.Config, error) {
 	if configFlag != "" {
-		var err error
-		cfg, err = config.Load(configFlag)
+		cfg, err := config.Load(configFlag)
 		if err != nil {
-			return fmt.Errorf("cannot load config %s: %w", configFlag, err)
+			return nil, fmt.Errorf("cannot load config %s: %w", configFlag, err)
 		}
-	} else {
-		// Auto-detect config file
-		startDir := path
-		if info, err := os.Stat(path); err == nil && !info.IsDir() {
-			startDir = filepath.Dir(path)
-		}
-		configPath := config.FindConfigFile(startDir)
-		if configPath != "" {
-			cfg, _ = config.Load(configPath)
+		return cfg, nil
+	}
+
+	// Auto-detect config file
+	startDir := path
+	if info, err := os.Stat(path); err == nil && !info.IsDir() {
+		startDir = filepath.Dir(path)
+	}
+
+	configPath := config.FindConfigFile(startDir)
+	if configPath != "" {
+		if cfg, err := config.Load(configPath); err == nil {
+			return cfg, nil
 		}
 	}
 
-	// Use default config if none found
-	if cfg == nil {
-		cfg = config.DefaultConfig()
-	}
+	return config.DefaultConfig(), nil
+}
 
-	// Apply CLI flag overrides
+// applyFlagOverrides applies CLI flag values to the config.
+func applyFlagOverrides(cmd *cobra.Command, cfg *config.Config) {
 	if maxGradeFlag > 0 {
 		cfg.Thresholds.MaxGrade = maxGradeFlag
 	}
@@ -105,41 +135,37 @@ func run(cmd *cobra.Command, args []string) error {
 	if cmd.Flags().Changed("min-admonitions") {
 		cfg.Thresholds.MinAdmonitions = minAdmonitionsFlag
 	}
+}
+
+// analyzeTarget analyzes a file or directory and returns results.
+func analyzeTarget(cfg *config.Config, path string) ([]*analyzer.Result, error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return nil, fmt.Errorf("cannot access %s: %w", path, err)
+	}
 
 	a := analyzer.NewWithConfig(cfg)
 
-	// Check if path is file or directory
-	info, err := os.Stat(path)
-	if err != nil {
-		return fmt.Errorf("cannot access %s: %w", path, err)
-	}
-
-	var results []*analyzer.Result
-
 	if info.IsDir() {
-		results, err = a.AnalyzeDirectory(path)
+		results, err := a.AnalyzeDirectory(path)
 		if err != nil {
-			return fmt.Errorf("error analyzing directory: %w", err)
+			return nil, fmt.Errorf("error analyzing directory: %w", err)
 		}
-	} else {
-		result, err := a.AnalyzeFile(path)
-		if err != nil {
-			return fmt.Errorf("error analyzing file: %w", err)
-		}
-		results = []*analyzer.Result{result}
+		return results, nil
 	}
 
-	if len(results) == 0 {
-		fmt.Fprintln(os.Stderr, "No markdown files found")
-		return nil
+	result, err := a.AnalyzeFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("error analyzing file: %w", err)
 	}
+	return []*analyzer.Result{result}, nil
+}
 
-	// Output results
+// outputResults writes results in the specified format.
+func outputResults(results []*analyzer.Result) error {
 	switch formatFlag {
 	case "json":
-		if err := output.JSON(os.Stdout, results); err != nil {
-			return fmt.Errorf("error writing JSON: %w", err)
-		}
+		return output.JSON(os.Stdout, results)
 	case "markdown":
 		output.Markdown(os.Stdout, results)
 	case "summary":
@@ -152,64 +178,96 @@ func run(cmd *cobra.Command, args []string) error {
 	default:
 		output.Table(os.Stdout, results, verboseFlag)
 	}
+	return nil
+}
 
-	// Check mode: exit with error if any files failed
-	if checkFlag {
-		failed := 0
-		tooLong := 0
-		lowReadability := 0
-		missingAdmonitions := 0
-		minAdm := cfg.Thresholds.MinAdmonitions
-		for _, r := range results {
-			if r.Status == "fail" {
-				failed++
-				if r.Structural.Lines > 375 {
-					tooLong++
-				}
-				if r.Readability.FleschKincaidGrade > 14 || r.Readability.ARI > 14 || r.Readability.FleschReadingEase < 30 {
-					lowReadability++
-				}
-				if minAdm > 0 && r.Admonitions.Count < minAdm {
-					missingAdmonitions++
-				}
-			}
-		}
-		if failed > 0 {
-			if tooLong > 0 {
-				fmt.Fprintln(os.Stderr, "")
-				fmt.Fprintln(os.Stderr, "IMPORTANT: Files exceeding line limits should be SPLIT into smaller documents.")
-				fmt.Fprintln(os.Stderr, "Do NOT remove content to meet thresholds. Split logically by topic or section.")
-				fmt.Fprintln(os.Stderr, "")
-			}
-			if lowReadability > 0 {
-				fmt.Fprintln(os.Stderr, "")
-				fmt.Fprintln(os.Stderr, "READABILITY: High grade level indicates complex sentence structure or dense vocabulary.")
-				fmt.Fprintln(os.Stderr, "- Break long sentences into shorter ones (aim for 15-20 words per sentence)")
-				fmt.Fprintln(os.Stderr, "- Replace jargon with plain language where possible")
-				fmt.Fprintln(os.Stderr, "- Add brief introductory sentences before bullet lists, code blocks, or admonitions")
-				fmt.Fprintln(os.Stderr, "- Use transitional phrases to connect dense technical sections")
-				fmt.Fprintln(os.Stderr, "Do NOT remove technical content. Rewrite for clarity while preserving accuracy.")
-				fmt.Fprintln(os.Stderr, "")
-			}
-			if missingAdmonitions > 0 {
-				fmt.Fprintln(os.Stderr, "")
-				fmt.Fprintln(os.Stderr, "ADMONITIONS: Files are missing MkDocs-style admonitions (note, warning, tip, etc.).")
-				fmt.Fprintln(os.Stderr, "Admonitions improve documentation by highlighting important information:")
-				fmt.Fprintln(os.Stderr, "- Use !!! note for supplementary information")
-				fmt.Fprintln(os.Stderr, "- Use !!! warning for potential pitfalls or breaking changes")
-				fmt.Fprintln(os.Stderr, "- Use !!! tip for best practices or shortcuts")
-				fmt.Fprintln(os.Stderr, "- Use !!! example for code samples or use cases")
-				fmt.Fprintln(os.Stderr, "")
-				fmt.Fprintln(os.Stderr, "Example syntax:")
-				fmt.Fprintln(os.Stderr, "  !!! note \"Optional Title\"")
-				fmt.Fprintln(os.Stderr, "      Content indented by 4 spaces.")
-				fmt.Fprintln(os.Stderr, "")
-				fmt.Fprintln(os.Stderr, "Do NOT add empty or meaningless admonitions. Add value with relevant context.")
-				fmt.Fprintln(os.Stderr, "")
-			}
-			return fmt.Errorf("%d file(s) failed readability checks", failed)
-		}
+// checkResults validates results against thresholds and returns an error if any fail.
+func checkResults(results []*analyzer.Result, cfg *config.Config) error {
+	stats := countFailures(results, cfg)
+
+	if stats.failed == 0 {
+		return nil
 	}
 
-	return nil
+	printFailureGuidance(stats)
+	return fmt.Errorf("%d file(s) failed readability checks", stats.failed)
+}
+
+// failureStats holds counts of different failure types.
+type failureStats struct {
+	failed             int
+	tooLong            int
+	lowReadability     int
+	missingAdmonitions int
+}
+
+// countFailures counts failures by category.
+func countFailures(results []*analyzer.Result, cfg *config.Config) failureStats {
+	stats := failureStats{}
+	minAdm := cfg.Thresholds.MinAdmonitions
+
+	for _, r := range results {
+		if r.Status != "fail" {
+			continue
+		}
+		stats.failed++
+		if r.Structural.Lines > 375 {
+			stats.tooLong++
+		}
+		if r.Readability.FleschKincaidGrade > 14 || r.Readability.ARI > 14 || r.Readability.FleschReadingEase < 30 {
+			stats.lowReadability++
+		}
+		if minAdm > 0 && r.Admonitions.Count < minAdm {
+			stats.missingAdmonitions++
+		}
+	}
+	return stats
+}
+
+// printFailureGuidance prints helpful guidance for each failure type.
+func printFailureGuidance(stats failureStats) {
+	if stats.tooLong > 0 {
+		printLengthGuidance()
+	}
+	if stats.lowReadability > 0 {
+		printReadabilityGuidance()
+	}
+	if stats.missingAdmonitions > 0 {
+		printAdmonitionGuidance()
+	}
+}
+
+func printLengthGuidance() {
+	fmt.Fprintln(os.Stderr, "")
+	fmt.Fprintln(os.Stderr, "IMPORTANT: Files exceeding line limits should be SPLIT into smaller documents.")
+	fmt.Fprintln(os.Stderr, "Do NOT remove content to meet thresholds. Split logically by topic or section.")
+	fmt.Fprintln(os.Stderr, "")
+}
+
+func printReadabilityGuidance() {
+	fmt.Fprintln(os.Stderr, "")
+	fmt.Fprintln(os.Stderr, "READABILITY: High grade level indicates complex sentence structure or dense vocabulary.")
+	fmt.Fprintln(os.Stderr, "- Break long sentences into shorter ones (aim for 15-20 words per sentence)")
+	fmt.Fprintln(os.Stderr, "- Replace jargon with plain language where possible")
+	fmt.Fprintln(os.Stderr, "- Add brief introductory sentences before bullet lists, code blocks, or admonitions")
+	fmt.Fprintln(os.Stderr, "- Use transitional phrases to connect dense technical sections")
+	fmt.Fprintln(os.Stderr, "Do NOT remove technical content. Rewrite for clarity while preserving accuracy.")
+	fmt.Fprintln(os.Stderr, "")
+}
+
+func printAdmonitionGuidance() {
+	fmt.Fprintln(os.Stderr, "")
+	fmt.Fprintln(os.Stderr, "ADMONITIONS: Files are missing MkDocs-style admonitions (note, warning, tip, etc.).")
+	fmt.Fprintln(os.Stderr, "Admonitions improve documentation by highlighting important information:")
+	fmt.Fprintln(os.Stderr, "- Use !!! note for supplementary information")
+	fmt.Fprintln(os.Stderr, "- Use !!! warning for potential pitfalls or breaking changes")
+	fmt.Fprintln(os.Stderr, "- Use !!! tip for best practices or shortcuts")
+	fmt.Fprintln(os.Stderr, "- Use !!! example for code samples or use cases")
+	fmt.Fprintln(os.Stderr, "")
+	fmt.Fprintln(os.Stderr, "Example syntax:")
+	fmt.Fprintln(os.Stderr, "  !!! note \"Optional Title\"")
+	fmt.Fprintln(os.Stderr, "      Content indented by 4 spaces.")
+	fmt.Fprintln(os.Stderr, "")
+	fmt.Fprintln(os.Stderr, "Do NOT add empty or meaningless admonitions. Add value with relevant context.")
+	fmt.Fprintln(os.Stderr, "")
 }

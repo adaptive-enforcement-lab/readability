@@ -1,7 +1,10 @@
 package markdown
 
 import (
+	"strings"
 	"testing"
+
+	"github.com/yuin/goldmark/ast"
 )
 
 func TestParse(t *testing.T) {
@@ -514,6 +517,60 @@ func TestIsInsideCodeBlock(t *testing.T) {
 	// Prose should not contain code block content
 	if contains(result.Prose, "code") {
 		t.Errorf("Prose should not contain code block content")
+	}
+}
+
+func TestExtractString(t *testing.T) {
+	// Test extractString directly with real ast.String nodes
+	tests := []struct {
+		name     string
+		value    string
+		wantText string
+	}{
+		{
+			name:     "simple string",
+			value:    "test value",
+			wantText: "test value ",
+		},
+		{
+			name:     "empty string",
+			value:    "",
+			wantText: " ",
+		},
+		{
+			name:     "string with special chars",
+			value:    "hello & goodbye",
+			wantText: "hello & goodbye ",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var builder strings.Builder
+			// Create a real ast.String node
+			node := ast.NewString([]byte(tt.value))
+			extractString(node, &builder)
+
+			if builder.String() != tt.wantText {
+				t.Errorf("extractString() = %q, want %q", builder.String(), tt.wantText)
+			}
+		})
+	}
+}
+
+func TestExtractStringInsideCodeBlock(t *testing.T) {
+	// Test that extractString does not extract content when inside a code block
+	var builder strings.Builder
+	node := ast.NewString([]byte("should not appear"))
+
+	// Set parent to a code block to test the guard clause
+	codeBlock := ast.NewCodeBlock()
+	codeBlock.AppendChild(codeBlock, node)
+
+	extractString(node, &builder)
+
+	if builder.String() != "" {
+		t.Errorf("extractString() should not extract inside code block, got %q", builder.String())
 	}
 }
 

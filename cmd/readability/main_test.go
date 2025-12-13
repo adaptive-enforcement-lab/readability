@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/adaptive-enforcement-lab/readability/pkg/analyzer"
+	"github.com/adaptive-enforcement-lab/readability/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -458,4 +460,204 @@ func resetFlags() {
 	maxARIFlag = 0
 	maxLinesFlag = 0
 	minAdmonitionsFlag = -1
+}
+
+func TestCountFailures(t *testing.T) {
+	tests := []struct {
+		name     string
+		results  []*analyzer.Result
+		minAdm   int
+		expected failureStats
+	}{
+		{
+			name:     "no failures",
+			results:  []*analyzer.Result{{Status: "pass"}},
+			minAdm:   0,
+			expected: failureStats{failed: 0},
+		},
+		{
+			name: "too long",
+			results: []*analyzer.Result{{
+				Status:      "fail",
+				Structural:  analyzer.Structural{Lines: 400},
+				Readability: analyzer.Readability{FleschReadingEase: 60}, // Valid readability to avoid triggering lowReadability
+			}},
+			minAdm:   0,
+			expected: failureStats{failed: 1, tooLong: 1},
+		},
+		{
+			name: "low readability - high grade",
+			results: []*analyzer.Result{{
+				Status:      "fail",
+				Readability: analyzer.Readability{FleschKincaidGrade: 16},
+			}},
+			minAdm:   0,
+			expected: failureStats{failed: 1, lowReadability: 1},
+		},
+		{
+			name: "low readability - high ARI",
+			results: []*analyzer.Result{{
+				Status:      "fail",
+				Readability: analyzer.Readability{ARI: 16},
+			}},
+			minAdm:   0,
+			expected: failureStats{failed: 1, lowReadability: 1},
+		},
+		{
+			name: "low readability - low ease",
+			results: []*analyzer.Result{{
+				Status:      "fail",
+				Readability: analyzer.Readability{FleschReadingEase: 20},
+			}},
+			minAdm:   0,
+			expected: failureStats{failed: 1, lowReadability: 1},
+		},
+		{
+			name: "missing admonitions",
+			results: []*analyzer.Result{{
+				Status:      "fail",
+				Readability: analyzer.Readability{FleschReadingEase: 60}, // Valid readability to avoid triggering lowReadability
+				Admonitions: analyzer.Admonitions{Count: 0},
+			}},
+			minAdm:   1,
+			expected: failureStats{failed: 1, missingAdmonitions: 1},
+		},
+		{
+			name: "multiple issues",
+			results: []*analyzer.Result{{
+				Status:      "fail",
+				Structural:  analyzer.Structural{Lines: 500},
+				Readability: analyzer.Readability{FleschKincaidGrade: 18},
+				Admonitions: analyzer.Admonitions{Count: 0},
+			}},
+			minAdm:   1,
+			expected: failureStats{failed: 1, tooLong: 1, lowReadability: 1, missingAdmonitions: 1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := config.DefaultConfig()
+			cfg.Thresholds.MinAdmonitions = tt.minAdm
+
+			stats := countFailures(tt.results, cfg)
+
+			if stats.failed != tt.expected.failed {
+				t.Errorf("failed: got %d, want %d", stats.failed, tt.expected.failed)
+			}
+			if stats.tooLong != tt.expected.tooLong {
+				t.Errorf("tooLong: got %d, want %d", stats.tooLong, tt.expected.tooLong)
+			}
+			if stats.lowReadability != tt.expected.lowReadability {
+				t.Errorf("lowReadability: got %d, want %d", stats.lowReadability, tt.expected.lowReadability)
+			}
+			if stats.missingAdmonitions != tt.expected.missingAdmonitions {
+				t.Errorf("missingAdmonitions: got %d, want %d", stats.missingAdmonitions, tt.expected.missingAdmonitions)
+			}
+		})
+	}
+}
+
+func TestCheckResults_Fail(t *testing.T) {
+	cfg := config.DefaultConfig()
+	cfg.Thresholds.MinAdmonitions = 0
+
+	results := []*analyzer.Result{{
+		Status:     "fail",
+		Structural: analyzer.Structural{Lines: 500},
+	}}
+
+	err := checkResults(results, cfg)
+
+	if err == nil {
+		t.Error("Expected error for failing results")
+	}
+	if !strings.Contains(err.Error(), "1 file(s) failed") {
+		t.Errorf("Expected failure message, got %v", err)
+	}
+}
+
+func TestCheckResults_Pass(t *testing.T) {
+	cfg := config.DefaultConfig()
+
+	results := []*analyzer.Result{{Status: "pass"}}
+
+	err := checkResults(results, cfg)
+
+	if err != nil {
+		t.Errorf("Expected no error for passing results, got %v", err)
+	}
+}
+
+func TestPrintFailureGuidance(t *testing.T) {
+	tests := []struct {
+		name     string
+		stats    failureStats
+		contains []string
+	}{
+		{
+			name:     "too long",
+			stats:    failureStats{failed: 1, tooLong: 1},
+			contains: []string{"IMPORTANT:", "SPLIT"},
+		},
+		{
+			name:     "low readability",
+			stats:    failureStats{failed: 1, lowReadability: 1},
+			contains: []string{"READABILITY:", "Break long sentences"},
+		},
+		{
+			name:     "missing admonitions",
+			stats:    failureStats{failed: 1, missingAdmonitions: 1},
+			contains: []string{"ADMONITIONS:", "!!! note"},
+		},
+		{
+			name:     "all issues",
+			stats:    failureStats{failed: 1, tooLong: 1, lowReadability: 1, missingAdmonitions: 1},
+			contains: []string{"IMPORTANT:", "READABILITY:", "ADMONITIONS:"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			output := captureStderr(t, func() {
+				printFailureGuidance(tt.stats)
+			})
+
+			for _, want := range tt.contains {
+				if !strings.Contains(output, want) {
+					t.Errorf("Expected output to contain %q, got %q", want, output)
+				}
+			}
+		})
+	}
+}
+
+func TestPrintLengthGuidance(t *testing.T) {
+	output := captureStderr(t, func() {
+		printLengthGuidance()
+	})
+
+	if !strings.Contains(output, "SPLIT") {
+		t.Errorf("Expected length guidance to mention SPLIT, got %q", output)
+	}
+}
+
+func TestPrintReadabilityGuidance(t *testing.T) {
+	output := captureStderr(t, func() {
+		printReadabilityGuidance()
+	})
+
+	if !strings.Contains(output, "Break long sentences") {
+		t.Errorf("Expected readability guidance, got %q", output)
+	}
+}
+
+func TestPrintAdmonitionGuidance(t *testing.T) {
+	output := captureStderr(t, func() {
+		printAdmonitionGuidance()
+	})
+
+	if !strings.Contains(output, "!!! note") {
+		t.Errorf("Expected admonition guidance, got %q", output)
+	}
 }

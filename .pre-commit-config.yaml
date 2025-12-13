@@ -23,17 +23,15 @@ repos:
         pass_filenames: false
 
       - id: gocyclo
-        name: Check cyclomatic complexity (warning)
+        name: Check cyclomatic complexity
         entry: >
           bash -c '
           command -v gocyclo >/dev/null || go install github.com/fzipp/gocyclo/cmd/gocyclo@latest;
-          $(go env GOPATH)/bin/gocyclo -over 15 . ||
-          echo "Warning: High complexity functions found (refactoring recommended)"
+          $(go env GOPATH)/bin/gocyclo -over 15 .
           '
         language: system
         files: '\.go$'
         pass_filenames: false
-        verbose: true
 
       - id: go-test
         name: Run Go tests
