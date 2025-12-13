@@ -6,8 +6,8 @@
   ],
   "packageRules": [
     {
-      "description": "scorecard-action requires version tags for workflow verification",
-      "matchPackageNames": ["ossf/scorecard-action"],
+      "description": "scorecard.yml requires version tags for workflow verification (all actions)",
+      "matchFileNames": [".github/workflows/scorecard.yml"],
       "pinDigests": false
     }
   ]
