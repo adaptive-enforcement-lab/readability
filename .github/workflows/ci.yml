@@ -78,7 +78,7 @@ jobs:
       - name: Check coverage threshold
         run: |
           COVERAGE="${{ steps.coverage.outputs.total }}"
-          THRESHOLD=80
+          THRESHOLD=$(grep -A2 "project:" codecov.yml | grep "target:" | head -1 | sed "s/.*target: *\([0-9]*\).*/\1/") || THRESHOLD=95
           if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
             echo "::error::Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
             exit 1

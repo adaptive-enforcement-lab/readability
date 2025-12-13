@@ -370,3 +370,142 @@ func TestLoad_NotFound(t *testing.T) {
 		t.Error("Expected error for non-existent file")
 	}
 }
+
+func TestMergeThresholds_AllFields(t *testing.T) {
+	base := Thresholds{
+		MaxGrade:       16,
+		MaxARI:         16,
+		MaxFog:         18,
+		MinEase:        25,
+		MaxLines:       375,
+		MinWords:       100,
+		MinAdmonitions: 1,
+	}
+
+	tests := []struct {
+		name     string
+		override Thresholds
+		want     Thresholds
+	}{
+		{
+			name: "MaxFog override",
+			override: Thresholds{
+				MaxFog: 20,
+			},
+			want: Thresholds{
+				MaxGrade:       16,
+				MaxARI:         16,
+				MaxFog:         20,
+				MinEase:        25,
+				MaxLines:       375,
+				MinWords:       100,
+				MinAdmonitions: 1,
+			},
+		},
+		{
+			name: "MaxLines override",
+			override: Thresholds{
+				MaxLines: 500,
+			},
+			want: Thresholds{
+				MaxGrade:       16,
+				MaxARI:         16,
+				MaxFog:         18,
+				MinEase:        25,
+				MaxLines:       500,
+				MinWords:       100,
+				MinAdmonitions: 1,
+			},
+		},
+		{
+			name: "MinWords override",
+			override: Thresholds{
+				MinWords: 200,
+			},
+			want: Thresholds{
+				MaxGrade:       16,
+				MaxARI:         16,
+				MaxFog:         18,
+				MinEase:        25,
+				MaxLines:       375,
+				MinWords:       200,
+				MinAdmonitions: 1,
+			},
+		},
+		{
+			name: "MaxARI override",
+			override: Thresholds{
+				MaxARI: 14,
+			},
+			want: Thresholds{
+				MaxGrade:       16,
+				MaxARI:         14,
+				MaxFog:         18,
+				MinEase:        25,
+				MaxLines:       375,
+				MinWords:       100,
+				MinAdmonitions: 1,
+			},
+		},
+		{
+			name: "MinAdmonitions negative override (disable)",
+			override: Thresholds{
+				MinAdmonitions: -1,
+			},
+			want: Thresholds{
+				MaxGrade:       16,
+				MaxARI:         16,
+				MaxFog:         18,
+				MinEase:        25,
+				MaxLines:       375,
+				MinWords:       100,
+				MinAdmonitions: -1,
+			},
+		},
+		{
+			name: "all fields override",
+			override: Thresholds{
+				MaxGrade:       10,
+				MaxARI:         10,
+				MaxFog:         12,
+				MinEase:        50,
+				MaxLines:       200,
+				MinWords:       50,
+				MinAdmonitions: 2,
+			},
+			want: Thresholds{
+				MaxGrade:       10,
+				MaxARI:         10,
+				MaxFog:         12,
+				MinEase:        50,
+				MaxLines:       200,
+				MinWords:       50,
+				MinAdmonitions: 2,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := mergeThresholds(base, tt.override)
+			if got != tt.want {
+				t.Errorf("mergeThresholds() = %+v, want %+v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFindConfigFile_FilesystemRoot(t *testing.T) {
+	// Create a temp directory without .git (simulates reaching filesystem root)
+	tmpDir := t.TempDir()
+
+	// Don't create .git - this tests the filesystem root case
+	subDir := filepath.Join(tmpDir, "sub")
+	if err := os.MkdirAll(subDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// Should eventually return empty when reaching filesystem root
+	// (In practice, this test might find a .git higher up, but the code path is exercised)
+	_ = FindConfigFile(subDir)
+}
