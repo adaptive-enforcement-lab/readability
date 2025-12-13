@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.3.1...1.4.0) (2025-12-13)
+
+
+### Features
+
+* add Codecov configuration with components and test analytics ([#86](https://github.com/adaptive-enforcement-lab/readability/issues/86)) ([333c094](https://github.com/adaptive-enforcement-lab/readability/commit/333c09499608b0096e9dd590af1b5d4355f55a10))
+
 ## [1.3.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.3.0...1.3.1) (2025-12-13)
 
 
