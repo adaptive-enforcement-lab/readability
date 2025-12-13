@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/adaptive-enforcement-lab/readability/compare/1.2.1...1.2.2) (2025-12-13)
+
+
+### Code Refactoring
+
+* unify CI/CD with reusable workflow pattern ([#76](https://github.com/adaptive-enforcement-lab/readability/issues/76)) ([df8511a](https://github.com/adaptive-enforcement-lab/readability/commit/df8511a1a028a9d3cae6277a88582ba02f466011))
+
 ## [1.2.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.2.0...1.2.1) (2025-12-13)
 
 
