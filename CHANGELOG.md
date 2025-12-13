@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.2.2...1.3.0) (2025-12-13)
+
+
+### Features
+
+* add Trivy security scanning and SBOM generation ([#80](https://github.com/adaptive-enforcement-lab/readability/issues/80)) ([844464f](https://github.com/adaptive-enforcement-lab/readability/commit/844464f6bd793d51b7610c8ec355596aace6d119))
+
+
+### Bug Fixes
+
+* remove duplicate push trigger from ci.yml ([#78](https://github.com/adaptive-enforcement-lab/readability/issues/78)) ([63dd296](https://github.com/adaptive-enforcement-lab/readability/commit/63dd2963bf2cba27af0a68c55733365a6a9c96cc))
+
+
+### Maintenance
+
+* **deps:** update github artifact actions ([#81](https://github.com/adaptive-enforcement-lab/readability/issues/81)) ([4cde10f](https://github.com/adaptive-enforcement-lab/readability/commit/4cde10fcc28839113c04fd378e60e36dcecdd189))
+
 ## [1.2.2](https://github.com/adaptive-enforcement-lab/readability/compare/1.2.1...1.2.2) (2025-12-13)
 
 
