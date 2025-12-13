@@ -41,7 +41,7 @@ jobs:
       major: ${{ steps.release.outputs.major }}
       minor: ${{ steps.release.outputs.minor }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@c3fc4de07084f75a2b61a5b933069bda6edf3d5c # v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -79,9 +79,9 @@ jobs:
           - goos: windows
             goarch: amd64
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
         with:
           go-version: "1.25"
 
@@ -101,7 +101,7 @@ jobs:
             ./cmd/readability
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: readability_${{ matrix.goos }}_${{ matrix.goarch }}
           path: readability_*
@@ -115,14 +115,14 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
     steps:
       - name: Download binary artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           path: dist/
           pattern: readability_*
           merge-multiple: true
 
       - name: Download SBOM artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: sbom-cyclonedx
           path: dist/
@@ -162,11 +162,11 @@ jobs:
       needs.release-please.result == 'success' &&
       (needs.release-please.outputs.release_created == 'true' || inputs.force_docs == true)
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6
         with:
           python-version: "3.14"
 
@@ -210,7 +210,7 @@ jobs:
       contents: write
     if: needs.release-please.outputs.release_created == 'true'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           fetch-depth: 0
 
