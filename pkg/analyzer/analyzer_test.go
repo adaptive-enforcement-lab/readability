@@ -269,13 +269,13 @@ func TestAnalyzeDirectory(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	files := map[string]string{
-		"doc1.md":           "# Doc 1\n\nContent one.",
-		"doc2.md":           "# Doc 2\n\nContent two.",
-		"subdir/doc3.md":    "# Doc 3\n\nContent three.",
-		"README.md":         "# README\n\nThis is readme.",
-		"CHANGELOG.md":      "# Changelog\n\nChanges here.", // Should be skipped
-		"CONTRIBUTING.md":   "# Contributing\n\nHow to contribute.", // Should be skipped
-		"not_markdown.txt":  "This is not markdown.",
+		"doc1.md":          "# Doc 1\n\nContent one.",
+		"doc2.md":          "# Doc 2\n\nContent two.",
+		"subdir/doc3.md":   "# Doc 3\n\nContent three.",
+		"README.md":        "# README\n\nThis is readme.",
+		"CHANGELOG.md":     "# Changelog\n\nChanges here.",         // Should be skipped
+		"CONTRIBUTING.md":  "# Contributing\n\nHow to contribute.", // Should be skipped
+		"not_markdown.txt": "This is not markdown.",
 	}
 
 	for name, content := range files {
@@ -380,9 +380,9 @@ func TestCollectDiagnostics_WithConfig(t *testing.T) {
 			Sentences: 10,
 		},
 		Readability: Readability{
-			FleschKincaidGrade: 5.0, // OK
-			ARI:                5.0, // OK
-			GunningFog:         8.0, // OK
+			FleschKincaidGrade: 5.0,  // OK
+			ARI:                5.0,  // OK
+			GunningFog:         8.0,  // OK
 			FleschReadingEase:  70.0, // OK
 		},
 		Admonitions: Admonitions{
