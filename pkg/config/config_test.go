@@ -280,3 +280,93 @@ func TestFindConfigFile(t *testing.T) {
 		t.Errorf("FindConfigFile() from root = %v, want %v", found, configPath)
 	}
 }
+
+func TestFindConfigFile_NoConfig(t *testing.T) {
+	// Create a temp directory with .git but no config
+	tmpDir := t.TempDir()
+	gitDir := filepath.Join(tmpDir, ".git")
+	if err := os.Mkdir(gitDir, 0755); err != nil {
+		t.Fatalf("Failed to create .git: %v", err)
+	}
+
+	found := FindConfigFile(tmpDir)
+	if found != "" {
+		t.Errorf("FindConfigFile() = %v, want empty string", found)
+	}
+}
+
+func TestDefaultConfig(t *testing.T) {
+	cfg := DefaultConfig()
+
+	if cfg == nil {
+		t.Fatal("DefaultConfig() returned nil")
+	}
+
+	// Check default values
+	if cfg.Thresholds.MaxGrade != 16.0 {
+		t.Errorf("MaxGrade = %v, want 16.0", cfg.Thresholds.MaxGrade)
+	}
+	if cfg.Thresholds.MaxARI != 16.0 {
+		t.Errorf("MaxARI = %v, want 16.0", cfg.Thresholds.MaxARI)
+	}
+	if cfg.Thresholds.MaxFog != 18.0 {
+		t.Errorf("MaxFog = %v, want 18.0", cfg.Thresholds.MaxFog)
+	}
+	if cfg.Thresholds.MinEase != 25.0 {
+		t.Errorf("MinEase = %v, want 25.0", cfg.Thresholds.MinEase)
+	}
+	if cfg.Thresholds.MaxLines != 375 {
+		t.Errorf("MaxLines = %v, want 375", cfg.Thresholds.MaxLines)
+	}
+	if cfg.Thresholds.MinWords != 100 {
+		t.Errorf("MinWords = %v, want 100", cfg.Thresholds.MinWords)
+	}
+	if cfg.Thresholds.MinAdmonitions != 1 {
+		t.Errorf("MinAdmonitions = %v, want 1", cfg.Thresholds.MinAdmonitions)
+	}
+}
+
+func TestLoadOrDefault_Success(t *testing.T) {
+	tmpDir := t.TempDir()
+	configPath := filepath.Join(tmpDir, "config.yml")
+	content := "thresholds:\n  max_grade: 10\n"
+	if err := os.WriteFile(configPath, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	cfg := LoadOrDefault(configPath)
+
+	if cfg.Thresholds.MaxGrade != 10 {
+		t.Errorf("MaxGrade = %v, want 10", cfg.Thresholds.MaxGrade)
+	}
+}
+
+func TestLoadOrDefault_Fallback(t *testing.T) {
+	cfg := LoadOrDefault("/nonexistent/config.yml")
+
+	// Should return default config
+	if cfg.Thresholds.MaxGrade != 16.0 {
+		t.Errorf("Expected default MaxGrade 16.0, got %v", cfg.Thresholds.MaxGrade)
+	}
+}
+
+func TestLoad_InvalidYAML(t *testing.T) {
+	tmpDir := t.TempDir()
+	configPath := filepath.Join(tmpDir, "invalid.yml")
+	content := "thresholds:\n  max_grade: [invalid\n" // Invalid YAML
+	if err := os.WriteFile(configPath, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := Load(configPath)
+	if err == nil {
+		t.Error("Expected error for invalid YAML")
+	}
+}
+
+func TestLoad_NotFound(t *testing.T) {
+	_, err := Load("/nonexistent/config.yml")
+	if err == nil {
+		t.Error("Expected error for non-existent file")
+	}
+}
