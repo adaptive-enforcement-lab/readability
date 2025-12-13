@@ -39,27 +39,27 @@ component_management:
     - component_id: cli
       name: CLI
       paths:
-        - cmd/**
+        - "cmd/readability/.*"
 
     - component_id: analyzer
       name: Analyzer
       paths:
-        - pkg/analyzer/**
+        - "pkg/analyzer/.*"
 
     - component_id: config
       name: Configuration
       paths:
-        - pkg/config/**
+        - "pkg/config/.*"
 
     - component_id: markdown
       name: Markdown Parser
       paths:
-        - pkg/markdown/**
+        - "pkg/markdown/.*"
 
     - component_id: output
       name: Output Formatters
       paths:
-        - pkg/output/**
+        - "pkg/output/.*"
 
 # Flags for different test types
 flags:
