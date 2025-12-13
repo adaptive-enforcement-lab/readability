@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.2.0...1.2.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* configure Codecov with OIDC authentication ([#75](https://github.com/adaptive-enforcement-lab/readability/issues/75)) ([894311e](https://github.com/adaptive-enforcement-lab/readability/commit/894311e7cbfca3ad7bedcd776067e2575f0b40d9))
+
+
+### Maintenance
+
+* **deps:** update github artifact actions ([#71](https://github.com/adaptive-enforcement-lab/readability/issues/71)) ([2ae0a49](https://github.com/adaptive-enforcement-lab/readability/commit/2ae0a492c33972c75b21efefe7256b9d4ff66a1d))
+
 ## [1.2.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.1.1...1.2.0) (2025-12-09)
 
 
