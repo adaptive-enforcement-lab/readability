@@ -10,6 +10,54 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// captureOutput captures stdout during function execution and returns the output
+func captureOutput(t *testing.T, fn func()) string {
+	t.Helper()
+	oldStdout := os.Stdout
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("Failed to create pipe: %v", err)
+	}
+	os.Stdout = w
+
+	fn()
+
+	if err := w.Close(); err != nil {
+		t.Fatalf("Failed to close writer: %v", err)
+	}
+	var buf bytes.Buffer
+	if _, err := buf.ReadFrom(r); err != nil {
+		t.Fatalf("Failed to read output: %v", err)
+	}
+	os.Stdout = oldStdout
+
+	return buf.String()
+}
+
+// captureStderr captures stderr during function execution and returns the output
+func captureStderr(t *testing.T, fn func()) string {
+	t.Helper()
+	oldStderr := os.Stderr
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("Failed to create pipe: %v", err)
+	}
+	os.Stderr = w
+
+	fn()
+
+	if err := w.Close(); err != nil {
+		t.Fatalf("Failed to close writer: %v", err)
+	}
+	var buf bytes.Buffer
+	if _, err := buf.ReadFrom(r); err != nil {
+		t.Fatalf("Failed to read output: %v", err)
+	}
+	os.Stderr = oldStderr
+
+	return buf.String()
+}
+
 func TestRun_SingleFile(t *testing.T) {
 	// Create temp file
 	tmpDir := t.TempDir()
@@ -35,23 +83,15 @@ func TestRun_SingleFile(t *testing.T) {
 
 	args := []string{testFile}
 
-	// Capture stdout
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	var runErr error
+	output := captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
 
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stdout = oldStdout
-
-	if err != nil {
-		t.Errorf("run() error = %v", err)
+	if runErr != nil {
+		t.Errorf("run() error = %v", runErr)
 	}
 
-	output := buf.String()
 	if !strings.Contains(output, "test.md") {
 		t.Errorf("Expected output to contain file name, got %q", output)
 	}
@@ -87,23 +127,15 @@ func TestRun_Directory(t *testing.T) {
 
 	args := []string{tmpDir}
 
-	// Capture stdout
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	var runErr error
+	output := captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
 
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stdout = oldStdout
-
-	if err != nil {
-		t.Errorf("run() error = %v", err)
+	if runErr != nil {
+		t.Errorf("run() error = %v", runErr)
 	}
 
-	output := buf.String()
 	if !strings.Contains(output, "doc1.md") {
 		t.Errorf("Expected output to contain 'doc1.md'")
 	}
@@ -175,20 +207,13 @@ func TestRun_WithConfig(t *testing.T) {
 
 	args := []string{testFile}
 
-	// Capture stdout
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	var runErr error
+	captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
 
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stdout = oldStdout
-
-	if err != nil {
-		t.Errorf("run() error = %v", err)
+	if runErr != nil {
+		t.Errorf("run() error = %v", runErr)
 	}
 }
 
@@ -216,22 +241,15 @@ func TestRun_CheckMode_Pass(t *testing.T) {
 
 	args := []string{testFile}
 
-	// Capture stdout
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
-
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stdout = oldStdout
+	var runErr error
+	output := captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
 
 	// Should pass since content is simple
-	if err != nil {
-		t.Logf("Output: %s", buf.String())
-		t.Errorf("Expected no error for passing check, got %v", err)
+	if runErr != nil {
+		t.Logf("Output: %s", output)
+		t.Errorf("Expected no error for passing check, got %v", runErr)
 	}
 }
 
@@ -262,23 +280,16 @@ func TestRun_Formats(t *testing.T) {
 
 			args := []string{testFile}
 
-			// Capture stdout
-			oldStdout := os.Stdout
-			r, w, _ := os.Pipe()
-			os.Stdout = w
+			var runErr error
+			output := captureOutput(t, func() {
+				runErr = run(cmd, args)
+			})
 
-			err := run(cmd, args)
-
-			w.Close()
-			var buf bytes.Buffer
-			buf.ReadFrom(r)
-			os.Stdout = oldStdout
-
-			if err != nil {
-				t.Errorf("Format %q: run() error = %v", format, err)
+			if runErr != nil {
+				t.Errorf("Format %q: run() error = %v", format, runErr)
 			}
 
-			if buf.Len() == 0 {
+			if len(output) == 0 {
 				t.Errorf("Format %q: expected non-empty output", format)
 			}
 		})
@@ -309,25 +320,22 @@ func TestRun_CLIOverrides(t *testing.T) {
 	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
 
 	// Mark flags as changed to trigger override behavior
-	cmd.Flags().Set("max-lines", "100")
-	cmd.Flags().Set("min-admonitions", "0")
+	if err := cmd.Flags().Set("max-lines", "100"); err != nil {
+		t.Fatalf("Failed to set max-lines flag: %v", err)
+	}
+	if err := cmd.Flags().Set("min-admonitions", "0"); err != nil {
+		t.Fatalf("Failed to set min-admonitions flag: %v", err)
+	}
 
 	args := []string{testFile}
 
-	// Capture stdout
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	var runErr error
+	captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
 
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stdout = oldStdout
-
-	if err != nil {
-		t.Errorf("run() error = %v", err)
+	if runErr != nil {
+		t.Errorf("run() error = %v", runErr)
 	}
 }
 
@@ -354,21 +362,14 @@ func TestRun_EmptyDirectory(t *testing.T) {
 
 	args := []string{subDir}
 
-	// Capture stderr for "No markdown files found" message
-	oldStderr := os.Stderr
-	r, w, _ := os.Pipe()
-	os.Stderr = w
-
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stderr = oldStderr
+	var runErr error
+	captureStderr(t, func() {
+		runErr = run(cmd, args)
+	})
 
 	// Should not error, just print message
-	if err != nil {
-		t.Errorf("run() error = %v for empty dir", err)
+	if runErr != nil {
+		t.Errorf("run() error = %v for empty dir", runErr)
 	}
 }
 
@@ -432,23 +433,15 @@ func TestRun_VerboseOutput(t *testing.T) {
 
 	args := []string{testFile}
 
-	// Capture stdout
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	var runErr error
+	output := captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
 
-	err := run(cmd, args)
-
-	w.Close()
-	var buf bytes.Buffer
-	buf.ReadFrom(r)
-	os.Stdout = oldStdout
-
-	if err != nil {
-		t.Errorf("run() error = %v", err)
+	if runErr != nil {
+		t.Errorf("run() error = %v", runErr)
 	}
 
-	output := buf.String()
 	// Verbose table output should include additional metrics
 	if !strings.Contains(output, "Additional metrics") {
 		t.Errorf("Verbose output should contain 'Additional metrics', got: %s", output)
