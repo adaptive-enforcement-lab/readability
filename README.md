@@ -3,6 +3,7 @@
 [![CI](https://github.com/adaptive-enforcement-lab/readability/actions/workflows/ci.yml/badge.svg)](https://github.com/adaptive-enforcement-lab/readability/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/adaptive-enforcement-lab/readability/graph/badge.svg)](https://codecov.io/gh/adaptive-enforcement-lab/readability)
 [![Go Report Card](https://goreportcard.com/badge/github.com/adaptive-enforcement-lab/readability)](https://goreportcard.com/report/github.com/adaptive-enforcement-lab/readability)
+[![Go Reference](https://pkg.go.dev/badge/github.com/adaptive-enforcement-lab/readability.svg)](https://pkg.go.dev/github.com/adaptive-enforcement-lab/readability)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11610/badge)](https://www.bestpractices.dev/projects/11610)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/adaptive-enforcement-lab/readability/badge)](https://scorecard.dev/viewer/?uri=github.com/adaptive-enforcement-lab/readability)
 
