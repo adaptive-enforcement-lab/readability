@@ -58,23 +58,23 @@ func TestParse(t *testing.T) {
 			wantTotalLines: 6,
 		},
 		{
-			name: "fenced code block",
-			content: "# Title\n\n```go\nfunc main() {}\n```\n\nSome text.",
+			name:           "fenced code block",
+			content:        "# Title\n\n```go\nfunc main() {}\n```\n\nSome text.",
 			wantHeadings:   1,
 			wantCodeBlocks: 1,
 			wantTotalLines: 7,
 			wantCodeLines:  3,
 		},
 		{
-			name: "multiple code blocks",
-			content: "```\ncode1\n```\n\n```python\ncode2\n```",
+			name:           "multiple code blocks",
+			content:        "```\ncode1\n```\n\n```python\ncode2\n```",
 			wantCodeBlocks: 2,
 			wantTotalLines: 7,
 			wantCodeLines:  6,
 		},
 		{
-			name: "prose with empty lines",
-			content: "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.",
+			name:           "prose with empty lines",
+			content:        "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.",
 			wantProseLen:   10,
 			wantTotalLines: 5,
 			wantEmptyLines: 2,
@@ -129,10 +129,10 @@ More prose here.`,
 
 func TestParse_Headings(t *testing.T) {
 	tests := []struct {
-		name        string
-		content     string
-		wantLevels  []int
-		wantTexts   []string
+		name       string
+		content    string
+		wantLevels []int
+		wantTexts  []string
 	}{
 		{
 			name:       "all heading levels",
@@ -145,7 +145,7 @@ func TestParse_Headings(t *testing.T) {
 			content:    "# **Bold** heading",
 			wantLevels: []int{1},
 			// Parser strips markdown formatting, leaving just the suffix
-			wantTexts:  []string{" heading"},
+			wantTexts: []string{" heading"},
 		},
 		{
 			name:       "heading with inline code",
@@ -222,8 +222,8 @@ func TestParse_Admonitions(t *testing.T) {
 			wantTypes: []string{"note"},
 		},
 		{
-			name: "admonition inside code block ignored",
-			content: "```\n!!! note\n    This should not be counted.\n```",
+			name:      "admonition inside code block ignored",
+			content:   "```\n!!! note\n    This should not be counted.\n```",
 			wantCount: 0,
 		},
 		{
@@ -338,27 +338,27 @@ func TestParse_CodeBlocks(t *testing.T) {
 		wantContains []string
 	}{
 		{
-			name:       "fenced code block",
-			content:    "```\ncode here\n```",
-			wantBlocks: 1,
+			name:         "fenced code block",
+			content:      "```\ncode here\n```",
+			wantBlocks:   1,
 			wantContains: []string{"code here"},
 		},
 		{
-			name:       "fenced with language",
-			content:    "```go\npackage main\n```",
-			wantBlocks: 1,
+			name:         "fenced with language",
+			content:      "```go\npackage main\n```",
+			wantBlocks:   1,
 			wantContains: []string{"package main"},
 		},
 		{
-			name:       "indented code block",
-			content:    "    indented code\n    more code",
-			wantBlocks: 1,
+			name:         "indented code block",
+			content:      "    indented code\n    more code",
+			wantBlocks:   1,
 			wantContains: []string{"indented code"},
 		},
 		{
-			name: "multiple fenced blocks",
-			content: "```\nblock1\n```\n\n```\nblock2\n```",
-			wantBlocks: 2,
+			name:         "multiple fenced blocks",
+			content:      "```\nblock1\n```\n\n```\nblock2\n```",
+			wantBlocks:   2,
 			wantContains: []string{"block1", "block2"},
 		},
 	}

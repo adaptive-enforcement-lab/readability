@@ -298,9 +298,9 @@ func TestMarkdown_Output(t *testing.T) {
 func TestSummary_AllPass(t *testing.T) {
 	results := []*analyzer.Result{
 		{
-			File:   "doc1.md",
-			Status: "pass",
-			Structural: analyzer.Structural{Lines: 50, Words: 200},
+			File:        "doc1.md",
+			Status:      "pass",
+			Structural:  analyzer.Structural{Lines: 50, Words: 200},
 			Readability: analyzer.Readability{FleschReadingEase: 75.0},
 		},
 	}
@@ -317,8 +317,8 @@ func TestSummary_AllPass(t *testing.T) {
 func TestSummary_WithFailures(t *testing.T) {
 	results := []*analyzer.Result{
 		{
-			File:   "bad.md",
-			Status: "fail",
+			File:       "bad.md",
+			Status:     "fail",
 			Structural: analyzer.Structural{Lines: 50, Words: 200},
 			Readability: analyzer.Readability{
 				FleschKincaidGrade: 18.0,
@@ -343,9 +343,9 @@ func TestSummary_WithFailures(t *testing.T) {
 func TestReport_Output(t *testing.T) {
 	results := []*analyzer.Result{
 		{
-			File:   "doc.md",
-			Status: "pass",
-			Structural: analyzer.Structural{Lines: 50, Words: 200},
+			File:        "doc.md",
+			Status:      "pass",
+			Structural:  analyzer.Structural{Lines: 50, Words: 200},
 			Readability: analyzer.Readability{FleschReadingEase: 65.0},
 		},
 	}
@@ -368,8 +368,8 @@ func TestReport_Output(t *testing.T) {
 func TestReport_WithFailures(t *testing.T) {
 	results := []*analyzer.Result{
 		{
-			File:   "bad.md",
-			Status: "fail",
+			File:       "bad.md",
+			Status:     "fail",
 			Structural: analyzer.Structural{Lines: 500, Words: 200},
 			Readability: analyzer.Readability{
 				FleschKincaidGrade: 18.0,
@@ -494,13 +494,13 @@ func TestIdentifyIssue(t *testing.T) {
 
 func TestCalculateDistribution(t *testing.T) {
 	results := []*analyzer.Result{
-		{Readability: analyzer.Readability{FleschReadingEase: 95.0}},  // Very Easy
-		{Readability: analyzer.Readability{FleschReadingEase: 85.0}},  // Easy
-		{Readability: analyzer.Readability{FleschReadingEase: 75.0}},  // Fairly Easy
-		{Readability: analyzer.Readability{FleschReadingEase: 65.0}},  // Standard
-		{Readability: analyzer.Readability{FleschReadingEase: 55.0}},  // Fairly Difficult
-		{Readability: analyzer.Readability{FleschReadingEase: 40.0}},  // Difficult
-		{Readability: analyzer.Readability{FleschReadingEase: 20.0}},  // Very Difficult
+		{Readability: analyzer.Readability{FleschReadingEase: 95.0}}, // Very Easy
+		{Readability: analyzer.Readability{FleschReadingEase: 85.0}}, // Easy
+		{Readability: analyzer.Readability{FleschReadingEase: 75.0}}, // Fairly Easy
+		{Readability: analyzer.Readability{FleschReadingEase: 65.0}}, // Standard
+		{Readability: analyzer.Readability{FleschReadingEase: 55.0}}, // Fairly Difficult
+		{Readability: analyzer.Readability{FleschReadingEase: 40.0}}, // Difficult
+		{Readability: analyzer.Readability{FleschReadingEase: 20.0}}, // Very Difficult
 	}
 
 	dist := calculateDistribution(results)

@@ -1,12 +1,39 @@
 repos:
   - repo: local
     hooks:
-      - id: readability
-        name: Check documentation readability
-        entry: go run ./cmd/readability --check --format diagnostic docs/
+      - id: gofmt
+        name: Format Go code (gofmt -s)
+        entry: bash -c 'gofmt -s -l -d "$@" | head -20; test -z "$(gofmt -s -l "$@")"' --
         language: system
-        files: '^docs/.*\.md$'
+        files: '\.go$'
+        pass_filenames: true
+
+      - id: go-vet
+        name: Run go vet
+        entry: go vet ./...
+        language: system
+        files: '\.go$'
         pass_filenames: false
+
+      - id: golangci-lint
+        name: Run golangci-lint
+        entry: golangci-lint run --fix
+        language: system
+        files: '\.go$'
+        pass_filenames: false
+
+      - id: gocyclo
+        name: Check cyclomatic complexity (warning)
+        entry: >
+          bash -c '
+          command -v gocyclo >/dev/null || go install github.com/fzipp/gocyclo/cmd/gocyclo@latest;
+          $(go env GOPATH)/bin/gocyclo -over 15 . ||
+          echo "Warning: High complexity functions found (refactoring recommended)"
+          '
+        language: system
+        files: '\.go$'
+        pass_filenames: false
+        verbose: true
 
       - id: go-test
         name: Run Go tests
@@ -30,3 +57,10 @@ repos:
         files: '\.go$'
         pass_filenames: false
         stages: [pre-push]
+
+      - id: readability
+        name: Check documentation readability
+        entry: go run ./cmd/readability --check --format diagnostic docs/
+        language: system
+        files: '^docs/.*\.md$'
+        pass_filenames: false
