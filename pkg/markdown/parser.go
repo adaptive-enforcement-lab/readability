@@ -46,9 +46,18 @@ func Parse(content []byte) (*ParseResult, error) {
 		Admonitions: make([]Admonition, 0),
 	}
 
+	prose := extractAST(doc, content, result)
+	result.Prose = strings.TrimSpace(prose)
+
+	countLines(content, result)
+
+	return result, nil
+}
+
+// extractAST walks the AST and extracts headings, code blocks, and prose.
+func extractAST(doc ast.Node, content []byte, result *ParseResult) string {
 	var proseBuilder strings.Builder
 
-	// Walk the AST to extract content
 	_ = ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
 		if !entering {
 			return ast.WalkContinue, nil
@@ -56,91 +65,105 @@ func Parse(content []byte) (*ParseResult, error) {
 
 		switch n := node.(type) {
 		case *ast.Heading:
-			// Get line number from the heading's first line segment
-			line := 1
-			if n.Lines().Len() > 0 {
-				line = bytes.Count(content[:n.Lines().At(0).Start], []byte("\n")) + 1
-			}
-			heading := Heading{
-				Line:  line,
-				Level: n.Level,
-				Text:  extractHeadingText(n, content),
-			}
-			result.Headings = append(result.Headings, heading)
-
+			result.Headings = append(result.Headings, extractHeading(n, content))
 		case *ast.FencedCodeBlock:
-			var codeContent bytes.Buffer
-			lines := n.Lines()
-			for i := 0; i < lines.Len(); i++ {
-				line := lines.At(i)
-				codeContent.Write(line.Value(content))
-			}
-			result.CodeBlocks = append(result.CodeBlocks, codeContent.String())
-
+			result.CodeBlocks = append(result.CodeBlocks, extractCodeBlock(n, content))
 		case *ast.CodeBlock:
-			var codeContent bytes.Buffer
-			lines := n.Lines()
-			for i := 0; i < lines.Len(); i++ {
-				line := lines.At(i)
-				codeContent.Write(line.Value(content))
-			}
-			result.CodeBlocks = append(result.CodeBlocks, codeContent.String())
-
+			result.CodeBlocks = append(result.CodeBlocks, extractCodeBlock(n, content))
 		case *ast.Text:
-			// Only extract text that's not inside code blocks
-			parent := n.Parent()
-			if !isInsideCodeBlock(parent) {
-				proseBuilder.Write(n.Segment.Value(content))
-				if n.HardLineBreak() || n.SoftLineBreak() {
-					proseBuilder.WriteString(" ")
-				} else {
-					proseBuilder.WriteString(" ")
-				}
-			}
-
+			extractText(n, content, &proseBuilder)
 		case *ast.String:
-			parent := n.Parent()
-			if !isInsideCodeBlock(parent) {
-				proseBuilder.Write(n.Value)
-				proseBuilder.WriteString(" ")
-			}
+			extractString(n, &proseBuilder)
 		}
 
 		return ast.WalkContinue, nil
 	})
 
-	result.Prose = strings.TrimSpace(proseBuilder.String())
+	return proseBuilder.String()
+}
 
-	// Count lines
+// extractHeading extracts a heading from an AST node.
+func extractHeading(n *ast.Heading, content []byte) Heading {
+	line := 1
+	if n.Lines().Len() > 0 {
+		line = bytes.Count(content[:n.Lines().At(0).Start], []byte("\n")) + 1
+	}
+	return Heading{
+		Line:  line,
+		Level: n.Level,
+		Text:  extractHeadingText(n, content),
+	}
+}
+
+// codeBlocker is an interface for nodes that have line segments.
+type codeBlocker interface {
+	Lines() *text.Segments
+}
+
+// extractCodeBlock extracts code content from a code block node.
+func extractCodeBlock(n codeBlocker, content []byte) string {
+	var codeContent bytes.Buffer
+	lines := n.Lines()
+	for i := 0; i < lines.Len(); i++ {
+		line := lines.At(i)
+		codeContent.Write(line.Value(content))
+	}
+	return codeContent.String()
+}
+
+// extractText extracts text content if not inside a code block.
+func extractText(n *ast.Text, content []byte, builder *strings.Builder) {
+	parent := n.Parent()
+	if isInsideCodeBlock(parent) {
+		return
+	}
+	builder.Write(n.Segment.Value(content))
+	builder.WriteString(" ")
+}
+
+// extractString extracts string content if not inside a code block.
+func extractString(n *ast.String, builder *strings.Builder) {
+	parent := n.Parent()
+	if isInsideCodeBlock(parent) {
+		return
+	}
+	builder.Write(n.Value)
+	builder.WriteString(" ")
+}
+
+// countLines counts total, code, and empty lines, and detects admonitions.
+func countLines(content []byte, result *ParseResult) {
 	lines := bytes.Split(content, []byte("\n"))
 	result.TotalLines = len(lines)
 
-	// Count code lines, empty lines, and detect admonitions
 	inCodeBlock := false
 	for lineNum, line := range lines {
 		trimmed := bytes.TrimSpace(line)
+
 		if bytes.HasPrefix(trimmed, []byte("```")) {
 			inCodeBlock = !inCodeBlock
 			result.CodeLines++
 			continue
 		}
+
 		if inCodeBlock {
 			result.CodeLines++
-		} else if len(trimmed) == 0 {
+			continue
+		}
+
+		if len(trimmed) == 0 {
 			result.EmptyLines++
+			continue
 		}
 
 		// Detect MkDocs-style admonitions: !!! type or !!! type "title"
-		if !inCodeBlock && bytes.HasPrefix(trimmed, []byte("!!!")) {
-			admonition := parseAdmonition(string(trimmed))
-			if admonition != nil {
-				admonition.Line = lineNum + 1 // 1-based line numbers
-				result.Admonitions = append(result.Admonitions, *admonition)
+		if bytes.HasPrefix(trimmed, []byte("!!!")) {
+			if adm := parseAdmonition(string(trimmed)); adm != nil {
+				adm.Line = lineNum + 1 // 1-based line numbers
+				result.Admonitions = append(result.Admonitions, *adm)
 			}
 		}
 	}
-
-	return result, nil
 }
 
 // parseAdmonition parses a MkDocs-style admonition line.
