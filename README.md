@@ -3,6 +3,7 @@
 [![CI](https://github.com/adaptive-enforcement-lab/readability/actions/workflows/ci.yml/badge.svg)](https://github.com/adaptive-enforcement-lab/readability/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/adaptive-enforcement-lab/readability/graph/badge.svg)](https://codecov.io/gh/adaptive-enforcement-lab/readability)
 [![Go Report Card](https://goreportcard.com/badge/github.com/adaptive-enforcement-lab/readability)](https://goreportcard.com/report/github.com/adaptive-enforcement-lab/readability)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11610/badge)](https://www.bestpractices.dev/projects/11610)
 
 Documentation readability analyzer - GitHub Action and CLI tool for measuring content quality metrics.
 
