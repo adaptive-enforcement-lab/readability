@@ -42,8 +42,15 @@ jobs:
         with:
           go-version: "1.25"
 
-      - name: Run tests with coverage
-        run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@latest
+
+      - name: Run tests with coverage and JUnit output
+        run: |
+          gotestsum \
+            --junitfile junit.xml \
+            --format testdox \
+            -- -v -race -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Extract coverage
         id: coverage
@@ -57,6 +64,16 @@ jobs:
         with:
           use_oidc: true
           files: ./coverage.out
+          flags: unit
+          fail_ci_if_error: false
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./junit.xml
+          flags: unit
           fail_ci_if_error: false
 
       - name: Check coverage threshold

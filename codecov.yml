@@ -1,0 +1,84 @@
+---
+# Codecov Configuration
+# https://docs.codecov.com/docs/codecov-yaml
+
+codecov:
+  require_ci_to_pass: true
+  notify:
+    wait_for_ci: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "80...100"
+
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+        if_ci_failed: error
+
+    patch:
+      default:
+        target: 80%
+        threshold: 5%
+        if_ci_failed: error
+
+# Components organize coverage by logical code groupings
+# https://docs.codecov.com/docs/components
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: 80%
+      - type: patch
+        target: 80%
+
+  individual_components:
+    - component_id: cli
+      name: CLI
+      paths:
+        - cmd/**
+
+    - component_id: analyzer
+      name: Analyzer
+      paths:
+        - pkg/analyzer/**
+
+    - component_id: config
+      name: Configuration
+      paths:
+        - pkg/config/**
+
+    - component_id: markdown
+      name: Markdown Parser
+      paths:
+        - pkg/markdown/**
+
+    - component_id: output
+      name: Output Formatters
+      paths:
+        - pkg/output/**
+
+# Flags for different test types
+flags:
+  unit:
+    paths:
+      - cmd/
+      - pkg/
+    carryforward: true
+
+# Comment configuration for PRs
+comment:
+  layout: "header, diff, flags, components, footer"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true
+
+# Ignore paths from coverage
+ignore:
+  - "**/*_test.go"
+  - "testdata/**"
+  - "site/**"
