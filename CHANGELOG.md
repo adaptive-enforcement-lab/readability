@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.5.0...v1.5.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* enable blank issues for free-form issue creation ([#96](https://github.com/adaptive-enforcement-lab/readability/issues/96)) ([e5c50a2](https://github.com/adaptive-enforcement-lab/readability/commit/e5c50a2b02539c99416b4bcb8091f96e1adf1475))
+* enable v prefix in release tags for Go module compliance ([#101](https://github.com/adaptive-enforcement-lab/readability/issues/101)) ([e3ab84e](https://github.com/adaptive-enforcement-lab/readability/commit/e3ab84ece59e2708fb847ec7c46a8d1fe46c57b9))
+
 ## [1.5.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.4.0...1.5.0) (2025-12-13)
 
 
