@@ -844,7 +844,7 @@ func TestAnalyzeDirectory_FileReadError(t *testing.T) {
 	if err := os.Chmod(testFile, 0000); err != nil {
 		t.Skip("Cannot change file permissions")
 	}
-	defer os.Chmod(testFile, 0644) // Restore for cleanup
+	defer func() { _ = os.Chmod(testFile, 0644) }() // Restore for cleanup
 
 	a := New()
 	_, err := a.AnalyzeDirectory(tmpDir)
