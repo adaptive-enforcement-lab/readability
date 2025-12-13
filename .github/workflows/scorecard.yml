@@ -23,8 +23,10 @@ jobs:
         with:
           persist-credentials: false
 
+      # NOTE: scorecard-action cannot be pinned to SHA - it requires version tags
+      # for workflow verification. See: https://github.com/ossf/scorecard-action#workflow-restrictions
       - name: Run Scorecard analysis
-        uses: ossf/scorecard-action@ff5dd8929f96a8a4dc67d13f32b8c75057829621 # v2.4.0
+        uses: ossf/scorecard-action@v2.4.0
         with:
           results_file: results.sarif
           results_format: sarif
