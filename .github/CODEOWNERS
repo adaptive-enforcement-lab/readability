@@ -1,0 +1,4 @@
+# Default code owners for the repository
+# These owners will be requested for review on all PRs
+
+* @adaptive-enforcement-lab/maintainers
