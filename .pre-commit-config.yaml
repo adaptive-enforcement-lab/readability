@@ -44,12 +44,13 @@ repos:
         name: Check test coverage threshold
         entry: >
           bash -c '
+          THRESHOLD=$(grep -A2 "project:" codecov.yml | grep "target:" | head -1 | sed "s/.*target: *\([0-9]*\).*/\1/") || THRESHOLD=95;
           go test -coverprofile=/tmp/coverage.out ./... &&
           COVERAGE=$(go tool cover -func=/tmp/coverage.out | grep total | awk "{print \$3}" | sed "s/%//") &&
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "Coverage ${COVERAGE}% is below 80%"; exit 1;
+          if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
+            echo "Coverage ${COVERAGE}% is below ${THRESHOLD}%"; exit 1;
           fi;
-          echo "Coverage: ${COVERAGE}%"
+          echo "Coverage: ${COVERAGE}% (threshold: ${THRESHOLD}%)"
           '
         language: system
         files: '\.go$'

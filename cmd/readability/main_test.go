@@ -661,3 +661,207 @@ func TestPrintAdmonitionGuidance(t *testing.T) {
 		t.Errorf("Expected admonition guidance, got %q", output)
 	}
 }
+
+func TestOutputResults_AllFormats(t *testing.T) {
+	results := []*analyzer.Result{{
+		File:        "test.md",
+		Status:      "pass",
+		Readability: analyzer.Readability{FleschReadingEase: 60},
+	}}
+
+	formats := []struct {
+		format   string
+		contains string
+	}{
+		{"json", "test.md"},
+		{"markdown", "test.md"},
+		{"summary", ""},
+		{"report", ""},
+		{"diagnostic", ""},
+		{"table", ""},
+		{"unknown", ""}, // defaults to table
+	}
+
+	for _, tt := range formats {
+		t.Run(tt.format, func(t *testing.T) {
+			formatFlag = tt.format
+			verboseFlag = false
+
+			err := outputResults(results)
+			if err != nil {
+				t.Errorf("outputResults() error = %v", err)
+			}
+		})
+	}
+}
+
+func TestApplyFlagOverrides_AllFlags(t *testing.T) {
+	tests := []struct {
+		name           string
+		setupFlags     func(cmd *cobra.Command)
+		expectedGrade  float64
+		expectedARI    float64
+		expectedLines  int
+		expectedMinAdm int
+	}{
+		{
+			name: "max-grade override",
+			setupFlags: func(cmd *cobra.Command) {
+				maxGradeFlag = 10.0
+			},
+			expectedGrade:  10.0,
+			expectedARI:    16.0, // default
+			expectedLines:  375,  // default
+			expectedMinAdm: 1,    // default
+		},
+		{
+			name: "max-ari override",
+			setupFlags: func(cmd *cobra.Command) {
+				maxARIFlag = 12.0
+			},
+			expectedGrade:  16.0, // default
+			expectedARI:    12.0,
+			expectedLines:  375, // default
+			expectedMinAdm: 1,   // default
+		},
+		{
+			name: "max-lines override via Changed",
+			setupFlags: func(cmd *cobra.Command) {
+				if err := cmd.Flags().Set("max-lines", "200"); err != nil {
+					panic(err)
+				}
+			},
+			expectedGrade:  16.0, // default
+			expectedARI:    16.0, // default
+			expectedLines:  200,
+			expectedMinAdm: 1, // default
+		},
+		{
+			name: "min-admonitions override via Changed",
+			setupFlags: func(cmd *cobra.Command) {
+				if err := cmd.Flags().Set("min-admonitions", "5"); err != nil {
+					panic(err)
+				}
+			},
+			expectedGrade:  16.0, // default
+			expectedARI:    16.0, // default
+			expectedLines:  375,  // default
+			expectedMinAdm: 5,
+		},
+		{
+			name: "all flags combined",
+			setupFlags: func(cmd *cobra.Command) {
+				maxGradeFlag = 8.0
+				maxARIFlag = 9.0
+				if err := cmd.Flags().Set("max-lines", "100"); err != nil {
+					panic(err)
+				}
+				if err := cmd.Flags().Set("min-admonitions", "3"); err != nil {
+					panic(err)
+				}
+			},
+			expectedGrade:  8.0,
+			expectedARI:    9.0,
+			expectedLines:  100,
+			expectedMinAdm: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resetFlags()
+			cfg := config.DefaultConfig()
+
+			cmd := &cobra.Command{}
+			cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+			cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+			cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+			cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+			tt.setupFlags(cmd)
+			applyFlagOverrides(cmd, cfg)
+
+			if cfg.Thresholds.MaxGrade != tt.expectedGrade {
+				t.Errorf("MaxGrade = %v, want %v", cfg.Thresholds.MaxGrade, tt.expectedGrade)
+			}
+			if cfg.Thresholds.MaxARI != tt.expectedARI {
+				t.Errorf("MaxARI = %v, want %v", cfg.Thresholds.MaxARI, tt.expectedARI)
+			}
+			if cfg.Thresholds.MaxLines != tt.expectedLines {
+				t.Errorf("MaxLines = %v, want %v", cfg.Thresholds.MaxLines, tt.expectedLines)
+			}
+			if cfg.Thresholds.MinAdmonitions != tt.expectedMinAdm {
+				t.Errorf("MinAdmonitions = %v, want %v", cfg.Thresholds.MinAdmonitions, tt.expectedMinAdm)
+			}
+		})
+	}
+}
+
+func TestLoadConfig_AutoDetectFromFile(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create config in directory
+	configContent := `thresholds:
+  max_grade: 12
+`
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a .git directory to mark repo root
+	gitDir := filepath.Join(tmpDir, ".git")
+	if err := os.Mkdir(gitDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create test file
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+
+	// Load config using the file path (not directory)
+	cfg, err := loadConfig(testFile)
+	if err != nil {
+		t.Fatalf("loadConfig() error = %v", err)
+	}
+
+	if cfg.Thresholds.MaxGrade != 12 {
+		t.Errorf("MaxGrade = %v, want 12", cfg.Thresholds.MaxGrade)
+	}
+}
+
+func TestLoadConfig_DefaultsWhenNoConfigFile(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create a .git directory but no config file
+	gitDir := filepath.Join(tmpDir, ".git")
+	if err := os.Mkdir(gitDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+
+	cfg, err := loadConfig(tmpDir)
+	if err != nil {
+		t.Fatalf("loadConfig() error = %v", err)
+	}
+
+	// Should return default config
+	if cfg.Thresholds.MaxGrade != 16.0 {
+		t.Errorf("MaxGrade = %v, want 16.0 (default)", cfg.Thresholds.MaxGrade)
+	}
+}
+
+func TestAnalyzeTarget_DirectoryError(t *testing.T) {
+	cfg := config.DefaultConfig()
+
+	// Test with non-existent path
+	_, err := analyzeTarget(cfg, "/nonexistent/path")
+	if err == nil {
+		t.Error("Expected error for non-existent path")
+	}
+}
