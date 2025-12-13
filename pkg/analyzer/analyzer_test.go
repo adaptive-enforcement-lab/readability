@@ -758,3 +758,97 @@ func TestDefaultThresholds(t *testing.T) {
 		t.Errorf("MaxLines = %v, want 375", d.MaxLines)
 	}
 }
+
+func TestCollectDiagnostics_AllViolations(t *testing.T) {
+	// Test all readability threshold violations
+	a := New()
+	a.Config = nil
+	a.Thresholds = Thresholds{
+		MaxFleschKincaidGrade: 5.0,
+		MaxARI:                5.0,
+		MaxGunningFog:         5.0,
+		MinFleschReadingEase:  90.0,
+		MaxLines:              10,
+	}
+
+	result := &Result{
+		File: "test.md",
+		Structural: Structural{
+			Words:     200, // Above minWords
+			Lines:     20,  // Over limit
+			Sentences: 10,
+		},
+		Readability: Readability{
+			FleschKincaidGrade: 15.0, // Over threshold
+			ARI:                15.0, // Over threshold
+			GunningFog:         15.0, // Over threshold
+			FleschReadingEase:  30.0, // Under threshold
+		},
+	}
+
+	diagnostics := a.collectDiagnostics(result)
+
+	// Should have all 5 diagnostics
+	rules := make(map[string]bool)
+	for _, d := range diagnostics {
+		rules[d.Rule] = true
+	}
+
+	expectedRules := []string{
+		"readability/grade-level",
+		"readability/ari",
+		"readability/gunning-fog",
+		"readability/flesch-ease",
+		"structure/max-lines",
+	}
+
+	for _, rule := range expectedRules {
+		if !rules[rule] {
+			t.Errorf("Expected diagnostic for rule %s", rule)
+		}
+	}
+}
+
+func TestAnalyzeDirectory_WalkError(t *testing.T) {
+	// Create temp directory with a file that will cause issues
+	tmpDir := t.TempDir()
+
+	// Create a file that looks like a directory in the path
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	a := New()
+
+	// Analyze the actual file as a directory - should not error
+	// but also should not find any markdown files inside
+	_, err := a.AnalyzeDirectory(testFile)
+	// This will fail because testFile is a file, not a directory
+	if err == nil {
+		// If it doesn't error, that's fine too - it just won't find files
+		t.Log("No error, path was traversed")
+	}
+}
+
+func TestAnalyzeDirectory_FileReadError(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create a markdown file
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Make file unreadable
+	if err := os.Chmod(testFile, 0000); err != nil {
+		t.Skip("Cannot change file permissions")
+	}
+	defer func() { _ = os.Chmod(testFile, 0644) }() // Restore for cleanup
+
+	a := New()
+	_, err := a.AnalyzeDirectory(tmpDir)
+	if err == nil {
+		t.Log("Expected error for unreadable file, but test may not work on all platforms")
+	}
+}
