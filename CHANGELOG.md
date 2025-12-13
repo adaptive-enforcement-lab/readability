@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.4.0...1.5.0) (2025-12-13)
+
+
+### Features
+
+* increase coverage threshold to 95% with single source of truth ([#91](https://github.com/adaptive-enforcement-lab/readability/issues/91)) ([0a1266c](https://github.com/adaptive-enforcement-lab/readability/commit/0a1266c76acc1bfc60621811c5e6ebb90154200f))
+
+
+### Bug Fixes
+
+* pass CODECOV_TOKEN to reusable CI workflow ([#88](https://github.com/adaptive-enforcement-lab/readability/issues/88)) ([a98ba23](https://github.com/adaptive-enforcement-lab/readability/commit/a98ba2390f359e3f2bf74f1244bd21497ed4aef3))
+* update component paths to use regex patterns ([#90](https://github.com/adaptive-enforcement-lab/readability/issues/90)) ([0931deb](https://github.com/adaptive-enforcement-lab/readability/commit/0931deb216eb31a09c4f2277319e53d6acdb775c))
+
 ## [1.4.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.3.1...1.4.0) (2025-12-13)
 
 
