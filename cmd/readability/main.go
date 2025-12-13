@@ -15,13 +15,13 @@ import (
 var version = "dev"
 
 var (
-	formatFlag        string
-	verboseFlag       bool
-	checkFlag         bool
-	configFlag        string
-	maxGradeFlag      float64
-	maxARIFlag        float64
-	maxLinesFlag      int
+	formatFlag         string
+	verboseFlag        bool
+	checkFlag          bool
+	configFlag         string
+	maxGradeFlag       float64
+	maxARIFlag         float64
+	maxLinesFlag       int
 	minAdmonitionsFlag int
 )
 
@@ -30,7 +30,7 @@ func main() {
 		Use:     "readability [path]",
 		Short:   "Analyze markdown documentation for readability and structure",
 		Version: version,
-		Long:    `A tool for analyzing documentation quality, readability, and structure.
+		Long: `A tool for analyzing documentation quality, readability, and structure.
 
 Computes readability metrics (Flesch-Kincaid, ARI, Coleman-Liau, etc.),
 structural analysis (headings, line counts), and content composition.
