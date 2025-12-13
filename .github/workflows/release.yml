@@ -206,12 +206,13 @@ jobs:
 
       - name: Update floating version tags
         run: |
-          MAJOR="${{ needs.release-please.outputs.major }}"
+          MAJOR="v${{ needs.release-please.outputs.major }}"
           TAG_NAME="${{ needs.release-please.outputs.tag_name }}"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Create v-prefixed major version alias (e.g., v1 -> v1.5.1)
           git tag -fa "${MAJOR}" "${TAG_NAME}" -m "Alias for ${TAG_NAME}"
           git push origin "${MAJOR}" --force
 
