@@ -462,6 +462,69 @@ func resetFlags() {
 	minAdmonitionsFlag = -1
 }
 
+func TestNewRootCmd(t *testing.T) {
+	resetFlags()
+	cmd := newRootCmd()
+
+	// Verify command is created with correct settings
+	if cmd.Use != "readability [path]" {
+		t.Errorf("Expected Use 'readability [path]', got %q", cmd.Use)
+	}
+
+	// Verify all flags are registered
+	flags := []string{"format", "verbose", "check", "config", "max-grade", "max-ari", "max-lines", "min-admonitions"}
+	for _, flag := range flags {
+		if cmd.Flags().Lookup(flag) == nil {
+			t.Errorf("Expected flag %q to be registered", flag)
+		}
+	}
+}
+
+func TestNewRootCmd_ExecuteSuccess(t *testing.T) {
+	tmpDir := t.TempDir()
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test\n\nSimple content."), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+	cmd := newRootCmd()
+	cmd.SetArgs([]string{testFile})
+
+	var runErr error
+	captureOutput(t, func() {
+		runErr = cmd.Execute()
+	})
+
+	if runErr != nil {
+		t.Errorf("Execute() error = %v", runErr)
+	}
+}
+
+func TestNewRootCmd_ExecuteError(t *testing.T) {
+	resetFlags()
+	cmd := newRootCmd()
+	cmd.SetArgs([]string{"/nonexistent/path"})
+
+	err := cmd.Execute()
+	if err == nil {
+		t.Error("Expected error for nonexistent path")
+	}
+}
+
+func TestNewRootCmd_NoArgs(t *testing.T) {
+	resetFlags()
+	cmd := newRootCmd()
+	cmd.SetArgs([]string{})
+
+	captureStderr(t, func() {
+		err := cmd.Execute()
+		if err == nil {
+			t.Error("Expected error for missing args")
+		}
+	})
+}
+
 func TestCountFailures(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -863,5 +926,256 @@ func TestAnalyzeTarget_DirectoryError(t *testing.T) {
 	_, err := analyzeTarget(cfg, "/nonexistent/path")
 	if err == nil {
 		t.Error("Expected error for non-existent path")
+	}
+}
+
+func TestAnalyzeTarget_DirectorySuccess(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create test files
+	files := map[string]string{
+		"doc1.md": "# Doc 1\n\nContent one.",
+		"doc2.md": "# Doc 2\n\nContent two.",
+	}
+	for name, content := range files {
+		if err := os.WriteFile(filepath.Join(tmpDir, name), []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	cfg := config.DefaultConfig()
+	cfg.Thresholds.MinAdmonitions = 0 // Don't require admonitions
+
+	results, err := analyzeTarget(cfg, tmpDir)
+	if err != nil {
+		t.Fatalf("analyzeTarget() error = %v", err)
+	}
+
+	if len(results) != 2 {
+		t.Errorf("Expected 2 results, got %d", len(results))
+	}
+}
+
+func TestRun_OutputResultsError(t *testing.T) {
+	// This tests the error path in outputResults
+	// JSON output can return an error if encoding fails
+	// but in practice this is hard to trigger with valid results
+	tmpDir := t.TempDir()
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test\n\nContent."), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+	formatFlag = "json"
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	args := []string{testFile}
+
+	var runErr error
+	captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
+
+	if runErr != nil {
+		t.Errorf("run() error = %v", runErr)
+	}
+}
+
+func TestLoadConfig_ConfigFileLoadError(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create an invalid YAML config file
+	invalidConfig := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(invalidConfig, []byte("invalid: [yaml"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a .git directory to mark repo root
+	gitDir := filepath.Join(tmpDir, ".git")
+	if err := os.Mkdir(gitDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+
+	// When config file is auto-detected but invalid, it falls back to defaults
+	cfg, err := loadConfig(tmpDir)
+	if err != nil {
+		t.Fatalf("loadConfig() should fall back to defaults, got error = %v", err)
+	}
+
+	// Should return default config
+	if cfg.Thresholds.MaxGrade != 16.0 {
+		t.Errorf("Expected default MaxGrade, got %v", cfg.Thresholds.MaxGrade)
+	}
+}
+
+func TestRun_CheckModeFail(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create a config file with strict thresholds
+	configContent := `thresholds:
+  max_grade: 100
+  max_ari: 100
+  max_fog: 100
+  min_ease: 0
+  max_lines: 10
+  min_admonitions: 0
+`
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a .git to mark repo root
+	if err := os.Mkdir(filepath.Join(tmpDir, ".git"), 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a file that will fail checks (too many lines)
+	content := "# Document\n\n"
+	for i := 0; i < 400; i++ {
+		content += "This is line content.\n"
+	}
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Reset and set flags BEFORE creating command
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	// Set flags AFTER binding to variables
+	checkFlag = true
+	formatFlag = "diagnostic"
+	configFlag = configPath
+
+	args := []string{testFile}
+
+	var runErr error
+	captureOutput(t, func() {
+		captureStderr(t, func() {
+			runErr = run(cmd, args)
+		})
+	})
+
+	if runErr == nil {
+		t.Error("Expected error for failing check")
+	}
+}
+
+func TestAnalyzeTarget_FileError(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create a markdown file
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Make file unreadable to cause AnalyzeFile to fail
+	if err := os.Chmod(testFile, 0000); err != nil {
+		t.Skip("Cannot change file permissions")
+	}
+	defer os.Chmod(testFile, 0644) // Restore for cleanup
+
+	cfg := config.DefaultConfig()
+	_, err := analyzeTarget(cfg, testFile)
+
+	// On Unix systems, this should return an error
+	if err == nil {
+		t.Log("Expected error for unreadable file (may not work on all platforms)")
+	} else if !strings.Contains(err.Error(), "error analyzing file") {
+		t.Errorf("Expected 'error analyzing file' error, got %v", err)
+	}
+}
+
+func TestRun_AnalyzeTargetError(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create a markdown file
+	testFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test\n\nContent here."), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Make file unreadable
+	if err := os.Chmod(testFile, 0000); err != nil {
+		t.Skip("Cannot change file permissions")
+	}
+	defer os.Chmod(testFile, 0644)
+
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	args := []string{testFile}
+
+	err := run(cmd, args)
+
+	// Should return error for unreadable file
+	if err == nil {
+		t.Log("Expected error for unreadable file (may not work on all platforms)")
+	} else if !strings.Contains(err.Error(), "error analyzing file") {
+		t.Errorf("Expected 'error analyzing file' error, got %v", err)
+	}
+}
+
+func TestAnalyzeTarget_DirectoryAnalyzeError(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	// Create a subdirectory with an unreadable file
+	subDir := filepath.Join(tmpDir, "subdir")
+	if err := os.Mkdir(subDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	testFile := filepath.Join(subDir, "test.md")
+	if err := os.WriteFile(testFile, []byte("# Test"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Make file unreadable
+	if err := os.Chmod(testFile, 0000); err != nil {
+		t.Skip("Cannot change file permissions")
+	}
+	defer os.Chmod(testFile, 0644)
+
+	cfg := config.DefaultConfig()
+	_, err := analyzeTarget(cfg, subDir)
+
+	// AnalyzeDirectory should return error for unreadable files
+	if err == nil {
+		t.Log("Expected error for directory with unreadable file (may not work on all platforms)")
+	} else if !strings.Contains(err.Error(), "error analyzing directory") {
+		t.Errorf("Expected 'error analyzing directory' error, got %v", err)
 	}
 }

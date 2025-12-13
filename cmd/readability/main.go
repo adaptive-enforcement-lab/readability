@@ -26,6 +26,13 @@ var (
 )
 
 func main() {
+	if err := newRootCmd().Execute(); err != nil {
+		os.Exit(1)
+	}
+}
+
+// newRootCmd creates and returns the root command with all flags configured.
+func newRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "readability [path]",
 		Short:   "Analyze markdown documentation for readability and structure",
@@ -59,9 +66,7 @@ Examples:
 	rootCmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "Maximum lines per file (overrides config, 0 to disable)")
 	rootCmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "Minimum MkDocs-style admonitions (overrides config, 0 to disable)")
 
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+	return rootCmd
 }
 
 func run(cmd *cobra.Command, args []string) error {
