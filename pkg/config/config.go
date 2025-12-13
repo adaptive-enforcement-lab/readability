@@ -10,8 +10,8 @@ import (
 
 // Config represents the content analyzer configuration.
 type Config struct {
-	Thresholds Thresholds          `yaml:"thresholds"`
-	Overrides  []PathOverride      `yaml:"overrides,omitempty"`
+	Thresholds Thresholds     `yaml:"thresholds"`
+	Overrides  []PathOverride `yaml:"overrides,omitempty"`
 }
 
 // Thresholds defines limits for pass/fail checks.
