@@ -3,5 +3,12 @@
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests"
+  ],
+  "packageRules": [
+    {
+      "description": "scorecard-action requires version tags for workflow verification",
+      "matchPackageNames": ["ossf/scorecard-action"],
+      "pinDigests": false
+    }
   ]
 }
