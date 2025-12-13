@@ -9,14 +9,15 @@ on:
         description: "Test coverage percentage"
         value: ${{ jobs.test.outputs.coverage }}
 
-permissions:
-  contents: read
-  security-events: write
+# Permissions set at job level for least privilege
+permissions: {}
 
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
@@ -32,6 +33,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       coverage: ${{ steps.coverage.outputs.total }}
     steps:
@@ -88,6 +91,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
@@ -101,6 +106,8 @@ jobs:
   test-action:
     name: Test Action
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
@@ -113,6 +120,8 @@ jobs:
   check-docs:
     name: Check Docs Readability
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
@@ -126,6 +135,9 @@ jobs:
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@v6
         with:
