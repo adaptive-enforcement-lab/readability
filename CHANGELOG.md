@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.1](https://github.com/adaptive-enforcement-lab/readability/compare/1.3.0...1.3.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* improve Go Report Card compliance and pre-commit hooks ([#84](https://github.com/adaptive-enforcement-lab/readability/issues/84)) ([d42947d](https://github.com/adaptive-enforcement-lab/readability/commit/d42947d1ed580c4df356241e5c809170d2ba61ef))
+* update CI badge to point to ci.yml ([#82](https://github.com/adaptive-enforcement-lab/readability/issues/82)) ([9a64c38](https://github.com/adaptive-enforcement-lab/readability/commit/9a64c3819fcafad4707e9e0bbf6047e2afc172a6))
+
+
+### Code Refactoring
+
+* reduce cyclomatic complexity and enforce strict gocyclo ([#85](https://github.com/adaptive-enforcement-lab/readability/issues/85)) ([bed6cae](https://github.com/adaptive-enforcement-lab/readability/commit/bed6caea4524a04b3de3fabc3932377acaa8f81d))
+
 ## [1.3.0](https://github.com/adaptive-enforcement-lab/readability/compare/1.2.2...1.3.0) (2025-12-13)
 
 
