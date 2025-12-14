@@ -260,7 +260,7 @@ jobs:
           if [ "${{ needs.release-please.outputs.release_created }}" == "true" ]; then
             VERSION="${{ needs.release-please.outputs.version }}"
             MAJOR="${{ needs.release-please.outputs.major }}"
-            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+            echo "version=v${VERSION}" >> "$GITHUB_OUTPUT"
             echo "alias=v${MAJOR}" >> "$GITHUB_OUTPUT"
           else
             echo "version=dev" >> "$GITHUB_OUTPUT"
