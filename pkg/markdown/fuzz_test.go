@@ -34,11 +34,11 @@ func FuzzParse(f *testing.F) {
 		"!!! ",
 
 		// Edge cases
-		"```",            // Unclosed code block
-		"```\n```\n```",  // Multiple fence markers
-		"# ",             // Empty heading
-		"######",         // Heading without space
-		"#######",        // Invalid heading level
+		"```",           // Unclosed code block
+		"```\n```\n```", // Multiple fence markers
+		"# ",            // Empty heading
+		"######",        // Heading without space
+		"#######",       // Invalid heading level
 		"**bold** _italic_ `code` [link](url)",
 		"!!! unknown_type \"Complex \\\"Escaped\\\" Title\"",
 

@@ -51,6 +51,25 @@ readability --format json docs/
 readability --config .readability.yml docs/
 ```
 
+### Docker
+
+```bash
+# Pull the image
+docker pull ghcr.io/adaptive-enforcement-lab/readability:latest
+
+# Analyze local docs
+docker run --rm -v "$(pwd):/workspace" ghcr.io/adaptive-enforcement-lab/readability:latest /workspace/docs
+
+# With thresholds
+docker run --rm -v "$(pwd):/workspace" ghcr.io/adaptive-enforcement-lab/readability:latest \
+  --check --max-grade 12 /workspace/docs
+
+# Verify image signature
+cosign verify ghcr.io/adaptive-enforcement-lab/readability:latest \
+  --certificate-identity-regexp 'https://github.com/adaptive-enforcement-lab/readability/.*' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
 ## Metrics
 
 | Metric | Range | Interpretation |
