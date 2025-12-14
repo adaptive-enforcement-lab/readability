@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.7.1...v1.8.0) (2025-12-14)
+
+
+### Features
+
+* add Go fuzz tests for OpenSSF Scorecard compliance ([#132](https://github.com/adaptive-enforcement-lab/readability/issues/132)) ([dd4d038](https://github.com/adaptive-enforcement-lab/readability/commit/dd4d038d9750751846e1da2842cd8e15db4ab920))
+
 ## [1.7.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.7.0...v1.7.1) (2025-12-14)
 
 
