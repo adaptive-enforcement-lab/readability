@@ -69,6 +69,8 @@ func (a *Analyzer) Analyze(path string, content []byte) (*Result, error) {
 	// Skip frontmatter from prose analysis
 	prose := stripFrontmatter(parsed.Prose)
 
+	sentences := countSentences(prose)
+
 	// Calculate readability metrics using textstats
 	// Use the function-based API which takes strings directly
 	result := &Result{
@@ -76,9 +78,10 @@ func (a *Analyzer) Analyze(path string, content []byte) (*Result, error) {
 		Structural: Structural{
 			Lines:              parsed.TotalLines,
 			Words:              countWords(prose),
-			Sentences:          countSentences(prose),
+			Sentences:          sentences,
 			Characters:         len(prose),
 			ReadingTimeMinutes: calculateReadingTime(countWords(prose)),
+			DashDensity:        calculateDashDensity(prose, sentences),
 		},
 		Headings: countHeadings(parsed.Headings),
 		Readability: Readability{
@@ -145,7 +148,7 @@ func (a *Analyzer) collectDiagnostics(r *Result) []Diagnostic {
 	var diagnostics []Diagnostic
 
 	// Get path-specific thresholds if config is available
-	var maxGrade, maxARI, maxFog, minEase float64
+	var maxGrade, maxARI, maxFog, minEase, maxDashDensity float64
 	var maxLines, minWords, minAdmonitions int
 
 	if a.Config != nil {
@@ -157,6 +160,7 @@ func (a *Analyzer) collectDiagnostics(r *Result) []Diagnostic {
 		maxLines = t.MaxLines
 		minWords = t.MinWords
 		minAdmonitions = t.MinAdmonitions
+		maxDashDensity = t.MaxDashDensity
 	} else {
 		maxGrade = a.Thresholds.MaxFleschKincaidGrade
 		maxARI = a.Thresholds.MaxARI
@@ -165,6 +169,7 @@ func (a *Analyzer) collectDiagnostics(r *Result) []Diagnostic {
 		maxLines = a.Thresholds.MaxLines
 		minWords = 100 // Default minimum
 		minAdmonitions = 1
+		maxDashDensity = 0 // No dashes allowed by default
 	}
 
 	// Skip readability checks for very short/code-heavy documents
@@ -223,6 +228,21 @@ func (a *Analyzer) collectDiagnostics(r *Result) []Diagnostic {
 			Severity: SeverityWarning,
 			Rule:     "content/admonitions",
 			Message:  fmt.Sprintf("Found %d admonitions, minimum required is %d", r.Admonitions.Count, minAdmonitions),
+		})
+	}
+
+	// Dash density check: prevent AI slop via mid-sentence dashes
+	if maxDashDensity >= 0 && r.Structural.DashDensity > maxDashDensity {
+		msg := fmt.Sprintf("Dash density %.1f per 100 sentences exceeds threshold %.1f. ", r.Structural.DashDensity, maxDashDensity)
+		msg += "Mid-sentence dashes (—, - ) often indicate AI-generated content. "
+		msg += "Rewrite for clarity: use commas, split into separate sentences, or restructure to avoid parenthetical constructions. "
+		msg += "Example: 'The system — which processes data — runs quickly' → 'The system processes data and runs quickly' or 'The system runs quickly. It processes data efficiently.'"
+
+		diagnostics = append(diagnostics, Diagnostic{
+			Line:     1,
+			Severity: SeverityError,
+			Rule:     "content/dash-density",
+			Message:  msg,
 		})
 	}
 
@@ -335,4 +355,33 @@ func countAdmonitions(admonitions []markdown.Admonition) Admonitions {
 		}
 	}
 	return result
+}
+
+// calculateDashDensity counts mid-sentence dash patterns and returns density per 100 sentences.
+// Detects AI slop patterns:
+//   - " - " (space-hyphen-space)
+//   - " — " (em-dash with spaces)
+//   - "—" (em-dash without spaces)
+func calculateDashDensity(text string, sentences int) float64 {
+	if sentences == 0 {
+		return 0
+	}
+
+	dashCount := 0
+
+	// Count " - " (space-hyphen-space)
+	dashCount += strings.Count(text, " - ")
+
+	// Count " — " (em-dash with spaces)
+	dashCount += strings.Count(text, " — ")
+
+	// Count "—" (em-dash without spaces)
+	// This includes the ones we already counted with spaces,
+	// so we need to subtract those
+	emDashTotal := strings.Count(text, "—")
+	emDashWithSpaces := strings.Count(text, " — ")
+	dashCount += (emDashTotal - emDashWithSpaces)
+
+	// Return density per 100 sentences
+	return (float64(dashCount) * 100.0) / float64(sentences)
 }

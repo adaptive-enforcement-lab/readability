@@ -23,6 +23,7 @@ type Thresholds struct {
 	MaxLines       int     `yaml:"max_lines"`
 	MinWords       int     `yaml:"min_words"`       // Skip readability checks if below this
 	MinAdmonitions int     `yaml:"min_admonitions"` // Minimum MkDocs-style admonitions required
+	MaxDashDensity float64 `yaml:"max_dash_density"` // Maximum mid-sentence dash pairs per 100 sentences (0 = no dashes allowed)
 }
 
 // PathOverride allows different thresholds for specific paths.
@@ -42,6 +43,7 @@ func DefaultConfig() *Config {
 			MaxLines:       375,
 			MinWords:       100, // Skip readability for very short/code-heavy docs
 			MinAdmonitions: 1,   // Require at least one MkDocs-style admonition
+			MaxDashDensity: 0,   // No mid-sentence dashes allowed (prevents AI slop)
 		},
 	}
 }
@@ -131,6 +133,7 @@ func (c *Config) ThresholdsForPath(filePath string) Thresholds {
 // To explicitly disable a check via override, use a negative value:
 //   - MinEase: use any negative value (e.g., -100) to allow very low readability
 //   - MinAdmonitions: use -1 to disable the admonition requirement
+//   - MaxDashDensity: use -1 to disable dash density check
 func mergeThresholds(base, override Thresholds) Thresholds {
 	result := base
 	if override.MaxGrade > 0 {
@@ -153,6 +156,9 @@ func mergeThresholds(base, override Thresholds) Thresholds {
 	}
 	if override.MinAdmonitions != 0 {
 		result.MinAdmonitions = override.MinAdmonitions
+	}
+	if override.MaxDashDensity >= 0 {
+		result.MaxDashDensity = override.MaxDashDensity
 	}
 	return result
 }
