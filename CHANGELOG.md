@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.8.0...v1.8.1) (2025-12-14)
+
+
+### Bug Fixes
+
+* trigger Scorecard after Release workflow completes ([#134](https://github.com/adaptive-enforcement-lab/readability/issues/134)) ([5450628](https://github.com/adaptive-enforcement-lab/readability/commit/5450628b523fab274dcc2acdec3eee69e2986da1))
+
 ## [1.8.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.7.1...v1.8.0) (2025-12-14)
 
 
