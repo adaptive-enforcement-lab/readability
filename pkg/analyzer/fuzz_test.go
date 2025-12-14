@@ -29,8 +29,8 @@ func FuzzStripFrontmatter(f *testing.F) {
 		" ---",          // Leading space (not valid frontmatter)
 		"---\n---\n---", // Multiple markers
 		"---\n---\n---\ncontent",
-		"----",          // Four dashes (not frontmatter)
-		"--",            // Two dashes (not frontmatter)
+		"----", // Four dashes (not frontmatter)
+		"--",   // Two dashes (not frontmatter)
 		"---\ncontent\n---\nmore---content",
 
 		// Unicode and special characters
@@ -192,7 +192,7 @@ func FuzzCalculateReadingTime(f *testing.F) {
 	f.Add(1000)
 	f.Add(-1)
 	f.Add(-100)
-	f.Add(1<<30 - 1) // Large positive
+	f.Add(1<<30 - 1)  // Large positive
 	f.Add(-(1 << 30)) // Large negative
 
 	f.Fuzz(func(t *testing.T, words int) {
