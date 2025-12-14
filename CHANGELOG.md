@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.6.0...v1.6.1) (2025-12-14)
+
+
+### Bug Fixes
+
+* update cosign signing for v3 API ([#117](https://github.com/adaptive-enforcement-lab/readability/issues/117)) ([ad12a83](https://github.com/adaptive-enforcement-lab/readability/commit/ad12a83406b0e9c23738063e715d657afe14bd12))
+
 ## [1.6.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.5.1...v1.6.0) (2025-12-13)
 
 
