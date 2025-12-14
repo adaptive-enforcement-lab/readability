@@ -84,7 +84,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: true
-          sbom: true
 
       - name: Install Cosign
         if: inputs.dry_run != true
@@ -94,6 +93,21 @@ jobs:
         if: inputs.dry_run != true
         run: |
           cosign sign --yes ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+
+      - name: Generate unified SBOM with Trivy
+        if: inputs.dry_run != true
+        uses: aquasecurity/trivy-action@22438a435773de8c97dc0958cc0b823c45b064ac # master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+          format: cyclonedx
+          output: sbom.cdx.json
+
+      - name: Attest SBOM to container image
+        if: inputs.dry_run != true
+        run: |
+          cosign attest --yes --predicate sbom.cdx.json \
+            --type cyclonedx \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
 
       - name: Output container info
         run: |
@@ -124,6 +138,14 @@ jobs:
               echo "### Verify Signature"
               echo "\`\`\`bash"
               echo "cosign verify ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }} \\"
+              echo "  --certificate-identity-regexp 'https://github.com/${{ github.repository }}/.*' \\"
+              echo "  --certificate-oidc-issuer https://token.actions.githubusercontent.com"
+              echo "\`\`\`"
+              echo ""
+              echo "### Verify SBOM Attestation"
+              echo "\`\`\`bash"
+              echo "cosign verify-attestation ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }} \\"
+              echo "  --type cyclonedx \\"
               echo "  --certificate-identity-regexp 'https://github.com/${{ github.repository }}/.*' \\"
               echo "  --certificate-oidc-issuer https://token.actions.githubusercontent.com"
               echo "\`\`\`"
