@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.1...v1.10.2) (2025-12-14)
+
+
+### Bug Fixes
+
+* inline container publishing in release.yml for Scorecard detection ([#150](https://github.com/adaptive-enforcement-lab/readability/issues/150)) ([b676272](https://github.com/adaptive-enforcement-lab/readability/commit/b676272ea785b03ed16f3d1bfabe748fa652bc3e))
+
 ## [1.10.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.0...v1.10.1) (2025-12-14)
 
 
