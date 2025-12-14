@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.0...v1.11.1) (2025-12-14)
+
+
+### Bug Fixes
+
+* Exclude frontmatter from prose extraction ([#164](https://github.com/adaptive-enforcement-lab/readability/issues/164)) ([afa3a36](https://github.com/adaptive-enforcement-lab/readability/commit/afa3a361c12e6b633f5ea82bde3b2716f5c05f1c))
+
 ## [1.11.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.5...v1.11.0) (2025-12-14)
 
 
