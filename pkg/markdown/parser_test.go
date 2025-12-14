@@ -486,6 +486,24 @@ func TestParse_ProseExtraction(t *testing.T) {
 			content:     "Use the `command` to run.",
 			wantContain: "Use the",
 		},
+		{
+			name:        "excludes table content",
+			content:     "Normal text.\n\n| Col - 1 | Col - 2 |\n|---------|----------|\n| Val - A | Val - B |\n\nMore text.",
+			wantContain: "Normal text",
+			wantExclude: "Col - 1",
+		},
+		{
+			name:        "excludes list content",
+			content:     "Normal text.\n\n- [Link](url.md) - Description\n- Another - item\n\nMore text.",
+			wantContain: "Normal text",
+			wantExclude: "Description",
+		},
+		{
+			name:        "excludes nested lists",
+			content:     "Text.\n\n- Item 1\n  - Nested - item\n\nMore.",
+			wantContain: "Text",
+			wantExclude: "Nested",
+		},
 	}
 
 	for _, tt := range tests {

@@ -6,6 +6,8 @@ import (
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/extension"
+	extast "github.com/yuin/goldmark/extension/ast"
 	"github.com/yuin/goldmark/text"
 )
 
@@ -36,7 +38,9 @@ type Heading struct {
 
 // Parse extracts prose content, code blocks, and headings from markdown.
 func Parse(content []byte) (*ParseResult, error) {
-	md := goldmark.New()
+	md := goldmark.New(
+		goldmark.WithExtensions(extension.GFM), // Enable GitHub Flavored Markdown (includes tables)
+	)
 	reader := text.NewReader(content)
 	doc := md.Parser().Parse(reader)
 
@@ -47,6 +51,8 @@ func Parse(content []byte) (*ParseResult, error) {
 	}
 
 	prose := extractAST(doc, content, result)
+	// Normalize whitespace: collapse multiple spaces to single space
+	prose = strings.Join(strings.Fields(prose), " ")
 	result.Prose = strings.TrimSpace(prose)
 
 	countLines(content, result)
@@ -111,20 +117,20 @@ func extractCodeBlock(n codeBlocker, content []byte) string {
 	return codeContent.String()
 }
 
-// extractText extracts text content if not inside a code block.
+// extractText extracts text content if not inside a code block, table, or list.
 func extractText(n *ast.Text, content []byte, builder *strings.Builder) {
 	parent := n.Parent()
-	if isInsideCodeBlock(parent) {
+	if isInsideCodeBlock(parent) || isInsideTable(parent) || isInsideList(parent) {
 		return
 	}
 	builder.Write(n.Segment.Value(content))
 	builder.WriteString(" ")
 }
 
-// extractString extracts string content if not inside a code block.
+// extractString extracts string content if not inside a code block, table, or list.
 func extractString(n *ast.String, builder *strings.Builder) {
 	parent := n.Parent()
-	if isInsideCodeBlock(parent) {
+	if isInsideCodeBlock(parent) || isInsideTable(parent) || isInsideList(parent) {
 		return
 	}
 	builder.Write(n.Value)
@@ -205,6 +211,30 @@ func isInsideCodeBlock(node ast.Node) bool {
 	for node != nil {
 		switch node.(type) {
 		case *ast.FencedCodeBlock, *ast.CodeBlock, *ast.CodeSpan:
+			return true
+		}
+		node = node.Parent()
+	}
+	return false
+}
+
+// isInsideTable checks if a node is inside a table.
+func isInsideTable(node ast.Node) bool {
+	for node != nil {
+		switch node.(type) {
+		case *extast.Table, *extast.TableRow, *extast.TableCell, *extast.TableHeader:
+			return true
+		}
+		node = node.Parent()
+	}
+	return false
+}
+
+// isInsideList checks if a node is inside a list item.
+func isInsideList(node ast.Node) bool {
+	for node != nil {
+		switch node.(type) {
+		case *ast.List, *ast.ListItem:
 			return true
 		}
 		node = node.Parent()
