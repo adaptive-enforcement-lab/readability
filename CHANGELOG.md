@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.5](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.4...v1.10.5) (2025-12-14)
+
+
+### Bug Fixes
+
+* make release binaries executable after artifact download ([#158](https://github.com/adaptive-enforcement-lab/readability/issues/158)) ([02fc306](https://github.com/adaptive-enforcement-lab/readability/commit/02fc3062f9a76e4d7cdf60cf69470337d47d1df9))
+
 ## [1.10.4](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.3...v1.10.4) (2025-12-14)
 
 
