@@ -305,7 +305,7 @@ jobs:
   # Publish multi-arch container image to GitHub Container Registry
   publish-container:
     name: Publish Container
-    needs: [release-please, ci]
+    needs: [release-please, build-binaries]
     if: needs.release-please.outputs.release_created == 'true'
     uses: ./.github/workflows/publish-container.yml
     permissions:
