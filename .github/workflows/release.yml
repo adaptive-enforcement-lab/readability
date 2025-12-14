@@ -345,6 +345,9 @@ jobs:
           pattern: readability_linux_*
           merge-multiple: true
 
+      - name: Make binaries executable
+        run: chmod +x dist/readability_linux_*
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
 
