@@ -38,10 +38,13 @@ type Heading struct {
 
 // Parse extracts prose content, code blocks, and headings from markdown.
 func Parse(content []byte) (*ParseResult, error) {
+	// Strip admonition blocks before parsing to exclude them from prose
+	cleanedContent := stripAdmonitions(content)
+
 	md := goldmark.New(
 		goldmark.WithExtensions(extension.GFM), // Enable GitHub Flavored Markdown (includes tables)
 	)
-	reader := text.NewReader(content)
+	reader := text.NewReader(cleanedContent)
 	doc := md.Parser().Parse(reader)
 
 	result := &ParseResult{
@@ -50,7 +53,7 @@ func Parse(content []byte) (*ParseResult, error) {
 		Admonitions: make([]Admonition, 0),
 	}
 
-	prose := extractAST(doc, content, result)
+	prose := extractAST(doc, cleanedContent, result)
 	// Normalize whitespace: collapse multiple spaces to single space
 	prose = strings.Join(strings.Fields(prose), " ")
 	result.Prose = strings.TrimSpace(prose)
@@ -135,6 +138,47 @@ func extractString(n *ast.String, builder *strings.Builder) {
 	}
 	builder.Write(n.Value)
 	builder.WriteString(" ")
+}
+
+// stripAdmonitions removes MkDocs-style admonition blocks from content.
+// Admonitions are lines starting with !!! followed by indented content.
+func stripAdmonitions(content []byte) []byte {
+	lines := bytes.Split(content, []byte("\n"))
+	var result [][]byte
+	i := 0
+
+	for i < len(lines) {
+		line := lines[i]
+		trimmed := bytes.TrimSpace(line)
+
+		// Check if this is an admonition start
+		if bytes.HasPrefix(trimmed, []byte("!!!")) {
+			// Skip the !!! line
+			i++
+			// Skip all following indented lines (admonition content)
+			for i < len(lines) {
+				nextLine := lines[i]
+				// If line is indented (starts with spaces/tabs), it's admonition content
+				if len(nextLine) > 0 && (nextLine[0] == ' ' || nextLine[0] == '\t') {
+					i++
+					continue
+				}
+				// If line is empty, could be part of admonition or end of it
+				if len(bytes.TrimSpace(nextLine)) == 0 {
+					i++
+					continue
+				}
+				// Non-indented, non-empty line - end of admonition
+				break
+			}
+			continue
+		}
+
+		result = append(result, line)
+		i++
+	}
+
+	return bytes.Join(result, []byte("\n"))
 }
 
 // countLines counts total, code, and empty lines, and detects admonitions.
