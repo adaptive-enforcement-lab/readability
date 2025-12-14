@@ -3,6 +3,7 @@ package analyzer
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/adaptive-enforcement-lab/readability/pkg/config"
@@ -850,5 +851,255 @@ func TestAnalyzeDirectory_FileReadError(t *testing.T) {
 	_, err := a.AnalyzeDirectory(tmpDir)
 	if err == nil {
 		t.Log("Expected error for unreadable file, but test may not work on all platforms")
+	}
+}
+
+func TestCalculateDashDensity(t *testing.T) {
+	tests := []struct {
+		name      string
+		text      string
+		sentences int
+		want      float64
+	}{
+		{
+			name:      "no dashes",
+			text:      "This is a simple sentence. Another sentence here.",
+			sentences: 2,
+			want:      0.0,
+		},
+		{
+			name:      "zero sentences",
+			text:      "Text with - dashes",
+			sentences: 0,
+			want:      0.0,
+		},
+		{
+			name:      "space-hyphen-space pattern",
+			text:      "This sentence - which has a dash - contains two instances.",
+			sentences: 1,
+			want:      200.0, // 2 instances in 1 sentence = 200 per 100
+		},
+		{
+			name:      "em-dash with spaces",
+			text:      "This sentence — which has an em-dash — contains two instances.",
+			sentences: 1,
+			want:      200.0,
+		},
+		{
+			name:      "em-dash without spaces",
+			text:      "This sentence—which has an em-dash—contains two instances.",
+			sentences: 1,
+			want:      200.0,
+		},
+		{
+			name:      "mixed patterns",
+			text:      "Sentence one - with hyphen. Sentence two — with em-dash. Sentence three—without spaces.",
+			sentences: 3,
+			want:      100.0, // 3 dashes in 3 sentences = 100 per 100
+		},
+		{
+			name:      "multiple sentences",
+			text:      "One. Two. Three. Four - with dash.",
+			sentences: 4,
+			want:      25.0, // 1 dash in 4 sentences = 25 per 100
+		},
+		{
+			name:      "AI slop example",
+			text:      "The system - which was designed for efficiency - processes requests quickly. Documentation — especially technical documentation — requires clarity.",
+			sentences: 2,
+			want:      200.0, // 4 dashes in 2 sentences = 200 per 100
+		},
+		{
+			name:      "list item dashes ignored",
+			text:      "Normal sentence here. Another without dashes.",
+			sentences: 2,
+			want:      0.0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := calculateDashDensity(tt.text, tt.sentences)
+			if got != tt.want {
+				t.Errorf("calculateDashDensity() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCollectDiagnostics_DashDensity(t *testing.T) {
+	tests := []struct {
+		name           string
+		maxDashDensity float64
+		dashDensity    float64
+		wantViolation  bool
+	}{
+		{
+			name:           "no dashes allowed, no dashes present",
+			maxDashDensity: 0.0,
+			dashDensity:    0.0,
+			wantViolation:  false,
+		},
+		{
+			name:           "no dashes allowed, dashes present",
+			maxDashDensity: 0.0,
+			dashDensity:    50.0,
+			wantViolation:  true,
+		},
+		{
+			name:           "some dashes allowed, under threshold",
+			maxDashDensity: 10.0,
+			dashDensity:    5.0,
+			wantViolation:  false,
+		},
+		{
+			name:           "some dashes allowed, at threshold",
+			maxDashDensity: 10.0,
+			dashDensity:    10.0,
+			wantViolation:  false,
+		},
+		{
+			name:           "some dashes allowed, over threshold",
+			maxDashDensity: 10.0,
+			dashDensity:    15.0,
+			wantViolation:  true,
+		},
+		{
+			name:           "check disabled",
+			maxDashDensity: -1.0,
+			dashDensity:    100.0,
+			wantViolation:  false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := &config.Config{
+				Thresholds: config.Thresholds{
+					MaxGrade:       100.0,
+					MaxARI:         100.0,
+					MaxFog:         100.0,
+					MinEase:        0.0,
+					MaxLines:       1000,
+					MinWords:       0,
+					MinAdmonitions: 0,
+					MaxDashDensity: tt.maxDashDensity,
+				},
+			}
+
+			a := NewWithConfig(cfg)
+
+			result := &Result{
+				File: "test.md",
+				Structural: Structural{
+					Words:       200,
+					Lines:       10,
+					Sentences:   10,
+					DashDensity: tt.dashDensity,
+				},
+			}
+
+			diagnostics := a.collectDiagnostics(result)
+
+			foundDashDensity := false
+			for _, d := range diagnostics {
+				if d.Rule == "content/dash-density" {
+					foundDashDensity = true
+					break
+				}
+			}
+
+			if foundDashDensity != tt.wantViolation {
+				t.Errorf("dash-density violation = %v, want %v", foundDashDensity, tt.wantViolation)
+			}
+		})
+	}
+}
+
+func TestAnalyze_DashDensityIntegration(t *testing.T) {
+	tests := []struct {
+		name       string
+		content    string
+		wantStatus string
+		wantDensity float64
+	}{
+		{
+			name: "no dashes",
+			content: `# Document
+
+This is a simple document. It has no mid-sentence dashes.
+All sentences are clear and readable.`,
+			wantStatus:  "pass",
+			wantDensity: 0.0,
+		},
+		{
+			name: "AI slop with dashes",
+			content: `# Document
+
+The system - which processes data - runs efficiently.
+Documentation — especially technical docs — requires clarity.
+This feature—unlike others—offers benefits.`,
+			wantStatus:  "fail",
+			wantDensity: 200.0, // 6 dashes in 3 sentences
+		},
+		{
+			name: "single dash violation",
+			content: `# Document
+
+This sentence - which has a dash - violates the rule.`,
+			wantStatus:  "fail",
+			wantDensity: 200.0, // 2 dashes in 1 sentence
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := &config.Config{
+				Thresholds: config.Thresholds{
+					MaxGrade:       100.0,
+					MaxARI:         100.0,
+					MaxFog:         100.0,
+					MinEase:        0.0,
+					MaxLines:       1000,
+					MinWords:       0,
+					MinAdmonitions: 0,
+					MaxDashDensity: 0.0, // No dashes allowed
+				},
+			}
+
+			a := NewWithConfig(cfg)
+			result, err := a.Analyze("test.md", []byte(tt.content))
+			if err != nil {
+				t.Fatalf("Analyze() error = %v", err)
+			}
+
+			if result.Status != tt.wantStatus {
+				t.Errorf("Status = %q, want %q", result.Status, tt.wantStatus)
+			}
+
+			if result.Structural.DashDensity != tt.wantDensity {
+				t.Errorf("DashDensity = %v, want %v", result.Structural.DashDensity, tt.wantDensity)
+			}
+
+			// If we expect failure, verify the diagnostic message
+			if tt.wantStatus == "fail" {
+				foundDashDiag := false
+				for _, d := range result.Diagnostics {
+					if d.Rule == "content/dash-density" {
+						foundDashDiag = true
+						// Check that message contains helpful rewriting advice
+						if !strings.Contains(d.Message, "AI-generated content") {
+							t.Error("Diagnostic message should mention AI-generated content")
+						}
+						if !strings.Contains(d.Message, "Rewrite for clarity") {
+							t.Error("Diagnostic message should contain rewriting advice")
+						}
+					}
+				}
+				if !foundDashDiag {
+					t.Error("Expected dash-density diagnostic for failing test")
+				}
+			}
+		})
 	}
 }

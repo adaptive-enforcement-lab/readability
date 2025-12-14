@@ -17,3 +17,21 @@ thresholds:
 
   # Require at least one admonition per page for visual breaks
   min_admonitions: 1
+
+  # No mid-sentence dashes allowed (prevents AI slop)
+  max_dash_density: 0
+
+# Path-specific overrides
+overrides:
+  # Metrics documentation explains technical formulas and legitimately needs higher complexity
+  - path: docs/metrics/
+    thresholds:
+      max_grade: 15
+      max_ari: 17
+
+  # Docker docs cover advanced security topics (Cosign, SBOM, distroless) requiring technical language
+  - path: docs/getting-started/docker.md
+    thresholds:
+      max_grade: 16
+      max_ari: 19
+      max_fog: 18

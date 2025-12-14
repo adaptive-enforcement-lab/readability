@@ -20,7 +20,7 @@ If you've never heard of "readability scores" before, start with these:
 
 ## The Short Version
 
-Readability formulas count words, sentences, and syllables. They output a grade level - the US school grade that can understand the text. A score of 8 means an eighth grader should follow it.
+Readability formulas count words, sentences, and syllables. They output a grade level: the US school grade that can understand the text. A score of 8 means an eighth grader should follow it.
 
 This tool runs those formulas on your Markdown files and tells you:
 

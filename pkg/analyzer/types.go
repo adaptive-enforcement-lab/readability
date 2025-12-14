@@ -38,11 +38,12 @@ type Admonitions struct {
 
 // Structural contains basic document metrics.
 type Structural struct {
-	Lines              int `json:"lines"`
-	Words              int `json:"words"`
-	Sentences          int `json:"sentences"`
-	Characters         int `json:"characters"`
-	ReadingTimeMinutes int `json:"reading_time_minutes"`
+	Lines              int     `json:"lines"`
+	Words              int     `json:"words"`
+	Sentences          int     `json:"sentences"`
+	Characters         int     `json:"characters"`
+	ReadingTimeMinutes int     `json:"reading_time_minutes"`
+	DashDensity        float64 `json:"dash_density"` // Mid-sentence dash pairs per 100 sentences
 }
 
 // Headings contains heading counts by level.

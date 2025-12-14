@@ -43,3 +43,4 @@ Bad scores usually mean:
 - [Flesch Reading Ease](flesch-reading-ease.md) - The comfort score
 - [Thresholds](thresholds.md) - Picking limits
 - [Admonitions](admonitions.md) - Callout boxes
+- [Dash Density](dash-density.md) - Preventing AI slop patterns

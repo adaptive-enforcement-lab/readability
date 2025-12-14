@@ -28,6 +28,7 @@ thresholds:
   max_lines: 400      # Lines per file
   min_words: 100      # Skip check if fewer words
   min_admonitions: 1  # Required callout boxes
+  max_dash_density: 0 # Mid-sentence dash pairs per 100 sentences
 ```
 
 ## What Each Threshold Means
@@ -41,6 +42,7 @@ thresholds:
 | `max_lines` | File length limit | 375 |
 | `min_words` | Skip short files | 100 |
 | `min_admonitions` | Notes, tips, warnings needed | 1 |
+| `max_dash_density` | Mid-sentence dashes per 100 sentences (prevents AI slop) | 0 |
 
 !!! info "Grade Level Scale"
     A grade of 12 means "high school senior" level. Most technical docs should target grades 10-14.
@@ -94,10 +96,11 @@ Set extreme values to skip specific checks:
 
 ```yaml
 thresholds:
-  max_grade: 100      # No grade limit
-  min_ease: -100      # No ease requirement
-  max_lines: 0        # No line limit (CLI only)
-  min_admonitions: 0  # No admonition requirement
+  max_grade: 100        # No grade limit
+  min_ease: -100        # No ease requirement
+  max_lines: 0          # No line limit (CLI only)
+  min_admonitions: 0    # No admonition requirement
+  max_dash_density: -1  # No dash density check
 ```
 
 ## Command Line Overrides
