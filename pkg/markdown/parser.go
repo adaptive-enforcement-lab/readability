@@ -38,8 +38,9 @@ type Heading struct {
 
 // Parse extracts prose content, code blocks, and headings from markdown.
 func Parse(content []byte) (*ParseResult, error) {
-	// Strip admonition blocks before parsing to exclude them from prose
-	cleanedContent := stripAdmonitions(content)
+	// Strip frontmatter and admonition blocks before parsing to exclude them from prose
+	cleanedContent := stripFrontmatter(content)
+	cleanedContent = stripAdmonitions(cleanedContent)
 
 	md := goldmark.New(
 		goldmark.WithExtensions(extension.GFM), // Enable GitHub Flavored Markdown (includes tables)
@@ -138,6 +139,37 @@ func extractString(n *ast.String, builder *strings.Builder) {
 	}
 	builder.Write(n.Value)
 	builder.WriteString(" ")
+}
+
+// stripFrontmatter removes YAML (---) or TOML (+++) frontmatter from content.
+// Frontmatter is metadata at the start of a file enclosed in delimiters.
+func stripFrontmatter(content []byte) []byte {
+	lines := bytes.Split(content, []byte("\n"))
+	if len(lines) == 0 {
+		return content
+	}
+
+	// Check if file starts with frontmatter delimiter
+	firstLine := bytes.TrimSpace(lines[0])
+	if !bytes.Equal(firstLine, []byte("---")) && !bytes.Equal(firstLine, []byte("+++")) {
+		return content // No frontmatter
+	}
+
+	delimiter := firstLine
+
+	// Find closing delimiter (must match opening)
+	for i := 1; i < len(lines); i++ {
+		if bytes.Equal(bytes.TrimSpace(lines[i]), delimiter) {
+			// Found closing delimiter, return everything after it
+			if i+1 < len(lines) {
+				return bytes.Join(lines[i+1:], []byte("\n"))
+			}
+			return []byte{}
+		}
+	}
+
+	// No closing delimiter found, return original content
+	return content
 }
 
 // stripAdmonitions removes MkDocs-style admonition blocks from content.

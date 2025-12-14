@@ -135,6 +135,7 @@ overrides:
 The dash density check only examines **prose content**. The following are automatically excluded:
 
 !!! success "Excluded Content"
+    - **Frontmatter**: YAML (`---`) and TOML (`+++`) metadata at file start
     - **Code blocks**: All fenced code blocks (` ```yaml `) and inline code
     - **Tables**: All table content including headers and cells
     - **Lists**: Unordered (`- Item`) and ordered list markers and content
@@ -143,6 +144,11 @@ The dash density check only examines **prose content**. The following are automa
 **Example:**
 
 ```markdown
+---
+title: Document - with dash
+author: John - Doe
+---
+
 # This dash is DETECTED ❌
 The system - which processes data - runs fast.
 
@@ -151,9 +157,11 @@ The system - which processes data - runs fast.
 | Column - 1 | Column - 2 |
 !!! note "Title - with dash"
     Content with - dashes here
+```yaml
+code: value - with dash
 ```
 
-Only the first line counts toward dash density. Everything else is excluded from prose analysis.
+Only the prose line ("The system...") counts toward dash density. Frontmatter, lists, tables, admonitions, and code are all excluded from analysis.
 
 ## AI Slop Indicators
 

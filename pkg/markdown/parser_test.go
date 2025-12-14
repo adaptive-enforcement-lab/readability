@@ -504,6 +504,29 @@ func TestParse_ProseExtraction(t *testing.T) {
 			wantContain: "Text",
 			wantExclude: "Nested",
 		},
+		{
+			name:        "excludes YAML frontmatter",
+			content:     "---\ntitle: Test\nauthor: John - Doe\ndescription: A test - with dashes\n---\n\n# Heading\n\nNormal prose.",
+			wantContain: "Normal prose",
+			wantExclude: "John - Doe",
+		},
+		{
+			name:        "excludes TOML frontmatter",
+			content:     "+++\ntitle = \"Test\"\nauthor = \"John - Doe\"\n+++\n\n# Heading\n\nNormal prose.",
+			wantContain: "Normal prose",
+			wantExclude: "John - Doe",
+		},
+		{
+			name:        "handles content without frontmatter",
+			content:     "# Heading\n\nNormal prose with - dashes.",
+			wantContain: "with - dashes",
+		},
+		{
+			name:        "handles incomplete frontmatter (no closing delimiter)",
+			content:     "---\ntitle: Test\n\n# Heading\n\nProse.",
+			wantContain: "title",
+			wantExclude: "should not match because incomplete frontmatter is kept",
+		},
 	}
 
 	for _, tt := range tests {
