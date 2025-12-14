@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.5...v1.11.0) (2025-12-14)
+
+
+### Features
+
+* Detect AI slop via mid-sentence dash patterns ([#162](https://github.com/adaptive-enforcement-lab/readability/issues/162)) ([3dfc09f](https://github.com/adaptive-enforcement-lab/readability/commit/3dfc09f31a6d6592da331609a54bcbd5f659d81b))
+
 ## [1.10.5](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.4...v1.10.5) (2025-12-14)
 
 
