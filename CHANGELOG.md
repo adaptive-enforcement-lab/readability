@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.7.0...v1.7.1) (2025-12-14)
+
+
+### Code Refactoring
+
+* simplify SLSA provenance workflow ([#130](https://github.com/adaptive-enforcement-lab/readability/issues/130)) ([0a03624](https://github.com/adaptive-enforcement-lab/readability/commit/0a03624d444e726b7105214f1d7dc083cac54d1f))
+
+
+### Maintenance
+
+* remove sign-releases workflow ([#129](https://github.com/adaptive-enforcement-lab/readability/issues/129)) ([e18457f](https://github.com/adaptive-enforcement-lab/readability/commit/e18457f7a29a304674f4d8661367c3d7663cdf6c))
+
 ## [1.7.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.6.2...v1.7.0) (2025-12-14)
 
 
