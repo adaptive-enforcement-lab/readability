@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.10.3](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.2...v1.10.3) (2025-12-14)
+
+
+### Maintenance
+
+* **deps:** update actions/download-artifact action to v7 ([#152](https://github.com/adaptive-enforcement-lab/readability/issues/152)) ([f43b7a6](https://github.com/adaptive-enforcement-lab/readability/commit/f43b7a66adb6b55019ca64350981a73d9bd8af37))
+* **deps:** update docker/setup-qemu-action digest to c7c5346 ([#151](https://github.com/adaptive-enforcement-lab/readability/issues/151)) ([f491d10](https://github.com/adaptive-enforcement-lab/readability/commit/f491d109567899355006cafe8b68ccdf0e5b7970))
+* remove deprecated publish-container workflow ([#154](https://github.com/adaptive-enforcement-lab/readability/issues/154)) ([923ea88](https://github.com/adaptive-enforcement-lab/readability/commit/923ea8894c65fbca56229384a090b23dbdb63186))
+
 ## [1.10.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.1...v1.10.2) (2025-12-14)
 
 
