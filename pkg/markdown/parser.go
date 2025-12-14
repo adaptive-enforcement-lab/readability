@@ -145,9 +145,6 @@ func extractString(n *ast.String, builder *strings.Builder) {
 // Frontmatter is metadata at the start of a file enclosed in delimiters.
 func stripFrontmatter(content []byte) []byte {
 	lines := bytes.Split(content, []byte("\n"))
-	if len(lines) == 0 {
-		return content
-	}
 
 	// Check if file starts with frontmatter delimiter
 	firstLine := bytes.TrimSpace(lines[0])

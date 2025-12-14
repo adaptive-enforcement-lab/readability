@@ -522,10 +522,24 @@ func TestParse_ProseExtraction(t *testing.T) {
 			wantContain: "with - dashes",
 		},
 		{
-			name:        "handles incomplete frontmatter (no closing delimiter)",
+			name:        "handles incomplete YAML frontmatter (no closing delimiter)",
 			content:     "---\ntitle: Test\n\n# Heading\n\nProse.",
 			wantContain: "title",
-			wantExclude: "should not match because incomplete frontmatter is kept",
+		},
+		{
+			name:        "handles incomplete TOML frontmatter (no closing delimiter)",
+			content:     "+++\ntitle = \"Test\"\n\n# Heading\n\nProse.",
+			wantContain: "title",
+		},
+		{
+			name:        "handles YAML frontmatter with closing delimiter at end",
+			content:     "---\ntitle: Test\n---",
+			wantContain: "",
+		},
+		{
+			name:        "handles TOML frontmatter with closing delimiter at end",
+			content:     "+++\ntitle = \"Test\"\n+++",
+			wantContain: "",
 		},
 	}
 
