@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.7.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.6.2...v1.7.0) (2025-12-14)
+
+
+### Features
+
+* add SLSA provenance generation to releases ([#127](https://github.com/adaptive-enforcement-lab/readability/issues/127)) ([1f5c92d](https://github.com/adaptive-enforcement-lab/readability/commit/1f5c92d9af7de2f112b09bca5e84949ce77078ed))
+* add workflow to sign existing releases ([#121](https://github.com/adaptive-enforcement-lab/readability/issues/121)) ([449c4a5](https://github.com/adaptive-enforcement-lab/readability/commit/449c4a5597abe8a557d9bcf06fee4878834f2a05))
+
+
+### Bug Fixes
+
+* move permissions to job level in sign-releases workflow ([#126](https://github.com/adaptive-enforcement-lab/readability/issues/126)) ([2565c22](https://github.com/adaptive-enforcement-lab/readability/commit/2565c22fe4a16340632238eb2274044079bccb0a))
+* sign source code archives in releases ([#122](https://github.com/adaptive-enforcement-lab/readability/issues/122)) ([c86288e](https://github.com/adaptive-enforcement-lab/readability/commit/c86288eb2a91f7a10ecc1a736010a80f9f352d1b))
+
+
+### Maintenance
+
+* **deps:** update sigstore/cosign-installer action to v3.10.1 ([#123](https://github.com/adaptive-enforcement-lab/readability/issues/123)) ([bdba92e](https://github.com/adaptive-enforcement-lab/readability/commit/bdba92eaaaa8a780abd0c94a7a19735ef73052d4))
+* **deps:** update sigstore/cosign-installer action to v4 ([#124](https://github.com/adaptive-enforcement-lab/readability/issues/124)) ([b264d48](https://github.com/adaptive-enforcement-lab/readability/commit/b264d4829f05726052bb9266568f35b5869a6788))
+
 ## [1.6.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.6.1...v1.6.2) (2025-12-14)
 
 
