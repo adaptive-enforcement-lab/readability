@@ -140,18 +140,6 @@ jobs:
       - name: Install Cosign
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
 
-      - name: Download source archives
-        run: |
-          cd dist
-          TAG="${{ needs.release-please.outputs.tag_name }}"
-          # Download GitHub-generated source archives and rename with source- prefix
-          curl -sL "https://github.com/${{ github.repository }}/archive/refs/tags/${TAG}.tar.gz" \
-            -o "source_${TAG}.tar.gz"
-          curl -sL "https://github.com/${{ github.repository }}/archive/refs/tags/${TAG}.zip" \
-            -o "source_${TAG}.zip"
-          echo "Downloaded source archives:"
-          ls -la source_*
-
       - name: Sign binaries with Cosign
         run: |
           cd dist
@@ -172,13 +160,12 @@ jobs:
               tar -czvf "${file}.tar.gz" "$file" "${file}.sig"
             fi
           done
-          # Include source archives in checksums
           sha256sum *.tar.gz *.zip sbom.cdx.json > checksums.txt
 
       - name: Sign archives with Cosign
         run: |
           cd dist
-          # Sign all archives (binary and source), SBOM, and checksums
+          # Sign binary archives, SBOM, and checksums
           for file in *.tar.gz *.zip sbom.cdx.json checksums.txt; do
             # Skip if already signed
             [ -f "${file}.sig" ] && continue
