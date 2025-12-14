@@ -301,3 +301,17 @@ jobs:
           echo "|-------|-----------|" >> "$GITHUB_STEP_SUMMARY"
           echo "| ${MAJOR} | ${TAG_NAME} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| latest | ${TAG_NAME} |" >> "$GITHUB_STEP_SUMMARY"
+
+  # Publish multi-arch container image to GitHub Container Registry
+  publish-container:
+    name: Publish Container
+    needs: [release-please, ci]
+    if: needs.release-please.outputs.release_created == 'true'
+    uses: ./.github/workflows/publish-container.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    secrets: inherit
+    with:
+      version: ${{ needs.release-please.outputs.version }}
