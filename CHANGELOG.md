@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.10.0...v1.10.1) (2025-12-14)
+
+
+### Bug Fixes
+
+* remove duplicate source archive signing from releases ([#146](https://github.com/adaptive-enforcement-lab/readability/issues/146)) ([67b8f11](https://github.com/adaptive-enforcement-lab/readability/commit/67b8f112cbb5ac7ccd0a11f941fc7e27dfcd05c4))
+
 ## [1.10.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.9.0...v1.10.0) (2025-12-14)
 
 
