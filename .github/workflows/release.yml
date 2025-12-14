@@ -135,20 +135,20 @@ jobs:
         run: |
           cd dist
           for file in readability_*; do
-            cosign sign-blob --yes --bundle "${file}.bundle" "${file}"
+            cosign sign-blob --yes --bundle "${file}.sig" "${file}"
           done
 
       - name: Create archives
         run: |
           cd dist
           for file in readability_*; do
-            if [[ "$file" == *.bundle ]]; then
+            if [[ "$file" == *.sig ]]; then
               continue
             elif [[ "$file" == *.exe ]]; then
               base="${file%.exe}"
-              zip "${base}.zip" "$file" "${file}.bundle"
+              zip "${base}.zip" "$file" "${file}.sig"
             else
-              tar -czvf "${file}.tar.gz" "$file" "${file}.bundle"
+              tar -czvf "${file}.tar.gz" "$file" "${file}.sig"
             fi
           done
           sha256sum *.tar.gz *.zip sbom.cdx.json > checksums.txt
@@ -157,7 +157,7 @@ jobs:
         run: |
           cd dist
           for file in *.tar.gz *.zip sbom.cdx.json checksums.txt; do
-            cosign sign-blob --yes --bundle "${file}.bundle" "${file}"
+            cosign sign-blob --yes --bundle "${file}.sig" "${file}"
           done
 
       - name: Upload to release
@@ -165,8 +165,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd dist
+          # Upload archives, their signatures, SBOM, and checksums
+          # Note: raw binary .sig files are already included inside archives
           gh release upload ${{ needs.release-please.outputs.tag_name }} \
-            *.tar.gz *.zip *.bundle sbom.cdx.json checksums.txt \
+            *.tar.gz *.tar.gz.sig \
+            *.zip *.zip.sig \
+            sbom.cdx.json sbom.cdx.json.sig \
+            checksums.txt checksums.txt.sig \
             --repo ${{ github.repository }}
 
   build-docs:
