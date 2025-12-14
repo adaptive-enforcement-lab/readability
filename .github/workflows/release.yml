@@ -139,6 +139,9 @@ jobs:
           pattern: readability_*
           merge-multiple: true
 
+      - name: Make binaries executable
+        run: chmod +x dist/readability_*
+
       - name: Generate hashes for SLSA provenance
         id: hash
         run: |
