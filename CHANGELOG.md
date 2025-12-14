@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.6.1...v1.6.2) (2025-12-14)
+
+
+### Bug Fixes
+
+* use .sig extension for cosign signatures ([#119](https://github.com/adaptive-enforcement-lab/readability/issues/119)) ([135e617](https://github.com/adaptive-enforcement-lab/readability/commit/135e6177d11847c01ca1ae61078be01c6b1dff0a))
+
 ## [1.6.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.6.0...v1.6.1) (2025-12-14)
 
 
