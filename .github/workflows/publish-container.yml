@@ -1,19 +1,10 @@
-name: Publish Container
+# DEPRECATED: This workflow is no longer used as a reusable workflow.
+# Container publishing is now inlined in release.yml for OpenSSF Scorecard detection.
+# This file is kept only for manual testing via workflow_dispatch.
+
+name: Publish Container (Manual Testing Only)
 
 on:
-  workflow_call:
-    inputs:
-      version:
-        description: "Version to tag the image with"
-        required: true
-        type: string
-    outputs:
-      digest:
-        description: "Container image digest"
-        value: ${{ jobs.publish.outputs.digest }}
-      image:
-        description: "Full image name with registry"
-        value: ${{ jobs.publish.outputs.image }}
   workflow_dispatch:
     inputs:
       version:
