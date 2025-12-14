@@ -1,0 +1,113 @@
+name: Sign Existing Releases
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag to sign (or 'all' for all releases)"
+        required: true
+        default: "all"
+      dry_run:
+        description: "Dry run (don't upload signatures)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  sign-releases:
+    name: Sign Release Assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
+
+      - name: Get release tags
+        id: get-tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ inputs.release_tag }}" = "all" ]; then
+            TAGS=$(gh release list --repo ${{ github.repository }} --json tagName --jq '.[].tagName' | tr '\n' ' ')
+          else
+            TAGS="${{ inputs.release_tag }}"
+          fi
+          echo "tags=${TAGS}" >> "$GITHUB_OUTPUT"
+          echo "Processing releases: ${TAGS}"
+
+      - name: Sign and upload
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+
+          for TAG in ${{ steps.get-tags.outputs.tags }}; do
+            echo "========================================"
+            echo "Processing release: ${TAG}"
+            echo "========================================"
+
+            # Create temp directory for this release
+            WORKDIR=$(mktemp -d)
+            cd "${WORKDIR}"
+
+            # Download all assets
+            echo "Downloading assets..."
+            gh release download "${TAG}" --repo ${{ github.repository }} --pattern '*' || {
+              echo "No assets found for ${TAG}, skipping..."
+              continue
+            }
+
+            # List downloaded files
+            echo "Downloaded files:"
+            ls -la
+
+            # Sign each signable asset (archives, SBOM, checksums)
+            for file in *.tar.gz *.zip *.json checksums.txt; do
+              # Skip if no matches (glob didn't expand)
+              [ -e "$file" ] || continue
+
+              # Skip if signature already exists
+              if [ -f "${file}.sig" ] || [ -f "${file}.bundle" ]; then
+                echo "Signature already exists for ${file}, skipping..."
+                continue
+              fi
+
+              echo "Signing: ${file}"
+              cosign sign-blob --yes --bundle "${file}.sig" "${file}"
+            done
+
+            # Upload signatures
+            if [ "${{ inputs.dry_run }}" = "true" ]; then
+              echo "DRY RUN: Would upload these signatures:"
+              ls -la *.sig 2>/dev/null || echo "No new signatures created"
+            else
+              # Upload only new .sig files
+              for sig in *.sig; do
+                [ -e "$sig" ] || continue
+                echo "Uploading: ${sig}"
+                gh release upload "${TAG}" "${sig}" --repo ${{ github.repository }} --clobber
+              done
+            fi
+
+            # Cleanup
+            cd /
+            rm -rf "${WORKDIR}"
+
+            echo ""
+          done
+
+          echo "========================================"
+          echo "All releases processed!"
+          echo "========================================"
+
+      - name: Summary
+        run: |
+          echo "## Release Signing Complete" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Release | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---------|--------|" >> "$GITHUB_STEP_SUMMARY"
+          for TAG in ${{ steps.get-tags.outputs.tags }}; do
+            echo "| ${TAG} | Signed |" >> "$GITHUB_STEP_SUMMARY"
+          done
