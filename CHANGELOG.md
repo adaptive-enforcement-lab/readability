@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.8.1...v1.9.0) (2025-12-14)
+
+
+### Features
+
+* add container publishing to ghcr.io with Cosign signing ([#136](https://github.com/adaptive-enforcement-lab/readability/issues/136)) ([a2b78ff](https://github.com/adaptive-enforcement-lab/readability/commit/a2b78ff190b27ca609a0725ce9a12728e5865134))
+
 ## [1.8.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.8.0...v1.8.1) (2025-12-14)
 
 
