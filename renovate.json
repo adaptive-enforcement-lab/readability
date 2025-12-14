@@ -9,6 +9,11 @@
       "description": "scorecard.yml requires version tags for workflow verification (all actions)",
       "matchFileNames": [".github/workflows/scorecard.yml"],
       "pinDigests": false
+    },
+    {
+      "description": "slsa-github-generator requires version tags for slsa-verifier compatibility",
+      "matchPackageNames": ["slsa-framework/slsa-github-generator"],
+      "pinDigests": false
     }
   ]
 }
