@@ -41,7 +41,7 @@ Uses character count instead of syllables. This makes it better for technical co
 
 ## Gunning Fog Index
 
-Counts "complex words" - those with three or more syllables. Common endings like "-ing" and "-ed" don't count.
+Counts "complex words": those with three or more syllables. Common endings like "-ing" and "-ed" don't count.
 
 **What affects it:**
 

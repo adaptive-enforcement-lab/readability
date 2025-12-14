@@ -130,8 +130,30 @@ overrides:
 - Insert parenthetical clauses that break reading flow
 - Rely on dashes to connect loosely related ideas
 
-!!! warning "List Markers Are OK"
-    Markdown list markers (like `- Item`) are automatically excluded from this check. Only mid-sentence dashes in prose are counted.
+## What Gets Excluded
+
+The dash density check only examines **prose content**. The following are automatically excluded:
+
+!!! success "Excluded Content"
+    - **Code blocks**: All fenced code blocks (` ```yaml `) and inline code
+    - **Tables**: All table content including headers and cells
+    - **Lists**: Unordered (`- Item`) and ordered list markers and content
+    - **Admonitions**: MkDocs-style callouts (`!!! note`) and their content
+
+**Example:**
+
+```markdown
+# This dash is DETECTED ❌
+The system - which processes data - runs fast.
+
+# These dashes are IGNORED ✓
+- List item with - dash in content
+| Column - 1 | Column - 2 |
+!!! note "Title - with dash"
+    Content with - dashes here
+```
+
+Only the first line counts toward dash density. Everything else is excluded from prose analysis.
 
 ## AI Slop Indicators
 

@@ -15,7 +15,7 @@ Get Readability running in under five minutes. Choose the method that fits your 
 
 ## Quick Preview
 
-Here's what you'll get - a clear report showing which files need attention:
+Here's what you'll get: a clear report showing which files need attention.
 
 ```
 docs/api-reference.md:1:1: error: Grade 14.5 exceeds threshold 12.0
