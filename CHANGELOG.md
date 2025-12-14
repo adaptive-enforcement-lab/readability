@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.1...v1.11.2) (2025-12-14)
+
+
+### Bug Fixes
+
+* add v prefix to mkdocs version URLs for consistency ([#166](https://github.com/adaptive-enforcement-lab/readability/issues/166)) ([0d40d20](https://github.com/adaptive-enforcement-lab/readability/commit/0d40d2041d0b6ea60dc3bf920672467d44f5fa97))
+
 ## [1.11.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.0...v1.11.1) (2025-12-14)
 
 
