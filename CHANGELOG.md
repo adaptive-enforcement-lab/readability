@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.9.0...v1.10.0) (2025-12-14)
+
+
+### Features
+
+* add unified container SBOM with Trivy attestation ([#140](https://github.com/adaptive-enforcement-lab/readability/issues/140)) ([e7617b1](https://github.com/adaptive-enforcement-lab/readability/commit/e7617b162d2c2cde80a9c7e964598c5fe631661a))
+
+
+### Maintenance
+
+* **deps:** update actions/download-artifact digest to d3f86a1 ([#143](https://github.com/adaptive-enforcement-lab/readability/issues/143)) ([6f38f0d](https://github.com/adaptive-enforcement-lab/readability/commit/6f38f0d49e6b68cc4d79bef9b48547352d0ff041))
+* **deps:** update docker/login-action digest to 5e57cd1 ([#137](https://github.com/adaptive-enforcement-lab/readability/issues/137)) ([8a00393](https://github.com/adaptive-enforcement-lab/readability/commit/8a003937b31114f2b29fb83f3cb4aae8f5e5425d))
+* **deps:** update docker/metadata-action digest to c299e40 ([#138](https://github.com/adaptive-enforcement-lab/readability/issues/138)) ([4d210e6](https://github.com/adaptive-enforcement-lab/readability/commit/4d210e6b1cac55e6ea126dabceac2ebfb3f67259))
+* **deps:** update docker/setup-buildx-action digest to e468171 ([#144](https://github.com/adaptive-enforcement-lab/readability/issues/144)) ([25cc3ba](https://github.com/adaptive-enforcement-lab/readability/commit/25cc3bafb640050e088a0c4137b0a2d8126e0a40))
+
 ## [1.9.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.8.1...v1.9.0) (2025-12-14)
 
 
