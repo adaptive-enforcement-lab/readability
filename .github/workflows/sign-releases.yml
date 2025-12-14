@@ -12,14 +12,15 @@ on:
         type: boolean
         default: false
 
-permissions:
-  contents: write
-  id-token: write
+permissions: {}
 
 jobs:
   sign-releases:
     name: Sign Release Assets
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Install Cosign
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
