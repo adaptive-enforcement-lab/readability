@@ -1,9 +1,16 @@
 # Docker
 
-Run the readability CLI using Docker. The image is available from GitHub Container Registry.
+Run Readability using Docker. No installation needed. Works the same on every machine.
 
-!!! tip "Multi-Architecture Support"
-    The image works on both Intel/AMD (`linux/amd64`) and ARM (`linux/arm64`) systems. Docker picks the right one for you.
+**Why choose Docker:**
+
+- No local setup required
+- Works on any system
+- Pin to specific versions
+- Security verified with signed images
+- Supports Intel and ARM processors
+
+Pull the official image from GitHub Container Registry.
 
 ## Quick Start
 
