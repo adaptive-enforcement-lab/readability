@@ -6,9 +6,18 @@ Run your first readability analysis and understand the results.
 
 Point the tool at your documentation folder:
 
-```bash
-readability docs/
-```
+=== "Docker"
+
+    ```bash
+    docker run --rm -v "$(pwd):/workspace" \
+      ghcr.io/adaptive-enforcement-lab/readability:latest /workspace/docs/
+    ```
+
+=== "Local Binary"
+
+    ```bash
+    readability docs/
+    ```
 
 You'll see a table like this:
 
@@ -42,9 +51,19 @@ Choose the format that fits your needs:
 
 Add `--check` to fail when thresholds are exceeded. This is useful for CI pipelines.
 
-```bash
-readability --check docs/
-```
+=== "Docker"
+
+    ```bash
+    docker run --rm -v "$(pwd):/workspace" \
+      ghcr.io/adaptive-enforcement-lab/readability:latest \
+      --check /workspace/docs/
+    ```
+
+=== "Local Binary"
+
+    ```bash
+    readability --check docs/
+    ```
 
 The command exits with code 1 if any file fails. Use this in your CI to block PRs with readability issues.
 
@@ -52,9 +71,19 @@ The command exits with code 1 if any file fails. Use this in your CI to block PR
 
 Override defaults from the command line:
 
-```bash
-readability --check --max-grade 12 --max-ari 12 docs/
-```
+=== "Docker"
+
+    ```bash
+    docker run --rm -v "$(pwd):/workspace" \
+      ghcr.io/adaptive-enforcement-lab/readability:latest \
+      --check --max-grade 12 --max-ari 12 /workspace/docs/
+    ```
+
+=== "Local Binary"
+
+    ```bash
+    readability --check --max-grade 12 --max-ari 12 docs/
+    ```
 
 Or create a `.readability.yml` file for persistent settings:
 
@@ -68,6 +97,8 @@ thresholds:
 
 !!! tip "Config File Location"
     Place `.readability.yml` in your repository root. The tool finds it automatically.
+
+    When using Docker, the config file is automatically detected when you mount your workspace with `-v "$(pwd):/workspace"`.
 
 ## What's Next?
 

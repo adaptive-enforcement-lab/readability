@@ -109,8 +109,8 @@ nav:
   - Getting Started:
       - getting-started/index.md
       - Installation: getting-started/installation.md
-      - Quick Start: getting-started/quick-start.md
       - Docker: getting-started/docker.md
+      - Quick Start: getting-started/quick-start.md
   - GitHub Action:
       - github-action/index.md
       - Configuration: github-action/configuration.md

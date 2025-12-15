@@ -16,6 +16,30 @@ No installation needed. Add this step to any workflow file in `.github/workflows
 !!! note "Version Pinning"
     Use `@v1` for the latest stable release. This automatically updates to new minor versions while staying on major version 1.
 
+## Docker
+
+Pull the official image from GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/adaptive-enforcement-lab/readability:latest
+```
+
+Verify it works:
+
+```bash
+docker run --rm ghcr.io/adaptive-enforcement-lab/readability:latest --version
+```
+
+Analyze your documentation:
+
+```bash
+docker run --rm -v "$(pwd):/workspace" \
+  ghcr.io/adaptive-enforcement-lab/readability:latest /workspace/docs/
+```
+
+!!! tip "Advanced Docker Usage"
+    See the [Docker Guide](docker.md) for details on image tags, security verification, CI/CD examples, and volume mounting patterns.
+
 ## Pre-commit Hook
 
 Pre-commit hooks run checks before each commit. This catches issues early, on your local machine.
