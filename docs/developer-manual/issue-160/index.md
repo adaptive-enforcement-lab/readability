@@ -20,15 +20,16 @@ Implement comprehensive JSON Schema support following industry standards used by
 
 ## Architecture Components
 
-This implementation is divided into seven major components:
+This implementation is divided into eight major components:
 
 1. **[Schema Creation](schema-creation.md)** - Design and implement the JSON Schema file
-2. **[Schema Publishing](schema-publishing.md)** - Distribute schema via SchemaStore and web hosting
+2. **[Schema Publishing](schema-publishing.md)** - Host schema on existing MkDocs site (immediate)
 3. **[YAML Integration](yaml-integration.md)** - Enable schema references in YAML files
 4. **[Runtime Validation](runtime-validation.md)** - Add Go-based schema validation
 5. **[Testing Strategy](testing-strategy.md)** - Comprehensive test coverage
 6. **[Documentation Updates](documentation.md)** - User-facing documentation
-7. **[Viability Summary](viability-summary.md)** - Overall assessment and recommendation
+7. **[SchemaStore Submission](schemastore-submission.md)** - Submit to SchemaStore for automatic discovery (future)
+8. **[Viability Summary](viability-summary.md)** - Overall assessment and recommendation
 
 ## Implementation Phases
 
@@ -37,18 +38,23 @@ This implementation is divided into seven major components:
 **Dependencies**: None
 
 - Create JSON Schema file
+- Publish to existing MkDocs site (10 minutes setup)
 - Add basic Go validation
 - Update example configurations
 - Local testing with IDEs
 
-### Phase 2: Publishing
-**Estimated Effort**: Small
+**Timeline**: 1 week
+
+### Phase 2: Integration & Testing
+**Estimated Effort**: Medium
 **Dependencies**: Phase 1 complete
 
-- Submit to SchemaStore.org
-- Set up schema hosting (GitHub Pages or readability.dev)
-- Update schema references
-- Documentation updates
+- Add YAML schema references to all configs
+- Update documentation with schema examples
+- Comprehensive test coverage
+- IDE integration verification
+
+**Timeline**: 1 week
 
 ### Phase 3: Enhanced Validation
 **Estimated Effort**: Medium
@@ -56,8 +62,21 @@ This implementation is divided into seven major components:
 
 - Detailed error reporting with line/column numbers
 - `--validate-config` CLI flag
-- Comprehensive test coverage
 - Error message improvements
+- User feedback integration
+
+**Timeline**: 1 week
+
+### Phase 4: SchemaStore Submission (Future)
+**Estimated Effort**: Small
+**Dependencies**: Schema stable and tested in production
+
+- Wait 2-4 weeks for schema to stabilize
+- Submit to SchemaStore.org for automatic discovery
+- Update documentation to mention automatic IDE support
+- Monitor SchemaStore PR review
+
+**Timeline**: 3-5 weeks (mostly waiting period)
 
 ## Success Criteria
 
