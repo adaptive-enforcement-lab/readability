@@ -24,7 +24,7 @@ This comment instructs the YAML language server to validate the file against the
 #### Format 1: YAML Language Server Directive (Recommended)
 
 ```yaml
-# yaml-language-server: $schema=https://json.schemastore.org/readability.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
 
 thresholds:
   max_grade: 12
@@ -233,17 +233,17 @@ thresholds:
 
 ### Schema URL Selection
 
-**For Documentation/Examples**: Use SchemaStore URL (assumes Phase 3 publishing complete)
+**For Documentation/Examples**: Use canonical domain URL (available immediately)
 ```yaml
-# yaml-language-server: $schema=https://json.schemastore.org/readability.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
 ```
 
-**For Repository's Own Config**: Use relative path during development, then SchemaStore URL after publishing
+**For Repository's Own Config**: Use hosted URL from day one
 ```yaml
-# Development
-# yaml-language-server: $schema=schemas/readability-config.schema.json
+# Production (immediate)
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
 
-# Production (after SchemaStore approval)
+# Alternative: After SchemaStore approval (automatic discovery, explicit reference optional)
 # yaml-language-server: $schema=https://json.schemastore.org/readability.json
 ```
 
@@ -348,7 +348,7 @@ thresholds:
 
 ```bash
 # Edit .readability.yml
-sed -i '1i# yaml-language-server: $schema=https://json.schemastore.org/readability.json\n' .readability.yml
+sed -i '1i# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json\n' .readability.yml
 ```
 
 Verify in VS Code that autocomplete works.
@@ -388,7 +388,7 @@ Add to README.md:
 Create `.readability.yml` in your repository root:
 
 ```yaml
-# yaml-language-server: $schema=https://json.schemastore.org/readability.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
 
 thresholds:
   max_grade: 12      # High school senior reading level

@@ -71,14 +71,15 @@ Edit `src/api/json/catalog.json` and add:
 Copy your schema to `src/schemas/json/readability.json`:
 
 ```bash
-cp /path/to/readability/schemas/readability-config.schema.json \
+cp /path/to/readability/docs/schemas/config.json \
    src/schemas/json/readability.json
 ```
 
 **Important**: SchemaStore expects:
 - Schema must be valid JSON (not YAML)
 - Schema must validate against JSON Schema meta-schema
-- `$id` should match the CDN URL: `https://json.schemastore.org/readability.json`
+- `$id` should reference your canonical URL: `https://readability.adaptive-enforcement-lab.com/schemas/config.json`
+- SchemaStore will serve a copy at `https://json.schemastore.org/readability.json`
 
 #### Step 4: Test Locally
 
@@ -155,146 +156,186 @@ Provide a stable URL for:
 3. **Documentation links** (users can browse schema)
 4. **Version pinning** (future: support schema versioning)
 
-### Hosting Options
+### Existing Infrastructure: MkDocs Material + GitHub Pages
 
-#### Option A: GitHub Pages (Recommended)
+**Current Setup**:
+- **Site URL**: `https://readability.adaptive-enforcement-lab.com`
+- **Platform**: MkDocs Material hosted on GitHub Pages
+- **Versioning**: Mike (already configured in `mkdocs.yml`)
+- **Domain**: Custom domain with HTTPS
 
-**Approach**: Host schema at `https://markcheret.github.io/readability/schemas/config.json`
+**Schema URL**: `https://readability.adaptive-enforcement-lab.com/schemas/config.json`
+
+### Hosting Strategy: Leverage Existing MkDocs Deployment
+
+**Approach**: Add schema file to existing MkDocs site structure
 
 **Pros**:
-- ✅ Free, reliable hosting
-- ✅ Automatic HTTPS
-- ✅ Easy to update (git push)
-- ✅ Version with Git tags
-- ✅ No infrastructure maintenance
+- ✅ **Zero new infrastructure** - reuses existing GitHub Pages deployment
+- ✅ **Professional domain** - already configured and stable
+- ✅ **Same deployment pipeline** - schema updates with docs
+- ✅ **Versioning support** - can use mike for schema versions if needed
+- ✅ **HTTPS by default** - already configured
+- ✅ **No additional cost** - uses existing setup
 
 **Cons**:
-- ⚠️ URL tied to GitHub username (not ideal for long-term projects)
+- None (ideal solution)
 
-**Setup**:
+**Verdict**: ✅ **OPTIMAL** - Best of all options
+
+### Implementation Steps
+
+#### Step 1: Add Schema to MkDocs Site
 
 ```bash
-# Enable GitHub Pages in repo settings
-# Settings → Pages → Source: gh-pages branch
+# Create schemas directory in docs
+mkdir -p docs/schemas
 
-# Create gh-pages branch
-git checkout --orphan gh-pages
-git rm -rf .
-mkdir -p schemas
-cp /path/to/readability-config.schema.json schemas/config.json
+# Copy schema file
+cp schemas/readability-config.schema.json docs/schemas/config.json
 
-# Update $id in schema
-sed -i 's|readability.dev/schemas|markcheret.github.io/readability/schemas|g' schemas/config.json
-
-git add schemas/
-git commit -m "Publish JSON Schema to GitHub Pages"
-git push origin gh-pages
+# Update $id in schema to match hosted URL
+# Edit docs/schemas/config.json:
+# "$id": "https://readability.adaptive-enforcement-lab.com/schemas/config.json"
 ```
 
-**Automation** (publish on release):
+#### Step 2: Configure MkDocs to Serve Schema
+
+Update `mkdocs.yml`:
 
 ```yaml
-# .github/workflows/publish-schema.yml
-name: Publish Schema
-on:
-  release:
-    types: [published]
+# Add to existing mkdocs.yml
+nav:
+  # ... existing nav items ...
+  - Schemas:
+      - schemas/config.json  # Makes schema available at /schemas/config.json
 
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy schema to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./schemas
-          destination_dir: schemas
+# OR use extra_files plugin to serve without navigation entry
+plugins:
+  - search
+  - social
+  # Add this if you want schema served but not in navigation:
+  - exclude:
+      glob:
+        - schemas/*  # Exclude from navigation but still serve
 ```
 
-#### Option B: Custom Domain (readability.dev)
+**Alternative** (if MkDocs plugins don't work well for JSON):
 
-**Approach**: Host schema at `https://readability.dev/schemas/config.json`
+Add schema to `docs/` and configure as static file:
 
-**Pros**:
-- ✅ Professional, stable URL
-- ✅ Project branding
-- ✅ Long-term stability (URL won't change if repo moves)
+```yaml
+# mkdocs.yml
+extra_files:
+  - schemas/config.json
+```
 
-**Cons**:
-- ⚠️ Requires domain registration (~$12/year)
-- ⚠️ Needs DNS configuration
-- ⚠️ Hosting setup (can still use GitHub Pages + custom domain)
+Or simply place in `docs/schemas/config.json` and MkDocs will serve it automatically.
 
-**Viability**: ⚠️ **MEDIUM** (cost/effort trade-off)
+#### Step 3: Update Schema $id
 
-**Recommendation**: Start with GitHub Pages (Option A), upgrade to custom domain if project gains traction.
+Edit `docs/schemas/config.json`:
 
-#### Option C: CDN (jsDelivr, unpkg)
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://readability.adaptive-enforcement-lab.com/schemas/config.json",
+  "title": "Readability Configuration",
+  // ... rest of schema
+}
+```
 
-**Approach**: Use free CDN to serve schema from GitHub releases
+#### Step 4: Deploy with Existing Pipeline
 
-**URL**: `https://cdn.jsdelivr.net/gh/markcheret/readability@latest/schemas/readability-config.schema.json`
+Schema deploys automatically with next docs deployment:
 
-**Pros**:
-- ✅ Free, fast global CDN
-- ✅ No setup required
-- ✅ Version pinning via Git tags
+```bash
+# If using mike for versioning
+mike deploy --push --update-aliases latest
 
-**Cons**:
-- ❌ Long, ugly URLs
-- ❌ Less professional
-- ❌ Third-party dependency
+# Or standard MkDocs deploy
+mkdocs gh-deploy
+```
 
-**Viability**: ✅ **HIGH** (good fallback option)
+#### Step 5: Verify Schema Accessibility
 
-**Use Case**: Temporary hosting while waiting for SchemaStore approval
+```bash
+# After deployment, verify schema is accessible
+curl -I https://readability.adaptive-enforcement-lab.com/schemas/config.json
 
-#### Option D: Raw GitHub
+# Should return:
+# HTTP/2 200
+# content-type: application/json
+```
 
-**Approach**: Link directly to `raw.githubusercontent.com`
+### Automation: Keep Schema in Sync
 
-**URL**: `https://raw.githubusercontent.com/markcheret/readability/main/schemas/readability-config.schema.json`
+**Option A**: Single Source (Recommended)
 
-**Pros**:
-- ✅ Zero setup
-- ✅ Always up-to-date with main branch
+Keep schema in `docs/schemas/config.json` as the canonical source:
 
-**Cons**:
-- ❌ Not recommended for production use (caching issues)
-- ❌ Content-Type headers may not be optimal
-- ❌ Rate limiting
+```bash
+# Project structure
+readability/
+├── docs/
+│   └── schemas/
+│       └── config.json  # Canonical source, deployed to site
+├── pkg/config/
+│   └── validate.go      # Embeds schema from docs/
+└── mkdocs.yml
+```
 
-**Viability**: ⚠️ **LOW** (development/testing only)
+**Option B**: Copy During Build
 
-**Verdict**: **Avoid for production**
+Keep schema in `schemas/` directory, copy to `docs/` during build:
+
+```yaml
+# .github/workflows/docs.yml
+- name: Copy schema to docs
+  run: cp schemas/readability-config.schema.json docs/schemas/config.json
+
+- name: Deploy docs
+  run: mkdocs gh-deploy --force
+```
+
+### Recommended Approach
+
+Use **Option A** (single source in `docs/schemas/`):
+- ✅ Single source of truth
+- ✅ No build step needed
+- ✅ Simple to maintain
+- ✅ Automatically versioned with docs (via mike)
+
+Then **embed schema in Go binary** from docs directory:
+
+```go
+// pkg/config/validate.go
+import _ "embed"
+
+//go:embed ../../docs/schemas/config.json
+var embeddedSchema []byte
+```
 
 ### Recommended Hosting Strategy
 
 **Phase 1** (Immediate):
 ```
-https://cdn.jsdelivr.net/gh/markcheret/readability@latest/schemas/config.json
+https://readability.adaptive-enforcement-lab.com/schemas/config.json
 ```
-Use jsDelivr for instant availability while preparing SchemaStore submission.
+Add schema to existing MkDocs site - **already have professional domain and infrastructure**.
 
-**Phase 2** (Post-Release):
-```
-https://markcheret.github.io/readability/schemas/config.json
-```
-Set up GitHub Pages for cleaner, official-looking URL.
-
-**Phase 3** (After SchemaStore Approval):
+**Phase 2** (Parallel with Phase 1):
 ```
 https://json.schemastore.org/readability.json
 ```
-Users get automatic schema loading—no explicit URL needed.
+Submit to SchemaStore for automatic discovery in IDEs.
 
-**Future** (If project grows):
+**Phase 3** (After SchemaStore Approval):
 ```
-https://readability.dev/schemas/config.json
+https://json.schemastore.org/readability.json (primary)
+https://readability.adaptive-enforcement-lab.com/schemas/config.json (canonical)
 ```
-Custom domain for long-term stability.
+Users get automatic schema loading from SchemaStore, with your domain as the authoritative source.
 
 ## Schema Versioning Strategy
 
@@ -335,29 +376,30 @@ For readability, versioning is **not needed** in Phase 1-3.
 | Milestone | Duration | Blocker |
 |-----------|----------|---------|
 | Create schema file | 1 day | None |
-| jsDelivr hosting | Immediate | Merge to main + release |
-| GitHub Pages setup | 1 day | Repo settings |
+| Add schema to MkDocs | 10 min | Schema finalized |
+| Deploy to existing site | Immediate | Next docs deployment |
 | SchemaStore PR submission | 1 day | Schema finalized |
 | SchemaStore review | 1-7 days | Community review |
-| Total | ~2 weeks | - |
+| Total | ~1 week | - |
 
 ### Step-by-Step
 
-1. **Week 1, Day 1-2**: Create and test schema (see [Schema Creation](schema-creation.md))
-2. **Week 1, Day 3**: Submit SchemaStore PR
-3. **Week 1, Day 4**: Set up GitHub Pages hosting
-4. **Week 1, Day 5**: Update documentation with schema URLs
-5. **Week 2**: Respond to SchemaStore review feedback
-6. **Week 2+**: Schema goes live on SchemaStore CDN
+1. **Day 1-2**: Create and test schema (see [Schema Creation](schema-creation.md))
+2. **Day 2**: Add schema to `docs/schemas/config.json` and update `$id`
+3. **Day 2**: Deploy docs (schema goes live immediately)
+4. **Day 3**: Submit SchemaStore PR
+5. **Day 4-5**: Update documentation with schema URLs
+6. **Week 2**: Respond to SchemaStore review feedback
+7. **Week 2+**: Schema goes live on SchemaStore CDN
 
 ### Rollback Plan
 
 If SchemaStore submission is rejected or delayed:
-1. Continue using GitHub Pages URL
+1. Continue using `readability.adaptive-enforcement-lab.com` URL (already live)
 2. Users add explicit `$schema` reference
 3. Validation still works, just not automatic
 
-**Impact**: Minor inconvenience, not a blocker
+**Impact**: Minimal - users have a stable, professional URL to reference
 
 ## Testing Requirements
 
@@ -403,9 +445,8 @@ Tests verify:
 | Approach | Setup Time | URL Quality | Auto-Discovery | Cost | Verdict |
 |----------|-----------|-------------|----------------|------|---------|
 | SchemaStore | 1 day | ⭐⭐⭐⭐⭐ | ✅ Yes | Free | ✅ Primary |
-| GitHub Pages | 1 day | ⭐⭐⭐⭐ | ❌ No | Free | ✅ Fallback |
-| jsDelivr CDN | Instant | ⭐⭐⭐ | ❌ No | Free | ✅ Temporary |
-| Custom Domain | 2 days | ⭐⭐⭐⭐⭐ | ❌ No | $12/year | ⚠️ Future |
+| Existing MkDocs Site | 10 min | ⭐⭐⭐⭐⭐ | ❌ No | Free | ✅ **OPTIMAL** |
+| jsDelivr CDN | Instant | ⭐⭐⭐ | ❌ No | Free | ⚠️ Backup only |
 | Raw GitHub | Instant | ⭐ | ❌ No | Free | ❌ Dev only |
 
 ## Next Steps
