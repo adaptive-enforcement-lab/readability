@@ -91,7 +91,7 @@ thresholds:
 - ⚠️ Users must have internet connection (for schema download)
 - ⚠️ Can't pin schema versions
 
-**Availability**: Available after [Schema Publishing](schema-publishing.md) Phase 3 (SchemaStore approval)
+**Availability**: Available after [Schema Publishing](02-schema-publishing.md) Phase 3 (SchemaStore approval)
 
 ## Implementation Strategy
 
@@ -448,7 +448,7 @@ Test schema integration in multiple editors:
 - Update README with schema reference example
 
 ### Week 3: Schema Publishing
-- Publish schema (see [Schema Publishing](schema-publishing.md))
+- Publish schema (see [Schema Publishing](02-schema-publishing.md))
 - Update `$schema` URLs to published location
 - Test remote schema loading
 
@@ -460,8 +460,8 @@ Test schema integration in multiple editors:
 ## Next Steps
 
 After YAML integration:
-1. Implement [Runtime Validation](runtime-validation.md) for CLI-based schema checking
-2. Expand [Testing Strategy](testing-strategy.md) to cover schema scenarios
+1. Implement [Runtime Validation](04-runtime-validation.md) for CLI-based schema checking
+2. Expand [Testing Strategy](05-testing-strategy.md) to cover schema scenarios
 3. Monitor user feedback and iterate on schema/documentation
 
 ## References

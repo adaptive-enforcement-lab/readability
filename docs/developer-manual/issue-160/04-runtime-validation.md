@@ -663,7 +663,7 @@ thresholds:
 ## Next Steps
 
 After runtime validation:
-1. Expand [Testing Strategy](testing-strategy.md) with validation test cases
+1. Expand [Testing Strategy](05-testing-strategy.md) with validation test cases
 2. Update documentation to mention runtime validation
 3. Add validation to CI pipeline (GitHub Actions)
 4. Monitor user feedback on error messages

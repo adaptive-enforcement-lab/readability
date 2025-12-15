@@ -375,10 +375,10 @@ Open these files in VS Code and verify:
 ## Next Steps
 
 After schema creation:
-1. Proceed to [Schema Publishing](schema-publishing.md) for distribution
-2. Implement [Runtime Validation](runtime-validation.md) in Go code
-3. Update [YAML Integration](yaml-integration.md) in example files
-4. Create [Testing Strategy](testing-strategy.md) for comprehensive coverage
+1. Proceed to [Schema Publishing](02-schema-publishing.md) for distribution
+2. Implement [Runtime Validation](04-runtime-validation.md) in Go code
+3. Update [YAML Integration](03-yaml-integration.md) in example files
+4. Create [Testing Strategy](05-testing-strategy.md) for comprehensive coverage
 
 ## References
 

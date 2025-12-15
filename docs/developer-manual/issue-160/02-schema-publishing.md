@@ -345,10 +345,10 @@ git push
 
 After schema is published on your site:
 
-1. Update [YAML Integration](yaml-integration.md) examples to use canonical URL
+1. Update [YAML Integration](03-yaml-integration.md) examples to use canonical URL
 2. Document schema URL in user-facing documentation
 3. Test IDE integration with live schema
-4. (Later) Consider [SchemaStore Submission](schemastore-submission.md) for automatic discovery
+4. (Later) Consider [SchemaStore Submission](07-schemastore-submission.md) for automatic discovery
 
 ## Advantages Over Alternatives
 

@@ -22,14 +22,14 @@ Implement comprehensive JSON Schema support following industry standards used by
 
 This implementation is divided into eight major components:
 
-1. **[Schema Creation](schema-creation.md)** - Design and implement the JSON Schema file
-2. **[Schema Publishing](schema-publishing.md)** - Host schema on existing MkDocs site (immediate)
-3. **[YAML Integration](yaml-integration.md)** - Enable schema references in YAML files
-4. **[Runtime Validation](runtime-validation.md)** - Add Go-based schema validation
-5. **[Testing Strategy](testing-strategy.md)** - Comprehensive test coverage
-6. **[Documentation Updates](documentation.md)** - User-facing documentation
-7. **[SchemaStore Submission](schemastore-submission.md)** - Submit to SchemaStore for automatic discovery (future)
-8. **[Viability Summary](viability-summary.md)** - Overall assessment and recommendation
+1. **[Schema Creation](01-schema-creation.md)** - Design and implement the JSON Schema file
+2. **[Schema Publishing](02-schema-publishing.md)** - Host schema on existing MkDocs site (immediate)
+3. **[YAML Integration](03-yaml-integration.md)** - Enable schema references in YAML files
+4. **[Runtime Validation](04-runtime-validation.md)** - Add Go-based schema validation
+5. **[Testing Strategy](05-testing-strategy.md)** - Comprehensive test coverage
+6. **[Documentation Updates](06-documentation.md)** - User-facing documentation
+7. **[SchemaStore Submission](07-schemastore-submission.md)** - Submit to SchemaStore for automatic discovery (future)
+8. **[Viability Summary](08-viability-summary.md)** - Overall assessment and recommendation
 
 ## Implementation Phases
 

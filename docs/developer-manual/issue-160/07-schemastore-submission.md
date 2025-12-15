@@ -366,7 +366,7 @@ Open `.readability.yml` and start typing - autocomplete will suggest available f
 ## Next Steps
 
 **Now** (immediate):
-1. Publish schema on your domain (see [Schema Publishing](schema-publishing.md))
+1. Publish schema on your domain (see [Schema Publishing](02-schema-publishing.md))
 2. Test with users
 3. Gather feedback
 4. Iterate on schema

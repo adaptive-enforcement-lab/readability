@@ -706,8 +706,8 @@ jobs:
 ## Next Steps
 
 After implementing testing strategy:
-1. Review [Component Viability Summary](viability-summary.md)
-2. Begin implementation starting with [Schema Creation](schema-creation.md)
+1. Review [Component Viability Summary](08-viability-summary.md)
+2. Begin implementation starting with [Schema Creation](01-schema-creation.md)
 3. Run tests continuously during development
 4. Update tests as feedback is received
 

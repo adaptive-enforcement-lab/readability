@@ -541,7 +541,7 @@ Documentation is successful when:
 ## Next Steps
 
 After documentation updates:
-1. Review [Viability Summary](viability-summary.md) for overall assessment
+1. Review [Viability Summary](08-viability-summary.md) for overall assessment
 2. Begin implementation following phased approach
 3. Update docs incrementally as features ship
 4. Collect user feedback and iterate

@@ -10,11 +10,11 @@ JSON Schema support for `.readability.yml` is a **low-risk, high-value** feature
 
 | Component | Viability | Risk | Effort | Value | Priority |
 |-----------|-----------|------|--------|-------|----------|
-| [Schema Creation](schema-creation.md) | ✅ High | Low | Medium | High | P0 (Required) |
-| [Schema Publishing](schema-publishing.md) | ✅ High | Low | Small | High | P0 (Required) |
-| [YAML Integration](yaml-integration.md) | ✅ High | Low | Small | Medium | P1 (Important) |
-| [Runtime Validation](runtime-validation.md) | ✅ High | Low | Medium | High | P0 (Required) |
-| [Testing Strategy](testing-strategy.md) | ✅ High | Low | Medium | High | P0 (Required) |
+| [Schema Creation](01-schema-creation.md) | ✅ High | Low | Medium | High | P0 (Required) |
+| [Schema Publishing](02-schema-publishing.md) | ✅ High | Low | Small | High | P0 (Required) |
+| [YAML Integration](03-yaml-integration.md) | ✅ High | Low | Small | Medium | P1 (Important) |
+| [Runtime Validation](04-runtime-validation.md) | ✅ High | Low | Medium | High | P0 (Required) |
+| [Testing Strategy](05-testing-strategy.md) | ✅ High | Low | Medium | High | P0 (Required) |
 
 **Legend**:
 - **Viability**: Likelihood of successful implementation
@@ -377,11 +377,11 @@ JSON Schema support for `.readability.yml` is a **well-understood, low-risk enha
 ## References
 
 - [Issue #160: Feature Request](https://github.com/markcheret/readability/issues/160)
-- [Schema Creation Analysis](schema-creation.md)
-- [Schema Publishing Strategy](schema-publishing.md)
-- [YAML Integration Guide](yaml-integration.md)
-- [Runtime Validation Design](runtime-validation.md)
-- [Testing Strategy](testing-strategy.md)
+- [Schema Creation Analysis](01-schema-creation.md)
+- [Schema Publishing Strategy](02-schema-publishing.md)
+- [YAML Integration Guide](03-yaml-integration.md)
+- [Runtime Validation Design](04-runtime-validation.md)
+- [Testing Strategy](05-testing-strategy.md)
 
 ## Appendix: Comparison with Alternatives
 
