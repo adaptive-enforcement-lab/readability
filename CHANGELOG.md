@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.3](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.2...v1.11.3) (2025-12-15)
+
+
+### Maintenance
+
+* **deps:** update codecov/test-results-action digest to 0fa95f0 ([#172](https://github.com/adaptive-enforcement-lab/readability/issues/172)) ([e3cd7f2](https://github.com/adaptive-enforcement-lab/readability/commit/e3cd7f264ee66e94cbea97e780ca0439541dce01))
+* **deps:** update trufflesecurity/trufflehog digest to 8aea6cd ([#169](https://github.com/adaptive-enforcement-lab/readability/issues/169)) ([14653a6](https://github.com/adaptive-enforcement-lab/readability/commit/14653a6c80503a19e838c4aaf2b1383f28502307))
+
 ## [1.11.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.1...v1.11.2) (2025-12-14)
 
 
