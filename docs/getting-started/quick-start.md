@@ -38,14 +38,41 @@ You'll see a table like this:
 
 ## Output Formats
 
-Choose the format that fits your needs:
+<div class="grid cards" markdown>
 
-| Format | Command | Best For |
-|--------|---------|----------|
-| Table | `readability docs/` | Human reading |
-| Markdown | `readability -f markdown docs/` | GitHub summaries |
-| JSON | `readability -f json docs/` | Scripts and automation |
-| Diagnostic | `readability -f diagnostic docs/` | IDE integration |
+- :material-table: **Table**
+
+    ---
+
+    `readability docs/`
+
+    Human-readable format for terminal viewing.
+
+- :material-language-markdown: **Markdown**
+
+    ---
+
+    `readability -f markdown docs/`
+
+    Perfect for GitHub PR summaries and comments.
+
+- :material-code-json: **JSON**
+
+    ---
+
+    `readability -f json docs/`
+
+    Structured output for scripts and automation.
+
+- :material-bug: **Diagnostic**
+
+    ---
+
+    `readability -f diagnostic docs/`
+
+    LSP-compatible format for IDE integration.
+
+</div>
 
 ## Check Mode
 
@@ -102,6 +129,24 @@ thresholds:
 
 ## What's Next?
 
-- **[CLI Reference](../cli/index.md)** - All command options
-- **[Understanding Metrics](../metrics/index.md)** - What each score means
-- **[GitHub Action](../github-action/index.md)** - Automate your checks
+<div class="grid cards" markdown>
+
+- :material-console: **[CLI Reference](../cli/index.md)**
+
+    ---
+
+    Explore all command options and flags.
+
+- :material-chart-line: **[Understanding Metrics](../metrics/index.md)**
+
+    ---
+
+    Learn what each readability score means.
+
+- :material-github: **[GitHub Action](../github-action/index.md)**
+
+    ---
+
+    Automate checks on every pull request.
+
+</div>
