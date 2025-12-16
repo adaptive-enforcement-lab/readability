@@ -24,7 +24,7 @@ Get Readability running in under five minutes. Choose the method that fits your 
 
     Fast and simple. No dependencies. Works offline.
 
-    [:octicons-arrow-right-24: Installation Guide](installation.md#download-binary)
+    [:octicons-arrow-right-24: Installation Guide](installation.md#cli-tool)
 
 - :material-language-go: **Go Install**
 
@@ -34,7 +34,7 @@ Get Readability running in under five minutes. Choose the method that fits your 
 
     Get the latest code. Easy to modify and rebuild.
 
-    [:octicons-arrow-right-24: Installation Guide](installation.md#go-install)
+    [:octicons-arrow-right-24: Installation Guide](installation.md#cli-tool)
 
 - :material-github: **GitHub Action**
 
