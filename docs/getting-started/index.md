@@ -4,39 +4,49 @@ Get Readability running in under five minutes. Choose the method that fits your 
 
 ## Choose Your Installation Method
 
-Pick the method that works best for you.
+<div class="grid cards" markdown>
 
-### 🐳 Docker
+- :material-docker: **Docker**
 
-Use Docker for CI/CD pipelines. Works in GitHub Actions, GitLab CI, and Jenkins.
+    ---
 
-No setup needed. Just pull and run. Every environment gets the same results.
+    Use Docker for CI/CD pipelines. Works in GitHub Actions, GitLab CI, and Jenkins.
 
-[Docker Guide](docker.md)
+    No setup needed. Just pull and run. Every environment gets the same results.
 
-### 📦 Binary Download
+    [:octicons-arrow-right-24: Docker Guide](docker.md)
 
-Download a single file. Run it on macOS, Linux, or Windows.
+- :material-download: **Binary Download**
 
-Fast and simple. No dependencies. Works offline.
+    ---
 
-[Installation Guide](installation.md#download-binary)
+    Download a single file. Run it on macOS, Linux, or Windows.
 
-### 🔧 Go Install
+    Fast and simple. No dependencies. Works offline.
 
-Install from source using Go. Best for contributors and developers.
+    [:octicons-arrow-right-24: Installation Guide](installation.md#download-binary)
 
-Get the latest code. Easy to modify and rebuild.
+- :material-language-go: **Go Install**
 
-[Installation Guide](installation.md#go-install)
+    ---
 
-### 🚀 GitHub Action
+    Install from source using Go. Best for contributors and developers.
 
-Add one step to your workflow file. No installation needed.
+    Get the latest code. Easy to modify and rebuild.
 
-Checks run on every pull request. Blocks merges when quality drops.
+    [:octicons-arrow-right-24: Installation Guide](installation.md#go-install)
 
-[GitHub Action Guide](../github-action/index.md)
+- :material-github: **GitHub Action**
+
+    ---
+
+    Add one step to your workflow file. No installation needed.
+
+    Checks run on every pull request. Blocks merges when quality drops.
+
+    [:octicons-arrow-right-24: GitHub Action Guide](../github-action/index.md)
+
+</div>
 
 !!! tip "New to Readability?"
     Start with **Docker** for CI/CD workflows or **Binary Download** for local use. Both methods get you running in under 2 minutes.
