@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.12.0...v1.12.1) (2025-12-17)
+
+
+### Bug Fixes
+
+* update schema URL to work with mike versioning ([#183](https://github.com/adaptive-enforcement-lab/readability/issues/183)) ([c14271c](https://github.com/adaptive-enforcement-lab/readability/commit/c14271cfa816eec0c0cf780c599461228830e6d3)), closes [#160](https://github.com/adaptive-enforcement-lab/readability/issues/160)
+
 ## [1.12.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.4...v1.12.0) (2025-12-17)
 
 
