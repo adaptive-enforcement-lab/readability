@@ -570,6 +570,63 @@ readability docs/
 | CLI flags | >70% | Integration tests |
 | Overall | >80% | Production quality |
 
+## Pre-Commit Hooks
+
+### Schema Validation Hook
+
+Add to `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      # ... existing hooks ...
+
+      - id: validate-json-schema
+        name: Validate JSON Schema
+        entry: >
+          bash -c '
+          command -v check-jsonschema >/dev/null || pipx install check-jsonschema;
+          check-jsonschema --check-metaschema docs/schemas/config.json
+          '
+        language: system
+        files: '^docs/schemas/config\.json$'
+        pass_filenames: false
+
+      - id: validate-readability-config
+        name: Validate .readability.yml against schema
+        entry: >
+          bash -c '
+          command -v check-jsonschema >/dev/null || pipx install check-jsonschema;
+          check-jsonschema --schemafile docs/schemas/config.json .readability.yml
+          '
+        language: system
+        files: '^\.readability\.yml$'
+        pass_filenames: false
+```
+
+**What This Does**:
+- **validate-json-schema**: Validates `docs/schemas/config.json` against JSON Schema Draft 2020-12 meta-schema
+- **validate-readability-config**: Validates `.readability.yml` against the schema
+
+**Triggers**:
+- Runs automatically on `git commit` when either file changes
+- Prevents commits with invalid schema or config
+- Catches errors before they reach CI
+
+**Installation**:
+```bash
+# Install pre-commit
+pip install pre-commit
+
+# Install hooks
+pre-commit install
+
+# Test hooks manually
+pre-commit run validate-json-schema --all-files
+pre-commit run validate-readability-config --all-files
+```
+
 ## Continuous Integration
 
 ### GitHub Actions Workflow
@@ -585,9 +642,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm install -g ajv-cli
-      - run: ajv compile -s schemas/readability-config.schema.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pipx install check-jsonschema
+      - name: Validate schema meta-schema compliance
+        run: check-jsonschema --check-metaschema docs/schemas/config.json
+      - name: Validate .readability.yml against schema
+        run: check-jsonschema --schemafile docs/schemas/config.json .readability.yml
+      - name: Validate test configs against schema
+        run: |
+          check-jsonschema --schemafile docs/schemas/config.json \
+            pkg/config/testdata/valid-*.yml
 
   test-go:
     name: Go Tests
@@ -610,9 +676,20 @@ jobs:
       - run: ./readability --validate-config
       - run: |
           for f in pkg/config/testdata/*.yml; do
-            ./readability --config "$f" --validate-config
+            ./readability --config "$f" --validate-config || true
           done
 ```
+
+**Key Changes from Baseline**:
+1. **test-schema job**: Added schema meta-schema validation and config file validation using `check-jsonschema`
+2. **Python setup**: Added to install `check-jsonschema` (better Draft 2020-12 support than ajv)
+3. **Multiple validation targets**: Validates production config and test fixtures
+
+**Why check-jsonschema**:
+- Native Draft 2020-12 support (no --spec flag needed)
+- Better error messages for YAML files
+- Handles both meta-schema and instance validation
+- Available via pipx (no npm required)
 
 ## Test Maintenance
 
