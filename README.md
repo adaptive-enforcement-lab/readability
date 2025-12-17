@@ -86,22 +86,26 @@ cosign verify ghcr.io/adaptive-enforcement-lab/readability:latest \
 Create `.readability.yml` in your repo:
 
 ```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
 thresholds:
-  max_grade: 12
-  max_ari: 12
-  max_fog: 12
-  min_ease: 30
-  max_lines: 500
-  min_words: 100
+  max_grade: 12       # Maximum Flesch-Kincaid grade level
+  max_ari: 12         # Maximum Automated Readability Index
+  max_fog: 12         # Maximum Gunning Fog index
+  min_ease: 30        # Minimum Flesch Reading Ease (0-100 scale)
+  max_lines: 500      # Maximum lines of prose per file
+  min_words: 100      # Skip files with fewer words (formulas unreliable)
   min_admonitions: 1  # Require at least one MkDocs admonition
 
 overrides:
   - path: docs/api/
     thresholds:
-      max_grade: 14
-      max_lines: 1000
-      min_admonitions: -1  # Disable admonition requirement
+      max_grade: 14           # Allow more complexity for API docs
+      max_lines: 1000         # API docs can be longer
+      min_admonitions: -1     # Disable admonition requirement
 ```
+
+Your editor will provide autocomplete and validation as you type. See the [Configuration Guide](https://readability.adaptive-enforcement-lab.com/latest/cli/config-file/#ide-support) for IDE setup.
 
 ## Action Inputs
 
