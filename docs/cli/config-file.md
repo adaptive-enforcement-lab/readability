@@ -7,6 +7,8 @@ Store your thresholds in a `.readability.yml` file instead of passing flags ever
 Create `.readability.yml` in your repository root:
 
 ```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
 thresholds:
   max_grade: 12
   max_ari: 12
@@ -20,6 +22,8 @@ That's it. The tool finds it automatically.
 ## All Options
 
 ```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
 thresholds:
   max_grade: 12       # Flesch-Kincaid grade level
   max_ari: 12         # Automated Readability Index
@@ -52,6 +56,8 @@ thresholds:
 Use `overrides` to apply stricter or looser rules to specific paths:
 
 ```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
 thresholds:
   max_grade: 12
 
@@ -78,6 +84,8 @@ overrides:
 **Example order:**
 
 ```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
 overrides:
   # Specific path first
   - path: docs/api/advanced/
@@ -95,6 +103,8 @@ overrides:
 Set extreme values to skip specific checks:
 
 ```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
 thresholds:
   max_grade: 100        # No grade limit
   min_ease: -100        # No ease requirement
