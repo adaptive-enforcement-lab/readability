@@ -32,7 +32,7 @@ Comprehensive documentation updates to guide users through JSON Schema features,
 Create `.readability.yml` in your repository root:
 
 ```yaml
-# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 thresholds:
   max_grade: 12      # Maximum Flesch-Kincaid grade level
@@ -80,7 +80,7 @@ Open `.readability.yml` and start typing to see autocomplete suggestions.
 To explicitly specify the schema (for version pinning or custom URLs):
 
 ```yaml
-# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 thresholds:
   max_grade: 12
@@ -204,7 +204,7 @@ See https://github.com/markcheret/readability/blob/main/docs/cli/config-file.md 
   - Runtime validation with detailed error messages and suggestions
   - `--validate-config` flag to test configuration without running analysis
   - Schema available at:
-    - https://readability.adaptive-enforcement-lab.com/schemas/config.json (canonical)
+    - https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json (canonical)
     - https://json.schemastore.org/readability.json (after SchemaStore approval)
 
 ### Changed

@@ -36,7 +36,7 @@ Based on the Go structs in `pkg/config/config.go:12-33`, the schema will define:
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://readability.adaptive-enforcement-lab.com/schemas/config.json",
+  "$id": "https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json",
   "title": "Readability Configuration",
   "description": "Configuration schema for readability markdown analyzer",
   "type": "object",
