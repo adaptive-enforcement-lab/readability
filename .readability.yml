@@ -35,3 +35,14 @@ overrides:
       max_grade: 16
       max_ari: 19
       max_fog: 18
+
+  # Developer manual: Implementation planning docs for contributors with technical depth
+  - path: docs/developer-manual/
+    thresholds:
+      max_grade: 30        # Allow complex technical writing
+      max_ari: 35          # Detailed analysis and code examples
+      max_fog: 26          # Architecture discussions require precision
+      min_ease: -100       # Disable reading ease (technical content)
+      max_lines: 800       # Comprehensive documentation needs space
+      min_admonitions: -1  # Not required for technical specs
+      max_dash_density: 150 # Allow parenthetical constructions for clarity
