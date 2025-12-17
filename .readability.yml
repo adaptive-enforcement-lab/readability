@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=./schemas/readability-config.schema.json
+# yaml-language-server: $schema=./docs/schemas/config.json
 # Readability configuration for this repository's documentation
 # These thresholds ensure docs are accessible to newcomers
 ---
