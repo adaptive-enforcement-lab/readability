@@ -1018,9 +1018,9 @@ func TestCollectDiagnostics_DashDensity(t *testing.T) {
 
 func TestAnalyze_DashDensityIntegration(t *testing.T) {
 	tests := []struct {
-		name       string
-		content    string
-		wantStatus string
+		name        string
+		content     string
+		wantStatus  string
 		wantDensity float64
 	}{
 		{
