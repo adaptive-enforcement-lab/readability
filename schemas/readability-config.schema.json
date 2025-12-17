@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://readability.adaptive-enforcement-lab.com/schemas/config.json",
+  "title": "Readability Configuration",
+  "description": "Configuration schema for readability markdown analyzer",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "thresholds": {
+      "type": "object",
+      "description": "Base readability thresholds applied to all files",
+      "additionalProperties": false,
+      "properties": {
+        "max_grade": {
+          "type": "number",
+          "description": "Maximum Flesch-Kincaid grade level (12 = high school senior, 16 = college senior)",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 16,
+          "examples": [12, 14, 16]
+        },
+        "max_ari": {
+          "type": "number",
+          "description": "Maximum Automated Readability Index (similar to grade level)",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 16,
+          "examples": [12, 14, 16]
+        },
+        "max_fog": {
+          "type": "number",
+          "description": "Maximum Gunning Fog index (years of formal education needed)",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 18,
+          "examples": [14, 16, 18]
+        },
+        "min_ease": {
+          "type": "number",
+          "description": "Minimum Flesch Reading Ease (0-100 scale, higher = easier). Use negative value to disable.",
+          "minimum": -100,
+          "maximum": 100,
+          "default": 25,
+          "examples": [30, 40, 50, -100]
+        },
+        "max_lines": {
+          "type": "integer",
+          "description": "Maximum lines of prose per file",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 375,
+          "examples": [250, 375, 500]
+        },
+        "min_words": {
+          "type": "integer",
+          "description": "Minimum words before applying readability formulas (sparse docs are unreliable)",
+          "minimum": 0,
+          "maximum": 10000,
+          "default": 100,
+          "examples": [50, 100, 150]
+        },
+        "min_admonitions": {
+          "type": "integer",
+          "description": "Minimum MkDocs-style admonitions required (!!! note, !!! warning). Use -1 to disable.",
+          "minimum": -1,
+          "maximum": 100,
+          "default": 1,
+          "examples": [0, 1, 2, -1]
+        },
+        "max_dash_density": {
+          "type": "number",
+          "description": "Maximum mid-sentence dash pairs per 100 sentences (detects AI-generated slop). Use -1 to disable. 0 = no dashes allowed.",
+          "minimum": -1,
+          "maximum": 500,
+          "default": 0,
+          "examples": [0, 2, 5, -1]
+        }
+      }
+    },
+    "overrides": {
+      "type": "array",
+      "description": "Path-specific threshold overrides (first match wins)",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path prefix to match (e.g., 'docs/developer-guide/' or 'api/')",
+            "minLength": 1,
+            "examples": [
+              "docs/developer-guide/",
+              "docs/user-guide/",
+              "api/",
+              "README.md"
+            ]
+          },
+          "thresholds": {
+            "type": "object",
+            "description": "Threshold overrides for this path (inherits unspecified values from base)",
+            "additionalProperties": false,
+            "properties": {
+              "max_grade": {
+                "$ref": "#/properties/thresholds/properties/max_grade"
+              },
+              "max_ari": {
+                "$ref": "#/properties/thresholds/properties/max_ari"
+              },
+              "max_fog": {
+                "$ref": "#/properties/thresholds/properties/max_fog"
+              },
+              "min_ease": {
+                "$ref": "#/properties/thresholds/properties/min_ease"
+              },
+              "max_lines": {
+                "$ref": "#/properties/thresholds/properties/max_lines"
+              },
+              "min_words": {
+                "$ref": "#/properties/thresholds/properties/min_words"
+              },
+              "min_admonitions": {
+                "$ref": "#/properties/thresholds/properties/min_admonitions"
+              },
+              "max_dash_density": {
+                "$ref": "#/properties/thresholds/properties/max_dash_density"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
