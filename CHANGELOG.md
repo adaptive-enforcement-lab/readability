@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.4...v1.12.0) (2025-12-17)
+
+
+### Features
+
+* add JSON Schema for .readability.yml configuration ([#180](https://github.com/adaptive-enforcement-lab/readability/issues/180)) ([f80543f](https://github.com/adaptive-enforcement-lab/readability/commit/f80543ff0fba7a6e77f524ef16d20d662625a026)), closes [#160](https://github.com/adaptive-enforcement-lab/readability/issues/160)
+* publish JSON Schema to MkDocs documentation site ([#182](https://github.com/adaptive-enforcement-lab/readability/issues/182)) ([645f6bc](https://github.com/adaptive-enforcement-lab/readability/commit/645f6bcf736ce75e86103790c6983fd9483c35da))
+
 ## [1.11.4](https://github.com/adaptive-enforcement-lab/readability/compare/v1.11.3...v1.11.4) (2025-12-17)
 
 
