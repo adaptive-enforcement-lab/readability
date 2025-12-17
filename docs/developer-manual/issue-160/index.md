@@ -41,7 +41,7 @@ This implementation is divided into eight major components:
 
 **Component 2: Schema Publishing** - ✅ COMPLETE (Current PR)
 - Schema published to `docs/schemas/config.json`
-- Accessible at `https://readability.adaptive-enforcement-lab.com/schemas/config.json`
+- Accessible at `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
 - Zero new infrastructure (reuses existing MkDocs deployment)
 - Tested locally with `mkdocs serve` - schema accessible and valid JSON
 

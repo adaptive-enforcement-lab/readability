@@ -29,7 +29,7 @@ Publish the JSON Schema to your existing MkDocs Material documentation site, lev
 - **Deployment**: GitHub Pages with custom domain
 - **HTTPS**: Enabled by default
 
-**Schema URL**: `https://readability.adaptive-enforcement-lab.com/schemas/config.json`
+**Schema URL**: `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
 
 ## Implementation Steps
 
@@ -61,7 +61,7 @@ cp schemas/readability-config.schema.json docs/schemas/config.json
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://readability.adaptive-enforcement-lab.com/schemas/config.json",
+  "$id": "https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json",
   "title": "Readability Configuration",
   "description": "Configuration schema for readability markdown analyzer",
   // ... rest of schema
@@ -143,7 +143,7 @@ After deployment, verify schema is accessible:
 
 ```bash
 # Check schema is accessible
-curl -I https://readability.adaptive-enforcement-lab.com/schemas/config.json
+curl -I https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 # Expected response:
 # HTTP/2 200
@@ -155,7 +155,7 @@ Test schema in IDE:
 
 ```yaml
 # .readability.yml
-# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 thresholds:
   max_grade: 12
@@ -195,7 +195,7 @@ readability/
 Use single, stable URL that always points to latest schema:
 
 ```
-https://readability.adaptive-enforcement-lab.com/schemas/config.json
+https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 ```
 
 **Rationale**:
@@ -249,15 +249,15 @@ readability --config .readability.yml --validate-config
 
 ```bash
 # 1. Verify schema is accessible
-curl -I https://readability.adaptive-enforcement-lab.com/schemas/config.json
+curl -I https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 # 2. Verify correct Content-Type
 curl -s -o /dev/null -w "%{content_type}\n" \
-  https://readability.adaptive-enforcement-lab.com/schemas/config.json
+  https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 # Should output: application/json
 
 # 3. Verify schema is valid JSON
-curl -s https://readability.adaptive-enforcement-lab.com/schemas/config.json | jq .
+curl -s https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json | jq .
 ```
 
 ### IDE Integration Tests
@@ -266,7 +266,7 @@ curl -s https://readability.adaptive-enforcement-lab.com/schemas/config.json | j
 
 1. Create test `.readability.yml`:
    ```yaml
-   # yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
+   # yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
    thresholds:
      max_grade:

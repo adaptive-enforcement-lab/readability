@@ -52,7 +52,7 @@ thresholds:
 **Without SchemaStore** (manual):
 ```yaml
 # User must add schema reference manually
-# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 thresholds:
   max_grade: 12  # Autocomplete only works with explicit reference
@@ -124,7 +124,7 @@ cp /path/to/readability/docs/schemas/config.json \
 **Schema Requirements**:
 - Must be valid JSON (not YAML)
 - Must validate against JSON Schema meta-schema
-- `$id` should reference your canonical URL: `https://readability.adaptive-enforcement-lab.com/schemas/config.json`
+- `$id` should reference your canonical URL: `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
 - SchemaStore will serve a **copy** at `https://json.schemastore.org/readability.json`
 
 **Important**: Your domain remains the authoritative source. SchemaStore is a mirror for discovery.
@@ -174,7 +174,7 @@ Adds JSON Schema for [readability](https://github.com/adaptive-enforcement-lab/r
 - **Project**: https://github.com/adaptive-enforcement-lab/readability
 - **Documentation**: https://readability.adaptive-enforcement-lab.com
 - **Schema Spec**: Draft 2020-12
-- **Canonical URL**: https://readability.adaptive-enforcement-lab.com/schemas/config.json
+- **Canonical URL**: https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 ## Schema Features
 - Comprehensive field descriptions
@@ -301,7 +301,7 @@ If SchemaStore submission is rejected or delayed:
 **Fallback**:
 ```yaml
 # Users add this line (one-time setup)
-# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/schemas/config.json
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 
 thresholds:
   max_grade: 12
