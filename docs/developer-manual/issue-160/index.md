@@ -23,9 +23,9 @@ Implement comprehensive JSON Schema support following industry standards used by
 This implementation is divided into eight major components:
 
 1. ✅ **[Schema Creation](01-schema-creation.md)** - Design and implement the JSON Schema file (PR #180 merged)
-2. ✅ **[Schema Publishing](02-schema-publishing.md)** - Host schema on existing MkDocs site (immediate) (Current PR)
-3. ⏳ **[YAML Integration](03-yaml-integration.md)** - Enable schema references in YAML files **← NEXT**
-4. 🔲 **[Runtime Validation](04-runtime-validation.md)** - Add Go-based schema validation
+2. ✅ **[Schema Publishing](02-schema-publishing.md)** - Host schema on existing MkDocs site (PR #182, #183 merged)
+3. ⏳ **[YAML Integration](03-yaml-integration.md)** - Enable schema references in YAML files (PR #185 pending) **← CURRENT**
+4. 🔲 **[Runtime Validation](04-runtime-validation.md)** - Add Go-based schema validation **← NEXT**
 5. 🔲 **[Testing Strategy](05-testing-strategy.md)** - Comprehensive test coverage
 6. 🔲 **[Documentation Updates](06-documentation.md)** - User-facing documentation
 7. 🔲 **[SchemaStore Submission](07-schemastore-submission.md)** - Submit to SchemaStore for automatic discovery (future)
@@ -34,16 +34,25 @@ This implementation is divided into eight major components:
 ## Current Status
 
 **Component 1: Schema Creation** - ✅ COMPLETE (PR #180)
-- Created `schemas/readability-config.schema.json` with JSON Schema Draft 2020-12
+- Created `docs/schemas/config.json` (canonical location) with JSON Schema Draft 2020-12
 - Updated `.readability.yml` with schema reference
 - Schema bounds match Go implementation (max 100 for readability scores, etc.)
 - All 8 threshold properties defined with validation, defaults, and examples
 
-**Component 2: Schema Publishing** - ✅ COMPLETE (Current PR)
+**Component 2: Schema Publishing** - ✅ COMPLETE (PR #182, #183)
 - Schema published to `docs/schemas/config.json`
 - Accessible at `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
 - Zero new infrastructure (reuses existing MkDocs deployment)
-- Tested locally with `mkdocs serve` - schema accessible and valid JSON
+- Tested with `mkdocs build` and `mkdocs serve` - schema accessible with correct Content-Type
+- Schema $id updated to use `/latest/` path for mike versioning compatibility
+
+**Component 3: YAML Integration Phase 1** - ⏳ IN PROGRESS (PR #185)
+- Added schema references to all YAML examples in README.md
+- Added schema references to all 5 examples in `docs/cli/config-file.md`
+- Enhanced inline comments for clarity
+- Added YAML document markers (`---`) for consistency
+- All examples use canonical schema URL: `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
+- Users will get IDE autocomplete, validation, and inline documentation when editing examples
 
 ## Implementation Phases
 
