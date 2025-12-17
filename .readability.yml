@@ -1,6 +1,7 @@
+# yaml-language-server: $schema=./schemas/readability-config.schema.json
 # Readability configuration for this repository's documentation
 # These thresholds ensure docs are accessible to newcomers
-
+---
 thresholds:
   # Grade level: Target high school reading level (grades 10-12)
   max_grade: 14
@@ -39,10 +40,10 @@ overrides:
   # Developer manual: Implementation planning docs for contributors with technical depth
   - path: docs/developer-manual/
     thresholds:
-      max_grade: 30        # Allow complex technical writing
-      max_ari: 35          # Detailed analysis and code examples
-      max_fog: 26          # Architecture discussions require precision
-      min_ease: -100       # Disable reading ease (technical content)
-      max_lines: 800       # Comprehensive documentation needs space
-      min_admonitions: -1  # Not required for technical specs
-      max_dash_density: 150 # Allow parenthetical constructions for clarity
+      max_grade: 30          # Allow complex technical writing
+      max_ari: 35            # Detailed analysis and code examples
+      max_fog: 26            # Architecture discussions require precision
+      min_ease: -100         # Disable reading ease (technical content)
+      max_lines: 800         # Comprehensive documentation needs space
+      min_admonitions: -1    # Not required for technical specs
+      max_dash_density: 150  # Allow parenthetical constructions for clarity
