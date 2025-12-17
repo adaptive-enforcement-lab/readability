@@ -21,8 +21,8 @@ type Thresholds struct {
 	MaxFog         float64 `yaml:"max_fog"`
 	MinEase        float64 `yaml:"min_ease"`
 	MaxLines       int     `yaml:"max_lines"`
-	MinWords       int     `yaml:"min_words"`       // Skip readability checks if below this
-	MinAdmonitions int     `yaml:"min_admonitions"` // Minimum MkDocs-style admonitions required
+	MinWords       int     `yaml:"min_words"`        // Skip readability checks if below this
+	MinAdmonitions int     `yaml:"min_admonitions"`  // Minimum MkDocs-style admonitions required
 	MaxDashDensity float64 `yaml:"max_dash_density"` // Maximum mid-sentence dash pairs per 100 sentences (0 = no dashes allowed)
 }
 
