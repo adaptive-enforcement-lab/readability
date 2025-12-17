@@ -97,45 +97,42 @@ thresholds:
 
 ### Phase 1: Explicit References (Immediate)
 
+**Status**: ✅ **COMPLETE** (PR #185)
+
 **Action**: Add `$schema` comments to all example configurations
 
-**Files to Update**:
+**Files Updated**:
 
 1. **Repository's own config** (`.readability.yml`):
-```yaml
-# yaml-language-server: $schema=https://markcheret.github.io/readability/schemas/config.json
+   - ✅ Already updated in PR #180 (Component 1)
+   - Schema reference: `./docs/schemas/config.json` (relative path)
+   - YAML document marker (`---`) added
 
-thresholds:
-  max_grade: 16
-  # ... rest of config
-```
-
-2. **Example in documentation** (`docs/cli/config-file.md`):
-```yaml
-# yaml-language-server: $schema=https://json.schemastore.org/readability.json
-
-thresholds:
-  max_grade: 12
-  max_ari: 12
-  min_ease: 40
-```
+2. **Examples in documentation** (`docs/cli/config-file.md`):
+   - ✅ Updated all 5 YAML examples with schema references:
+     - Quick Start example
+     - All Options example
+     - Different Rules for Different Folders example
+     - Path ordering example
+     - Disabling Checks example
+   - Schema reference: `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
+   - YAML document markers (`---`) added to all examples
 
 3. **Example in README.md**:
-```yaml
-# .readability.yml
-# yaml-language-server: $schema=https://json.schemastore.org/readability.json
-
-thresholds:
-  max_grade: 14
-```
+   - ✅ Updated main configuration example
+   - Schema reference: `https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json`
+   - YAML document marker (`---`) added
+   - Enhanced inline comments explaining each field purpose
+   - Added link to IDE setup documentation (forward reference to Component 6)
 
 4. **Test fixtures** (`pkg/config/testdata/*.yml`):
-```yaml
-# yaml-language-server: $schema=../../../schemas/readability-config.schema.json
+   - ⚠️ **N/A** - No YAML test fixtures exist in this codebase
+   - Tests use in-memory Go structs in `pkg/config/config_test.go`
 
-thresholds:
-  max_grade: 10
-```
+**Verification**:
+- ✅ All examples validated against schema using `check-jsonschema`
+- ✅ Schema URL accessible and returns valid JSON
+- ✅ HTTP 200, Content-Type: `application/json; charset=utf-8`
 
 ### Phase 2: Documentation (Post-Schema Publishing)
 
