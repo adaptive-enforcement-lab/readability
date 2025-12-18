@@ -107,6 +107,27 @@ overrides:
 
 Your editor will provide autocomplete and validation as you type. See the [Configuration Guide](https://readability.adaptive-enforcement-lab.com/latest/cli/config-file/#ide-support) for IDE setup.
 
+### IDE Support
+
+The configuration file includes a JSON Schema that enables:
+
+- **Real-time validation** - Catch errors while editing
+- **Autocomplete** - IntelliSense for all config options
+- **Inline documentation** - Hover tooltips for field descriptions
+- **Type checking** - Prevent invalid values before commit
+
+**Supported Editors**: VS Code, JetBrains IDEs (IntelliJ, WebStorm, etc.), Neovim with yaml-language-server, and any editor with YAML language server support.
+
+**Validate your config**:
+```bash
+# Validate configuration file
+readability --validate-config
+
+# Or use check-jsonschema directly
+pipx install check-jsonschema
+check-jsonschema --schemafile docs/schemas/config.json .readability.yml
+```
+
 ## Action Inputs
 
 | Input | Description | Default |
@@ -138,6 +159,7 @@ Your editor will provide autocomplete and validation as you type. See the [Confi
 | `--verbose, -v` | Show all metrics |
 | `--check` | Check against thresholds (exit 1 on failure) |
 | `--config, -c` | Path to config file |
+| `--validate-config` | Validate configuration file and exit |
 | `--max-grade` | Maximum Flesch-Kincaid grade level |
 | `--max-ari` | Maximum ARI score |
 | `--max-lines` | Maximum lines per file (0 to disable) |

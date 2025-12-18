@@ -120,6 +120,33 @@ jobs:
       - name: Build
         run: go build -v ./...
 
+  validate-schema:
+    name: Validate JSON Schema
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
+        with:
+          python-version: '3.12'
+
+      - name: Install check-jsonschema
+        run: pipx install check-jsonschema
+
+      - name: Validate schema against JSON Schema Draft 2020-12
+        run: check-jsonschema --check-metaschema docs/schemas/config.json
+
+      - name: Validate .readability.yml against schema
+        run: check-jsonschema --schemafile docs/schemas/config.json .readability.yml
+
   test-action:
     name: Test Action
     runs-on: ubuntu-latest

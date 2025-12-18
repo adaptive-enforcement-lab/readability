@@ -128,3 +128,12 @@ nav:
       - Grade Level Scores: metrics/grade-level.md
       - Thresholds: metrics/thresholds.md
       - Admonitions: metrics/admonitions.md
+  - Schema Validation:
+      - schema-validation/index.md
+      - Schema Reference: schema-validation/schema-reference.md
+      - Schema Overrides and Validation: schema-validation/schema-overrides.md
+      - IDE Setup: schema-validation/ide-setup.md
+      - Validation Guide: schema-validation/validation-guide.md
+      - Validation Workflow: schema-validation/validation-workflow.md
+      - Maintaining the Schema: schema-validation/maintaining-schema.md
+      - Schema Testing: schema-validation/schema-testing.md

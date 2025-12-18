@@ -68,6 +68,29 @@ repos:
         language: system
         files: '^docs/.*\.md$'
         pass_filenames: false
+
+      - id: validate-json-schema
+        name: Validate JSON Schema
+        entry: >
+          bash -c '
+          command -v check-jsonschema >/dev/null || pipx install check-jsonschema;
+          check-jsonschema --check-metaschema docs/schemas/config.json
+          '
+        language: system
+        files: '^docs/schemas/config\.json$'
+        pass_filenames: false
+
+      - id: validate-readability-config
+        name: Validate .readability.yml against schema
+        entry: >
+          bash -c '
+          command -v check-jsonschema >/dev/null || pipx install check-jsonschema;
+          check-jsonschema --schemafile docs/schemas/config.json .readability.yml
+          '
+        language: system
+        files: '^\.readability\.yml$'
+        pass_filenames: false
+
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.16.3
     hooks:
