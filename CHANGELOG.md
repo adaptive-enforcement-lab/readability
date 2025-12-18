@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.12.1...v1.13.0) (2025-12-18)
+
+
+### Features
+
+* add runtime JSON Schema validation for configuration files ([#198](https://github.com/adaptive-enforcement-lab/readability/issues/198)) ([df643db](https://github.com/adaptive-enforcement-lab/readability/commit/df643dbe7d621f459392b983ff9c6565421a253d))
+* add schema references to YAML configuration examples ([#185](https://github.com/adaptive-enforcement-lab/readability/issues/185)) ([6258b6a](https://github.com/adaptive-enforcement-lab/readability/commit/6258b6ac548175d090bb0ad96eed8f5f096ffc9b))
+
 ## [1.12.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.12.0...v1.12.1) (2025-12-17)
 
 
