@@ -24,9 +24,9 @@ This implementation is divided into eight major components:
 
 1. ✅ **[Schema Creation](01-schema-creation.md)** - Design and implement the JSON Schema file (PR #180 merged)
 2. ✅ **[Schema Publishing](02-schema-publishing.md)** - Host schema on existing MkDocs site (PRs #182, #183 merged)
-3. ⏳ **[YAML Integration](03-yaml-integration.md)** - Enable schema references in YAML files (PR #185 pending) **← CURRENT**
-4. 🔲 **[Runtime Validation](04-runtime-validation.md)** - Add Go-based schema validation **← NEXT**
-5. 🔲 **[Testing Strategy](05-testing-strategy.md)** - Comprehensive test coverage
+3. ✅ **[YAML Integration](03-yaml-integration.md)** - Enable schema references in YAML files (PR #185 merged)
+4. ✅ **[Runtime Validation](04-runtime-validation.md)** - Add Go-based schema validation (PR pending) **← CURRENT**
+5. 🔲 **[Testing Strategy](05-testing-strategy.md)** - Comprehensive test coverage **← NEXT**
 6. 🔲 **[Documentation Updates](06-documentation.md)** - User-facing documentation
 7. 🔲 **[SchemaStore Submission](07-schemastore-submission.md)** - Submit to SchemaStore for automatic discovery (future)
 8. 🔲 **[Viability Summary](08-viability-summary.md)** - Overall assessment and recommendation
@@ -46,13 +46,22 @@ This implementation is divided into eight major components:
 - Tested with `mkdocs build` and `mkdocs serve` - schema accessible with correct Content-Type
 - Schema $id updated to use `/latest/` path for mike versioning compatibility
 
-**Component 3: YAML Integration Phase 1** - ⏳ IN PROGRESS (PR #185)
+**Component 3: YAML Integration Phase 1** - ✅ COMPLETE (PR #185)
 - Added schema references to all YAML examples in README.md
 - Added schema references to all 5 examples in `docs/cli/config-file.md`
 - Enhanced inline comments for clarity
 - Added YAML document markers (`---`) for consistency
 - All examples use canonical schema URL
 - Verified all examples validate against schema using `check-jsonschema`
+
+**Component 4: Runtime Validation** - ⏳ IN PROGRESS (PR pending on `feat/runtime-validation`)
+- Added `github.com/santhosh-tekuri/jsonschema/v6` dependency
+- Created `pkg/config/validate.go` with embedded schema validation
+- Updated `config.Load()` to validate YAML before parsing to struct
+- Added `--validate-config` CLI flag for standalone validation
+- Enhanced error formatting with YAML paths and suggestions
+- Comprehensive test coverage (8 new tests, all passing)
+- Tested with valid and invalid configurations
 
 ## Implementation Phases
 

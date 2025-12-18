@@ -201,6 +201,7 @@ func TestRun_WithConfig(t *testing.T) {
 	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
 	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
 	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "")
 	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
 	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
 	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
@@ -216,6 +217,126 @@ func TestRun_WithConfig(t *testing.T) {
 
 	if runErr != nil {
 		t.Errorf("run() error = %v", runErr)
+	}
+}
+
+func TestRun_ValidateConfig_ValidConfig(t *testing.T) {
+	// Create temp directory with valid config
+	tmpDir := t.TempDir()
+
+	configContent := `thresholds:
+  max_grade: 16
+  max_ari: 16
+  min_ease: 25
+`
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	// Set flag values AFTER creating flags (flag creation resets to defaults)
+	configFlag = configPath
+	validateConfigFlag = true
+
+	// Note: --validate-config doesn't require a path argument
+	args := []string{}
+
+	var runErr error
+	output := captureOutput(t, func() {
+		runErr = run(cmd, args)
+	})
+
+	if runErr != nil {
+		t.Errorf("run() error = %v for valid config", runErr)
+	}
+
+	if !strings.Contains(output, "Configuration is valid") {
+		t.Errorf("Expected validation success message, got: %s", output)
+	}
+}
+
+func TestRun_ValidateConfig_InvalidConfig(t *testing.T) {
+	// Create temp directory with invalid config
+	tmpDir := t.TempDir()
+
+	// Invalid: max_grade is a string instead of number
+	configContent := `thresholds:
+  max_grade: "sixteen"
+`
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	// Set flag values AFTER creating flags (flag creation resets to defaults)
+	configFlag = configPath
+	validateConfigFlag = true
+
+	args := []string{}
+
+	err := run(cmd, args)
+
+	if err == nil {
+		t.Error("Expected error for invalid config")
+	}
+
+	if !strings.Contains(err.Error(), "cannot load config") {
+		t.Errorf("Expected 'cannot load config' error, got: %v", err)
+	}
+}
+
+func TestRun_NoPathArgument(t *testing.T) {
+	// Test that normal operation (not validation mode) requires a path argument
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	// No path argument provided, and validation mode is OFF
+	args := []string{}
+
+	err := run(cmd, args)
+
+	if err == nil {
+		t.Error("Expected error when no path argument provided in normal mode")
+	}
+
+	if !strings.Contains(err.Error(), "requires a path argument") {
+		t.Errorf("Expected 'requires a path argument' error, got: %v", err)
 	}
 }
 
@@ -455,6 +576,7 @@ func resetFlags() {
 	formatFlag = "table"
 	verboseFlag = false
 	checkFlag = false
+	validateConfigFlag = false
 	configFlag = ""
 	maxGradeFlag = 0
 	maxARIFlag = 0
@@ -472,7 +594,7 @@ func TestNewRootCmd(t *testing.T) {
 	}
 
 	// Verify all flags are registered
-	flags := []string{"format", "verbose", "check", "config", "max-grade", "max-ari", "max-lines", "min-admonitions"}
+	flags := []string{"format", "verbose", "check", "validate-config", "config", "max-grade", "max-ari", "max-lines", "min-admonitions"}
 	for _, flag := range flags {
 		if cmd.Flags().Lookup(flag) == nil {
 			t.Errorf("Expected flag %q to be registered", flag)

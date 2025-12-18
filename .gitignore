@@ -2,3 +2,4 @@ bin/
 site/
 .cache/
 test-*.yml
+/readability

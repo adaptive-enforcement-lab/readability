@@ -1,9 +1,12 @@
 package config
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 
 func TestThresholdsForPath_RelativePaths(t *testing.T) {
@@ -508,4 +511,100 @@ func TestFindConfigFile_FilesystemRoot(t *testing.T) {
 	// Should eventually return empty when reaching filesystem root
 	// (In practice, this test might find a .git higher up, but the code path is exercised)
 	_ = FindConfigFile(subDir)
+}
+
+func TestLoad_MaxDashDensity(t *testing.T) {
+	// Test that max_dash_density field loads correctly (this field was added later)
+	content := `thresholds:
+  max_grade: 16
+  max_dash_density: 0.05
+`
+	tmpDir := t.TempDir()
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write config: %v", err)
+	}
+
+	cfg, err := Load(configPath)
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+
+	if cfg.Thresholds.MaxDashDensity != 0.05 {
+		t.Errorf("MaxDashDensity = %v, want 0.05", cfg.Thresholds.MaxDashDensity)
+	}
+}
+
+func TestLoad_SchemaStructSyncDefense(t *testing.T) {
+	// This test verifies the defensive error handling on config.go:72-74
+	// which guards against schema/struct synchronization bugs.
+	//
+	// We temporarily replace the schema with a permissive one that allows
+	// structures the Go struct can't unmarshal, simulating what would happen
+	// if a developer updated the schema but forgot to update the struct.
+
+	// Force schema to load first (ensures schemaOnce has executed)
+	_, _ = getCompiledSchema()
+
+	// Save original schema state
+	originalSchema := compiledSchema
+	originalError := schemaCompileError
+
+	defer func() {
+		// Restore original state
+		compiledSchema = originalSchema
+		schemaCompileError = originalError
+	}()
+
+	// Create a truly permissive schema using "true" schema (accepts anything)
+	permissiveSchemaJSON := `true`
+
+	compiler := jsonschema.NewCompiler()
+	var permissiveSchemaData interface{}
+	if err := json.Unmarshal([]byte(permissiveSchemaJSON), &permissiveSchemaData); err != nil {
+		t.Fatal(err)
+	}
+
+	const schemaID = "https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json"
+	if err := compiler.AddResource(schemaID, permissiveSchemaData); err != nil {
+		t.Fatal(err)
+	}
+
+	permissiveSchema, err := compiler.Compile(schemaID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Set global schema to permissive one
+	compiledSchema = permissiveSchema
+	schemaCompileError = nil
+
+	// Create YAML with structure that passes permissive schema
+	// but can't be unmarshaled into Config struct
+	content := `thresholds:
+  max_grade: {nested: "map instead of number"}
+`
+	tmpDir := t.TempDir()
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write config: %v", err)
+	}
+
+	// Verify schema was replaced with permissive one
+	schema, schemaErr := getCompiledSchema()
+	if schemaErr != nil {
+		t.Fatalf("Failed to get compiled schema: %v", schemaErr)
+	}
+	if schema != permissiveSchema {
+		t.Fatal("Schema was not replaced with permissive schema")
+	}
+	t.Log("Schema successfully replaced with permissive schema")
+
+	// Should fail at unmarshal (line 72), not schema validation
+	_, err = Load(configPath)
+	if err == nil {
+		t.Error("Expected unmarshal error when schema allows invalid structure")
+	}
+	// Verify we got an error (defensive error handling worked)
+	t.Logf("Got error (as expected): %v", err)
 }
