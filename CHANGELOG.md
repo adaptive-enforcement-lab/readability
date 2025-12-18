@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.14.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.0...v1.14.1) (2025-12-18)
+
+
+### Code Refactoring
+
+* reorganize docs navigation - make Configuration a top-level section ([#203](https://github.com/adaptive-enforcement-lab/readability/issues/203)) ([b25af08](https://github.com/adaptive-enforcement-lab/readability/commit/b25af089b85bee62c1db7f5acb333ebc24366d8b))
+
+
+### Maintenance
+
+* **deps:** update actions/setup-python action to v6 ([#204](https://github.com/adaptive-enforcement-lab/readability/issues/204)) ([4965742](https://github.com/adaptive-enforcement-lab/readability/commit/496574216efe4066f63c9f429732d95e479cd3ef))
+
 ## [1.14.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.13.0...v1.14.0) (2025-12-18)
 
 
