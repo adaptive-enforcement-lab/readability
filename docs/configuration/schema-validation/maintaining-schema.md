@@ -135,7 +135,7 @@ Fix the schema and re-run tests.
 Add the field to:
 
 - [Schema Reference](schema-reference.md)
-- [Configuration File](../cli/config-file.md) examples
+- [Configuration File](../index.md) examples
 - README.md examples (if relevant)
 
 ### Step 6: Validate Schema

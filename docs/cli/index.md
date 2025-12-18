@@ -60,5 +60,5 @@ readability --max-grade 12 --max-ari 12 docs/
 ## More Info
 
 - [Commands](commands.md) - All flags
-- [Config File](config-file.md) - Save settings
+- [Config File](../configuration/index.md) - Save settings
 - [Diagnostic Output](diagnostic-output.md) - IDE setup

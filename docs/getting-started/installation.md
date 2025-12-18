@@ -71,7 +71,7 @@ pre-commit run readability-docs --all-files
 | `readability-docs` | Only files in the `docs/` folder |
 
 !!! tip "Configuration"
-    Create a `.readability.yml` file to customize thresholds. See [Configuration File](../cli/config-file.md) for options.
+    Create a `.readability.yml` file to customize thresholds. See [Configuration File](../configuration/index.md) for options.
 
 ## CLI Tool
 

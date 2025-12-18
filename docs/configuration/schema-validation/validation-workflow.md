@@ -138,4 +138,4 @@ If you still cannot resolve the issue, file a bug report on GitHub. Include your
 - [Validation Guide](validation-guide.md): Common error examples and fixes
 - [Schema Reference](schema-reference.md): Complete field documentation
 - [IDE Setup](ide-setup.md): Configure validation in your editor
-- [Configuration File](../cli/config-file.md): Usage examples
+- [Configuration File](../index.md): Usage examples

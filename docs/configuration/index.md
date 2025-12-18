@@ -68,6 +68,9 @@ check-jsonschema --schemafile docs/schemas/config.json .readability.yml
 !!! success "Pre-commit Validation"
     The repository includes pre-commit hooks that automatically validate schema files and configs before each commit. See [Contributing](../../contributing.md) for setup.
 
+!!! info "Detailed Schema Documentation"
+    For comprehensive schema validation documentation, see [Schema Validation](schema-validation/index.md).
+
 ## All Options
 
 ```yaml

@@ -48,19 +48,11 @@ overrides:
       min_admonitions: -1    # Not required for technical specs
       max_dash_density: 150  # Allow parenthetical constructions for clarity
 
-  # Schema validation: Reference documentation with technical specifications
-  - path: docs/schema-validation/
+  # Configuration docs: Main config file and schema validation reference
+  - path: docs/configuration/
     thresholds:
       max_grade: 18          # Technical reference needs precision
       max_ari: 20            # Detailed field documentation
       max_fog: 18            # Complex configuration explanations
       min_ease: 25           # Allow technical content
       min_admonitions: 0     # Reference docs don't always need callouts
-
-  # CLI config file docs: Enhanced with IDE setup guides
-  - path: docs/cli/config-file.md
-    thresholds:
-      max_grade: 17          # Technical setup instructions
-      max_ari: 20            # IDE configuration details
-      max_fog: 17            # Complex setup steps
-      min_ease: 28           # Allow slightly more complex language
