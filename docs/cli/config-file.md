@@ -19,6 +19,55 @@ That's it. The tool finds it automatically.
 !!! tip "Where to Put It"
     Place the config file in your repository root. The tool searches from the target directory up to the git root.
 
+## IDE Support
+
+The first line in the config examples (`# yaml-language-server: $schema=...`) enables IDE features:
+
+### Benefits
+
+- **Autocomplete** - IntelliSense suggests all available fields as you type
+- **Validation** - Red squiggles show errors before you save
+- **Documentation** - Hover over fields to see descriptions, defaults, and allowed values
+- **Type Checking** - Prevents typos and invalid values
+
+### Supported Editors
+
+| Editor | Setup Required |
+|--------|----------------|
+| **VS Code** | Install [YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) |
+| **JetBrains** | Built-in support (IntelliJ, WebStorm, PyCharm, etc.) |
+| **Neovim** | Install [yaml-language-server](https://github.com/redhat-developer/yaml-language-server) via Mason or manually |
+| **Vim** | Use [coc-yaml](https://github.com/neoclide/coc-yaml) or [ALE](https://github.com/dense-analysis/ale) with yaml-language-server |
+| **Emacs** | Use [lsp-mode](https://emacs-lsp.github.io/lsp-mode/) with yaml-language-server |
+
+### VS Code Setup
+
+1. Install the [YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) by Red Hat
+2. Open your `.readability.yml` file
+3. Ensure the first line contains the schema reference (shown in examples above)
+4. Start typing - autocomplete will appear automatically
+
+### Validating Your Config
+
+Use the built-in validation flag:
+
+```bash
+readability --validate-config
+```
+
+Or validate directly with `check-jsonschema`:
+
+```bash
+# Install check-jsonschema
+pipx install check-jsonschema
+
+# Validate your config
+check-jsonschema --schemafile docs/schemas/config.json .readability.yml
+```
+
+!!! success "Pre-commit Validation"
+    The repository includes pre-commit hooks that automatically validate schema files and configs before each commit. See [Contributing](../../contributing.md) for setup.
+
 ## All Options
 
 ```yaml
