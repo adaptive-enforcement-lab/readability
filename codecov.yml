@@ -50,6 +50,9 @@ component_management:
       name: Configuration
       paths:
         - "pkg/config/.*"
+      statuses:
+        - type: patch
+          target: 94%  # Lower threshold due to unreachable defensive error paths
 
     - component_id: markdown
       name: Markdown Parser

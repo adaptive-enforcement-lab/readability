@@ -18,6 +18,7 @@ var (
 	formatFlag         string
 	verboseFlag        bool
 	checkFlag          bool
+	validateConfigFlag bool
 	configFlag         string
 	maxGradeFlag       float64
 	maxARIFlag         float64
@@ -60,6 +61,7 @@ Examples:
 	rootCmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "Output format: table, json, markdown, summary, report, diagnostic")
 	rootCmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "Show all metrics")
 	rootCmd.Flags().BoolVar(&checkFlag, "check", false, "Check against thresholds (exit 1 on failure)")
+	rootCmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "Validate configuration and exit (no analysis)")
 	rootCmd.Flags().StringVarP(&configFlag, "config", "c", "", "Path to config file (default: auto-detect .readability.yml)")
 	rootCmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "Maximum Flesch-Kincaid grade level (overrides config)")
 	rootCmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "Maximum ARI score (overrides config)")
@@ -70,11 +72,29 @@ Examples:
 }
 
 func run(cmd *cobra.Command, args []string) error {
-	path := args[0]
+	// Determine path for config loading
+	var path string
+	if len(args) > 0 {
+		path = args[0]
+	} else {
+		// If no path provided, use current directory for config search
+		path = "."
+	}
 
 	cfg, err := loadConfig(path)
 	if err != nil {
 		return err
+	}
+
+	// If --validate-config flag is set, just validate and exit
+	if validateConfigFlag {
+		fmt.Println("✓ Configuration is valid")
+		return nil
+	}
+
+	// For normal operation, require a path argument
+	if len(args) == 0 {
+		return fmt.Errorf("requires a path argument")
 	}
 
 	applyFlagOverrides(cmd, cfg)

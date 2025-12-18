@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -48,13 +49,25 @@ func DefaultConfig() *Config {
 	}
 }
 
-// Load reads configuration from a YAML file.
+// Load reads configuration from a YAML file and validates it against the JSON Schema.
 func Load(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
+	// Parse YAML to generic interface{} for schema validation
+	var yamlData interface{}
+	if err := yaml.Unmarshal(data, &yamlData); err != nil {
+		return nil, fmt.Errorf("invalid YAML syntax: %w", err)
+	}
+
+	// Validate against embedded JSON Schema
+	if err := ValidateAgainstSchema(yamlData); err != nil {
+		return nil, err
+	}
+
+	// Parse into typed Config struct (we know it's valid now)
 	cfg := DefaultConfig()
 	if err := yaml.Unmarshal(data, cfg); err != nil {
 		return nil, err
