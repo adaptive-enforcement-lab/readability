@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.14.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.13.0...v1.14.0) (2025-12-18)
+
+
+### Features
+
+* complete Components 5 & 6 - testing strategy and documentation ([#199](https://github.com/adaptive-enforcement-lab/readability/issues/199)) ([1074aa8](https://github.com/adaptive-enforcement-lab/readability/commit/1074aa8ce4bc34cbb2859d757be5ff4136415ae5)), closes [#160](https://github.com/adaptive-enforcement-lab/readability/issues/160)
+
+
+### Maintenance
+
+* **deps:** update actions/setup-python digest to a26af69 ([#200](https://github.com/adaptive-enforcement-lab/readability/issues/200)) ([8b77d6a](https://github.com/adaptive-enforcement-lab/readability/commit/8b77d6adf18f30e82222257152839ee6a66f073b))
+* **deps:** update dependency python to 3.14 ([#201](https://github.com/adaptive-enforcement-lab/readability/issues/201)) ([cd7eeda](https://github.com/adaptive-enforcement-lab/readability/commit/cd7eeda72c10ee1f9abc0f6166dd941e7e481818))
+
 ## [1.13.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.12.1...v1.13.0) (2025-12-18)
 
 
