@@ -232,12 +232,17 @@
     "aliases": []
   },
   {
+    "version": "v1.13.0",
+    "title": "v1.13.0",
+    "aliases": [
+      "v1",
+      "latest"
+    ]
+  },
+  {
     "version": "v1.12.1",
     "title": "v1.12.1",
-    "aliases": [
-      "latest",
-      "v1"
-    ]
+    "aliases": []
   },
   {
     "version": "v1.12.0",
