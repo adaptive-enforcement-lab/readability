@@ -120,20 +120,21 @@ nav:
   - CLI Reference:
       - cli/index.md
       - Commands: cli/commands.md
-      - Configuration File: cli/config-file.md
       - Diagnostic Output: cli/diagnostic-output.md
+  - Configuration:
+      - configuration/index.md
+      - Schema Validation:
+          - configuration/schema-validation/index.md
+          - Schema Reference: configuration/schema-validation/schema-reference.md
+          - Schema Overrides: configuration/schema-validation/schema-overrides.md
+          - IDE Setup: configuration/schema-validation/ide-setup.md
+          - Validation Guide: configuration/schema-validation/validation-guide.md
+          - Validation Workflow: configuration/schema-validation/validation-workflow.md
+          - Maintaining the Schema: configuration/schema-validation/maintaining-schema.md
+          - Schema Testing: configuration/schema-validation/schema-testing.md
   - Metrics:
       - metrics/index.md
       - Flesch Reading Ease: metrics/flesch-reading-ease.md
       - Grade Level Scores: metrics/grade-level.md
       - Thresholds: metrics/thresholds.md
       - Admonitions: metrics/admonitions.md
-  - Schema Validation:
-      - schema-validation/index.md
-      - Schema Reference: schema-validation/schema-reference.md
-      - Schema Overrides and Validation: schema-validation/schema-overrides.md
-      - IDE Setup: schema-validation/ide-setup.md
-      - Validation Guide: schema-validation/validation-guide.md
-      - Validation Workflow: schema-validation/validation-workflow.md
-      - Maintaining the Schema: schema-validation/maintaining-schema.md
-      - Schema Testing: schema-validation/schema-testing.md

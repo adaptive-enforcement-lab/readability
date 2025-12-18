@@ -320,4 +320,4 @@ All tests passing? Your setup is working correctly!
 - [Schema Reference](schema-reference.md) - Complete schema documentation
 - [Validation Guide](validation-guide.md) - Common error examples and fixes
 - [Validation Workflow](validation-workflow.md) - Step-by-step validation process
-- [Configuration File](../cli/config-file.md) - Learn all config options
+- [Configuration File](../index.md) - Learn all config options

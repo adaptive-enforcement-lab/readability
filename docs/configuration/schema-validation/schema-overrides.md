@@ -250,4 +250,4 @@ We recommend using `/latest/` in your schema reference. This gives you the most 
 - [IDE Setup](ide-setup.md): Configure your editor
 - [Validation Guide](validation-guide.md): Common error examples and fixes
 - [Validation Workflow](validation-workflow.md): Step-by-step validation process
-- [Configuration File](../cli/config-file.md): Examples and usage
+- [Configuration File](../index.md): Examples and usage

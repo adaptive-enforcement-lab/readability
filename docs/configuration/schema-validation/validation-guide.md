@@ -25,7 +25,7 @@ Configuration validation failed:
     got string, want number
     Suggestion: Remove quotes around numeric values
 
-See https://github.com/adaptive-enforcement-lab/readability/blob/main/docs/cli/config-file.md for configuration reference.
+See https://github.com/adaptive-enforcement-lab/readability/blob/main/do../index.md for configuration reference.
 ```
 
 ### check-jsonschema
@@ -321,4 +321,4 @@ For validation workflows and debugging strategies, see [Validation Workflow](val
 - [Validation Workflow](validation-workflow.md): Step-by-step validation process, pre-commit hooks, CI validation, and debugging strategies
 - [Schema Reference](schema-reference.md): Complete field documentation
 - [IDE Setup](ide-setup.md): Configure validation in your editor
-- [Configuration File](../cli/config-file.md): Usage examples
+- [Configuration File](../index.md): Usage examples
