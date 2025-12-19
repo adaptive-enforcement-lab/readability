@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json",
+  "properties": {
+    "thresholds": {
+      "properties": {
+        "max_grade": {
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0,
+          "description": "Maximum Flesch-Kincaid grade level (12 = high school senior, 16 = college senior)",
+          "default": 16,
+          "examples": [
+            12,
+            14,
+            16
+          ]
+        },
+        "max_ari": {
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0,
+          "description": "Maximum Automated Readability Index (similar to grade level)",
+          "default": 16,
+          "examples": [
+            12,
+            14,
+            16
+          ]
+        },
+        "max_fog": {
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0,
+          "description": "Maximum Gunning Fog index (years of formal education needed)",
+          "default": 18,
+          "examples": [
+            14,
+            16,
+            18
+          ]
+        },
+        "min_ease": {
+          "type": "number",
+          "maximum": 100,
+          "minimum": -100,
+          "description": "Minimum Flesch Reading Ease (0-100 scale, higher = easier). Use negative value to disable.",
+          "default": 25,
+          "examples": [
+            30,
+            40,
+            50,
+            -100
+          ]
+        },
+        "max_lines": {
+          "type": "integer",
+          "maximum": 10000,
+          "minimum": 1,
+          "description": "Maximum lines of prose per file",
+          "default": 375,
+          "examples": [
+            250,
+            375,
+            500
+          ]
+        },
+        "min_words": {
+          "type": "integer",
+          "maximum": 10000,
+          "minimum": 0,
+          "description": "Minimum words before applying readability formulas (sparse docs are unreliable)",
+          "default": 100,
+          "examples": [
+            50,
+            100,
+            150
+          ]
+        },
+        "min_admonitions": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": -1,
+          "description": "Minimum MkDocs-style admonitions required (!!! note, !!! warning). Use -1 to disable.",
+          "default": 1,
+          "examples": [
+            0,
+            1,
+            2,
+            -1
+          ]
+        },
+        "max_dash_density": {
+          "type": "number",
+          "maximum": 500,
+          "minimum": -1,
+          "description": "Maximum mid-sentence dash pairs per 100 sentences (detects AI-generated slop). Use -1 to disable. 0 = no dashes allowed.",
+          "default": 0,
+          "examples": [
+            0,
+            2,
+            5,
+            -1
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Base readability thresholds applied to all files"
+    },
+    "overrides": {
+      "items": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path prefix to match (e.g., 'docs/developer-guide/' or 'api/')",
+            "examples": [
+              "docs/developer-guide/",
+              "docs/user-guide/",
+              "api/",
+              "README.md"
+            ]
+          },
+          "thresholds": {
+            "properties": {
+              "max_grade": {
+                "type": "number",
+                "maximum": 100,
+                "minimum": 0,
+                "description": "Maximum Flesch-Kincaid grade level (12 = high school senior, 16 = college senior)",
+                "default": 16,
+                "examples": [
+                  12,
+                  14,
+                  16
+                ]
+              },
+              "max_ari": {
+                "type": "number",
+                "maximum": 100,
+                "minimum": 0,
+                "description": "Maximum Automated Readability Index (similar to grade level)",
+                "default": 16,
+                "examples": [
+                  12,
+                  14,
+                  16
+                ]
+              },
+              "max_fog": {
+                "type": "number",
+                "maximum": 100,
+                "minimum": 0,
+                "description": "Maximum Gunning Fog index (years of formal education needed)",
+                "default": 18,
+                "examples": [
+                  14,
+                  16,
+                  18
+                ]
+              },
+              "min_ease": {
+                "type": "number",
+                "maximum": 100,
+                "minimum": -100,
+                "description": "Minimum Flesch Reading Ease (0-100 scale, higher = easier). Use negative value to disable.",
+                "default": 25,
+                "examples": [
+                  30,
+                  40,
+                  50,
+                  -100
+                ]
+              },
+              "max_lines": {
+                "type": "integer",
+                "maximum": 10000,
+                "minimum": 1,
+                "description": "Maximum lines of prose per file",
+                "default": 375,
+                "examples": [
+                  250,
+                  375,
+                  500
+                ]
+              },
+              "min_words": {
+                "type": "integer",
+                "maximum": 10000,
+                "minimum": 0,
+                "description": "Minimum words before applying readability formulas (sparse docs are unreliable)",
+                "default": 100,
+                "examples": [
+                  50,
+                  100,
+                  150
+                ]
+              },
+              "min_admonitions": {
+                "type": "integer",
+                "maximum": 100,
+                "minimum": -1,
+                "description": "Minimum MkDocs-style admonitions required (!!! note, !!! warning). Use -1 to disable.",
+                "default": 1,
+                "examples": [
+                  0,
+                  1,
+                  2,
+                  -1
+                ]
+              },
+              "max_dash_density": {
+                "type": "number",
+                "maximum": 500,
+                "minimum": -1,
+                "description": "Maximum mid-sentence dash pairs per 100 sentences (detects AI-generated slop). Use -1 to disable. 0 = no dashes allowed.",
+                "default": 0,
+                "examples": [
+                  0,
+                  2,
+                  5,
+                  -1
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "description": "Threshold overrides for this path (inherits unspecified values from base)"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ]
+      },
+      "type": "array",
+      "description": "Path-specific threshold overrides (first match wins)"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Readability Configuration",
+  "description": "Configuration schema for readability markdown analyzer"
+}
