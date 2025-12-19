@@ -69,6 +69,13 @@ repos:
         files: '^docs/.*\.md$'
         pass_filenames: false
 
+      - id: generate-config-schema
+        name: Generate config schema from Go structs
+        entry: go generate ./pkg/config/...
+        language: system
+        files: 'pkg/config/config\.go$'
+        pass_filenames: false
+
       - id: validate-json-schema
         name: Validate JSON Schema
         entry: >

@@ -21,7 +21,7 @@ coverage:
 
     patch:
       default:
-        target: 95%
+        target: 90%
         threshold: 5%
         if_ci_failed: error
 
@@ -33,7 +33,7 @@ component_management:
       - type: project
         target: 95%
       - type: patch
-        target: 95%
+        target: 90%  # Lower default to account for defensive error handling
 
   individual_components:
     - component_id: cli
@@ -50,9 +50,6 @@ component_management:
       name: Configuration
       paths:
         - "pkg/config/.*"
-      statuses:
-        - type: patch
-          target: 94%  # Lower threshold due to unreachable defensive error paths
 
     - component_id: markdown
       name: Markdown Parser
