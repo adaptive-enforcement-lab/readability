@@ -72,29 +72,21 @@ Examples:
 }
 
 func run(cmd *cobra.Command, args []string) error {
-	// Determine path for config loading
-	var path string
-	if len(args) > 0 {
-		path = args[0]
-	} else {
-		// If no path provided, use current directory for config search
-		path = "."
-	}
-
-	cfg, err := loadConfig(path)
-	if err != nil {
-		return err
-	}
-
-	// If --validate-config flag is set, just validate and exit
+	// If --validate-config flag is set, validate and exit
 	if validateConfigFlag {
-		fmt.Println("✓ Configuration is valid")
-		return nil
+		return validateConfigCommand(args)
 	}
 
 	// For normal operation, require a path argument
 	if len(args) == 0 {
 		return fmt.Errorf("requires a path argument")
+	}
+
+	path := args[0]
+
+	cfg, err := loadConfig(path)
+	if err != nil {
+		return err
 	}
 
 	applyFlagOverrides(cmd, cfg)
@@ -117,6 +109,40 @@ func run(cmd *cobra.Command, args []string) error {
 		return checkResults(results, cfg)
 	}
 
+	return nil
+}
+
+// validateConfigCommand validates the configuration file and exits.
+func validateConfigCommand(args []string) error {
+	// Determine path for config search
+	var searchPath string
+	if len(args) > 0 {
+		searchPath = args[0]
+	} else {
+		searchPath = "."
+	}
+
+	// Find config file
+	var configPath string
+	if configFlag != "" {
+		configPath = configFlag
+	} else {
+		startDir := searchPath
+		if info, err := os.Stat(searchPath); err == nil && !info.IsDir() {
+			startDir = filepath.Dir(searchPath)
+		}
+		configPath = config.FindConfigFile(startDir)
+		if configPath == "" {
+			return fmt.Errorf("no .readability.yml found")
+		}
+	}
+
+	// Validate the config file
+	if err := config.ValidateConfig(configPath); err != nil {
+		return err
+	}
+
+	fmt.Println("✓ Configuration is valid")
 	return nil
 }
 

@@ -306,8 +306,46 @@ func TestRun_ValidateConfig_InvalidConfig(t *testing.T) {
 		t.Error("Expected error for invalid config")
 	}
 
-	if !strings.Contains(err.Error(), "cannot load config") {
-		t.Errorf("Expected 'cannot load config' error, got: %v", err)
+	// With --validate-config, we should get a detailed schema validation error
+	errMsg := err.Error()
+	if !strings.Contains(errMsg, "Configuration validation failed") {
+		t.Errorf("Expected 'Configuration validation failed' error, got: %v", err)
+	}
+	if !strings.Contains(errMsg, "max_grade") {
+		t.Errorf("Error should mention the invalid field 'max_grade', got: %v", err)
+	}
+}
+
+func TestRun_ValidateConfig_NoConfigFound(t *testing.T) {
+	// Create temp directory with NO config file
+	tmpDir := t.TempDir()
+
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	validateConfigFlag = true
+
+	// Pass tmpDir as path argument (but no .readability.yml exists there)
+	args := []string{tmpDir}
+
+	err := run(cmd, args)
+
+	if err == nil {
+		t.Error("Expected error when no config found")
+	}
+
+	if !strings.Contains(err.Error(), "no .readability.yml found") {
+		t.Errorf("Expected 'no .readability.yml found' error, got: %v", err)
 	}
 }
 

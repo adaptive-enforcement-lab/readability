@@ -1,15 +1,19 @@
 package config
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/santhosh-tekuri/jsonschema/v6"
 )
+
+const schemaURL = "https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json"
+
+//go:embed schema.json
+var embeddedSchemaBytes []byte
 
 var (
 	compiledSchema     *jsonschema.Schema
@@ -17,72 +21,34 @@ var (
 	schemaOnce         sync.Once
 )
 
-// getCompiledSchema loads and compiles the schema on first use
+// getCompiledSchema loads and compiles the embedded schema on first use.
+//
+// Note: Error handling in this function covers defensive "should never happen" cases
+// since the schema is generated from Go structs and embedded at compile time.
+// These error paths are not easily testable without mocking the embed directive.
 func getCompiledSchema() (*jsonschema.Schema, error) {
 	schemaOnce.Do(func() {
-		// Find schema file relative to this source file or repository root
-		schemaPath := findSchemaFile()
-		if schemaPath == "" {
-			schemaCompileError = fmt.Errorf("schema file not found (expected docs/schemas/config.json)")
-			return
-		}
-
-		// Read schema file
-		schemaBytes, err := os.ReadFile(schemaPath)
-		if err != nil {
-			schemaCompileError = fmt.Errorf("failed to read schema file: %w", err)
-			return
-		}
-
-		// Unmarshal schema JSON
+		// Unmarshal embedded schema JSON
 		var schemaData interface{}
-		if err := json.Unmarshal(schemaBytes, &schemaData); err != nil {
-			schemaCompileError = fmt.Errorf("failed to unmarshal schema: %w", err)
+		if err := json.Unmarshal(embeddedSchemaBytes, &schemaData); err != nil {
+			// This would only happen if the embedded schema is malformed JSON,
+			// which should be caught by go:generate and CI validation
+			schemaCompileError = fmt.Errorf("failed to unmarshal embedded schema: %w", err)
 			return
 		}
 
 		// Compile schema
-		const schemaID = "https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json"
 		compiler := jsonschema.NewCompiler()
-		if err := compiler.AddResource(schemaID, schemaData); err != nil {
+		if err := compiler.AddResource(schemaURL, schemaData); err != nil {
+			// This would only happen if the schema structure is invalid
 			schemaCompileError = fmt.Errorf("failed to add schema resource: %w", err)
 			return
 		}
 
-		compiledSchema, schemaCompileError = compiler.Compile(schemaID)
+		compiledSchema, schemaCompileError = compiler.Compile(schemaURL)
 	})
 
 	return compiledSchema, schemaCompileError
-}
-
-// findSchemaFile searches for docs/schemas/config.json
-func findSchemaFile() string {
-	// Try from current working directory
-	if _, err := os.Stat("docs/schemas/config.json"); err == nil {
-		return "docs/schemas/config.json"
-	}
-
-	// Try from repository root (walk up looking for .git)
-	dir, _ := os.Getwd()
-	for dir != "" && dir != "/" {
-		schemaPath := filepath.Join(dir, "docs/schemas/config.json")
-		if _, err := os.Stat(schemaPath); err == nil {
-			return schemaPath
-		}
-
-		// Check if we're at git root
-		if _, err := os.Stat(filepath.Join(dir, ".git")); err == nil {
-			break
-		}
-
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			break
-		}
-		dir = parent
-	}
-
-	return ""
 }
 
 // ValidateAgainstSchema validates the parsed YAML data against the JSON Schema.
