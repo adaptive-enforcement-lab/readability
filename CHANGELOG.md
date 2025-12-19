@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.14.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.1...v1.14.2) (2025-12-19)
+
+
+### Bug Fixes
+
+* generate schema from Go structs with embedded validation ([#210](https://github.com/adaptive-enforcement-lab/readability/issues/210)) ([7e88510](https://github.com/adaptive-enforcement-lab/readability/commit/7e8851059dfc579b02aa413eaefad1456f5a95b4))
+
+
+### Maintenance
+
+* **deps:** update dependency mkdocs-material to v9.7.1 ([#206](https://github.com/adaptive-enforcement-lab/readability/issues/206)) ([0f1aea5](https://github.com/adaptive-enforcement-lab/readability/commit/0f1aea5e8fda5724b6e0a920d1168e65cbae0cbc))
+* **deps:** update docker/setup-buildx-action digest to 8d2750c ([#207](https://github.com/adaptive-enforcement-lab/readability/issues/207)) ([943e8b4](https://github.com/adaptive-enforcement-lab/readability/commit/943e8b440ad8ed22fb440a237cae3b79e247331e))
+* **deps:** update trufflesecurity/trufflehog digest to ef6e76c ([#208](https://github.com/adaptive-enforcement-lab/readability/issues/208)) ([bf6c56c](https://github.com/adaptive-enforcement-lab/readability/commit/bf6c56cb3d68bb00b6c4960535e2e26f486015d9))
+
 ## [1.14.1](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.0...v1.14.1) (2025-12-18)
 
 
