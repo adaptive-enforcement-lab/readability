@@ -40,9 +40,6 @@ component_management:
       name: CLI
       paths:
         - "cmd/readability/.*"
-      statuses:
-        - type: patch
-          target: 90%  # Lower threshold due to validateConfigCommand edge cases
 
     - component_id: analyzer
       name: Analyzer
@@ -53,10 +50,6 @@ component_management:
       name: Configuration
       paths:
         - "pkg/config/.*"
-      statuses:
-        - type: patch
-          target: 75%  # Lower threshold due to unreachable defensive error paths in embedded schema validation
-                       # Untestable without mocking: corrupted embedded bytes (validate.go:33-38, 42-46, 58-60, 72-74)
 
     - component_id: markdown
       name: Markdown Parser
