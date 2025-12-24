@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.3](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.2...v1.14.3) (2025-12-24)
+
+
+### Maintenance
+
+* **deps:** update trufflesecurity/trufflehog digest to a633174 ([#212](https://github.com/adaptive-enforcement-lab/readability/issues/212)) ([0d6633e](https://github.com/adaptive-enforcement-lab/readability/commit/0d6633ea9af7f9899b9dfccdad919a51bc94ed76))
+
 ## [1.14.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.1...v1.14.2) (2025-12-19)
 
 
