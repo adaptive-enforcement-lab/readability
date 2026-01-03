@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.3](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.2...v1.14.3) (2026-01-03)
+
+
+### Maintenance
+
+* **deps:** update dependency pillow to v12.1.0 ([#214](https://github.com/adaptive-enforcement-lab/readability/issues/214)) ([2957e52](https://github.com/adaptive-enforcement-lab/readability/commit/2957e52dd75fb50303ee86402f09c10bb367898c))
+* **deps:** update trufflesecurity/trufflehog digest to a633174 ([#212](https://github.com/adaptive-enforcement-lab/readability/issues/212)) ([0d6633e](https://github.com/adaptive-enforcement-lab/readability/commit/0d6633ea9af7f9899b9dfccdad919a51bc94ed76))
+
 ## [1.14.2](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.1...v1.14.2) (2025-12-19)
 
 
