@@ -119,7 +119,7 @@ The pre-commit hook uses diagnostic format by default:
 ```yaml
 repos:
   - repo: https://github.com/adaptive-enforcement-lab/readability
-    rev: v0.11.0
+    rev: v1.14.3
     hooks:
       - id: readability-docs
 ```
