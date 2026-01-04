@@ -2,7 +2,6 @@
 name: codecov-api-verification
 description: Verifies test coverage using Codecov API, compares coverage between commits/branches, validates coverage claims against thresholds. Use when verifying PR coverage improvements, investigating local tool discrepancies, or validating CI/CD coverage reports.
 allowed-tools: Read, Bash(python:*), Bash(curl:*), Bash(jq:*), Bash(bc:*), Bash(source:*)
-model: haiku
 ---
 
 # Codecov API Verification
@@ -14,11 +13,8 @@ Verify coverage claims against Codecov API instead of trusting local tools like 
 Ensure `CODECOV_TOKEN` is set:
 
 ```bash
-# Check if set
-echo $CODECOV_TOKEN
-
-# If not set, source from shell config
-source ~/.zshrc
+echo $CODECOV_TOKEN  # Should show your token
+source ~/.zshrc      # If not set
 ```
 
 ## Quick Start
@@ -26,7 +22,7 @@ source ~/.zshrc
 ### Verify Current Coverage
 
 ```bash
-python .claude/skills/codecov-api/verify_coverage.py
+python scripts/verify_coverage.py
 ```
 
 Returns before/after coverage and file-level changes.
@@ -34,7 +30,7 @@ Returns before/after coverage and file-level changes.
 ### Check Against Threshold
 
 ```bash
-python .claude/skills/codecov-api/verify_coverage.py --threshold 99.0
+python scripts/verify_coverage.py --threshold 99.0
 ```
 
 Exits with code 1 if below threshold.
@@ -42,7 +38,7 @@ Exits with code 1 if below threshold.
 ### Find Files Below Target
 
 ```bash
-python .claude/skills/codecov-api/verify_coverage.py --files-below 95.0
+python scripts/verify_coverage.py --files-below 95.0
 ```
 
 Lists files needing coverage improvement.
@@ -54,11 +50,7 @@ Lists files needing coverage improvement.
 Before making coverage claims in a PR:
 
 ```bash
-# Run automated verification
-python .claude/skills/codecov-api/verify_coverage.py --format markdown > coverage-report.md
-
-# Check the report shows actual Codecov numbers
-cat coverage-report.md
+python scripts/verify_coverage.py --format markdown
 ```
 
 **Critical**: Always use Codecov API numbers, not `go tool cover` output.
@@ -66,10 +58,7 @@ cat coverage-report.md
 ### Task 2: Compare Commits
 
 ```bash
-python .claude/skills/codecov-api/verify_coverage.py \
-  --before abc123 \
-  --after def456 \
-  --format json
+python scripts/verify_coverage.py --before abc123 --after def456 --format json
 ```
 
 Returns JSON with improvement details and changed files.
@@ -106,8 +95,7 @@ Use this checklist when verifying coverage:
 **Automated workflow**:
 
 ```bash
-# Single command verification
-python .claude/skills/codecov-api/verify_coverage.py
+python scripts/verify_coverage.py
 ```
 
 ## Understanding Coverage Discrepancies
@@ -132,21 +120,22 @@ Local tools (`go tool cover`, etc.) often show different numbers than Codecov:
 - **Real-world examples**: [EXAMPLES.md](EXAMPLES.md)
 - **Automated verification**: Run `python verify_coverage.py --help`
 
-## Verification Script Options
+## Verification Script
+
+Run the verification script with options:
 
 ```bash
-# Script location
-.claude/skills/codecov-api/verify_coverage.py
-
-# Available options
---branch BRANCH          # Branch to verify (default: main)
---before SHA             # Parent commit SHA
---after SHA              # Current commit SHA
---threshold PERCENT      # Coverage threshold to check
---files-below PERCENT    # Show files below threshold
---format FORMAT          # Output format (text, json, markdown)
---token TOKEN            # Codecov API token (defaults to env var)
+python scripts/verify_coverage.py [OPTIONS]
 ```
+
+Available options:
+- `--branch BRANCH` - Branch to verify (default: main)
+- `--before SHA` - Parent commit SHA
+- `--after SHA` - Current commit SHA
+- `--threshold PERCENT` - Coverage threshold to check
+- `--files-below PERCENT` - Show files below threshold
+- `--format FORMAT` - Output format (text, json, markdown)
+- `--token TOKEN` - Codecov API token (defaults to env var)
 
 ## Error Handling
 

@@ -11,19 +11,19 @@ This script automates coverage verification by:
 
 Usage:
     # Verify current branch coverage
-    python .claude/skills/codecov-api/verify_coverage.py
+    python scripts/verify_coverage.py
 
     # Verify specific branch
-    python .claude/skills/codecov-api/verify_coverage.py --branch develop
+    python scripts/verify_coverage.py --branch develop
 
     # Check against threshold
-    python .claude/skills/codecov-api/verify_coverage.py --threshold 99.0
+    python scripts/verify_coverage.py --threshold 99.0
 
     # Compare specific commits
-    python .claude/skills/codecov-api/verify_coverage.py --before abc123 --after def456
+    python scripts/verify_coverage.py --before abc123 --after def456
 
     # Output as JSON
-    python .claude/skills/codecov-api/verify_coverage.py --format json
+    python scripts/verify_coverage.py --format json
 """
 
 import argparse
@@ -326,19 +326,19 @@ def main():
         epilog="""
 Examples:
   # Verify current branch
-  python .claude/skills/codecov-api/verify_coverage.py
+  python scripts/verify_coverage.py
 
   # Check against threshold
-  python .claude/skills/codecov-api/verify_coverage.py --threshold 99.0
+  python scripts/verify_coverage.py --threshold 99.0
 
   # Compare specific commits
-  python .claude/skills/codecov-api/verify_coverage.py --before abc123 --after def456
+  python scripts/verify_coverage.py --before abc123 --after def456
 
   # Find files below threshold
-  python .claude/skills/codecov-api/verify_coverage.py --files-below 95.0
+  python scripts/verify_coverage.py --files-below 95.0
 
   # Output as JSON
-  python .claude/skills/codecov-api/verify_coverage.py --format json
+  python scripts/verify_coverage.py --format json
         """,
     )
 
