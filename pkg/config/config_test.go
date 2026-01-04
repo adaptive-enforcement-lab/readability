@@ -608,3 +608,44 @@ func TestLoad_SchemaStructSyncDefense(t *testing.T) {
 	// Verify we got an error (defensive error handling worked)
 	t.Logf("Got error (as expected): %v", err)
 }
+
+func TestLoad_SchemaValidationError(t *testing.T) {
+	// Tests config.go:69-71 - schema validation failure
+	content := `thresholds:
+  max_grade: "not a number"
+`
+	tmpDir := t.TempDir()
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write config: %v", err)
+	}
+
+	_, err := Load(configPath)
+	if err == nil {
+		t.Error("Expected schema validation error for non-numeric max_grade")
+	}
+}
+
+func TestLoad_PathOverrideValidationError(t *testing.T) {
+	// Tests config.go:80-82 - validatePathOverrides() returns error
+	// when both exclude:true and thresholds are set
+	content := `thresholds:
+  max_grade: 16
+
+overrides:
+  - path: docs/api/
+    exclude: true
+    thresholds:
+      max_grade: 20
+`
+	tmpDir := t.TempDir()
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write config: %v", err)
+	}
+
+	_, err := Load(configPath)
+	if err == nil {
+		t.Error("Expected validation error when both exclude and thresholds are set")
+	}
+}

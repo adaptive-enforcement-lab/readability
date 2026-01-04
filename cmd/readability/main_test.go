@@ -349,6 +349,50 @@ func TestRun_ValidateConfig_NoConfigFound(t *testing.T) {
 	}
 }
 
+func TestRun_ValidateConfig_FileArgument(t *testing.T) {
+	// Test validateConfigCommand when passed a file path (not directory)
+	// This covers main.go:131-133
+	tmpDir := t.TempDir()
+
+	// Create a markdown file and a config file in the directory
+	mdFile := filepath.Join(tmpDir, "test.md")
+	if err := os.WriteFile(mdFile, []byte("# Test\n\nContent here."), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	configContent := "thresholds:\n  max_grade: 16\n"
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	resetFlags()
+
+	cmd := &cobra.Command{}
+	cmd.Flags().StringVarP(&formatFlag, "format", "f", "table", "")
+	cmd.Flags().BoolVarP(&verboseFlag, "verbose", "v", false, "")
+	cmd.Flags().BoolVar(&checkFlag, "check", false, "")
+	cmd.Flags().BoolVar(&validateConfigFlag, "validate-config", false, "")
+	cmd.Flags().StringVarP(&configFlag, "config", "c", "", "")
+	cmd.Flags().Float64Var(&maxGradeFlag, "max-grade", 0, "")
+	cmd.Flags().Float64Var(&maxARIFlag, "max-ari", 0, "")
+	cmd.Flags().IntVar(&maxLinesFlag, "max-lines", 0, "")
+	cmd.Flags().IntVar(&minAdmonitionsFlag, "min-admonitions", -1, "")
+
+	validateConfigFlag = true
+
+	// Pass the markdown FILE as argument (not directory)
+	// This should trigger the path: os.Stat(searchPath) -> !info.IsDir()
+	args := []string{mdFile}
+
+	err := run(cmd, args)
+
+	// Should succeed - config found by searching parent directory
+	if err != nil {
+		t.Errorf("Expected no error when config found via file argument, got: %v", err)
+	}
+}
+
 func TestRun_NoPathArgument(t *testing.T) {
 	// Test that normal operation (not validation mode) requires a path argument
 	resetFlags()
