@@ -24,6 +24,13 @@ thresholds:
 
 # Path-specific overrides
 overrides:
+  # Exclude changelog and contributing files (previously hardcoded exclusions)
+  - path: CHANGELOG.md
+    exclude: true
+
+  - path: CONTRIBUTING.md
+    exclude: true
+
   # Metrics documentation explains technical formulas and legitimately needs higher complexity
   - path: docs/metrics/
     thresholds:

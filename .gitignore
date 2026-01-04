@@ -3,3 +3,4 @@ site/
 .cache/
 test-*.yml
 /readability
+coverage.*

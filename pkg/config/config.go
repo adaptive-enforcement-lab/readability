@@ -32,7 +32,8 @@ type Thresholds struct {
 // PathOverride allows different thresholds for specific paths.
 type PathOverride struct {
 	Path       string     `yaml:"path" json:"path" jsonschema:"minLength=1,examples=docs/developer-guide/;docs/user-guide/;api/;README.md,description=Path prefix to match (e.g.\\, 'docs/developer-guide/' or 'api/')"`
-	Thresholds Thresholds `yaml:"thresholds" json:"thresholds" jsonschema:"description=Threshold overrides for this path (inherits unspecified values from base)"`
+	Exclude    bool       `yaml:"exclude,omitempty" json:"exclude,omitempty" jsonschema:"description=Exclude matching files from threshold checks (analyzed but never fail)"`
+	Thresholds Thresholds `yaml:"thresholds,omitempty" json:"thresholds,omitempty" jsonschema:"description=Threshold overrides for this path (inherits unspecified values from base)"`
 }
 
 // DefaultConfig returns sensible defaults for technical documentation.
@@ -72,6 +73,11 @@ func Load(path string) (*Config, error) {
 	// Parse into typed config struct
 	cfg := DefaultConfig()
 	if err := yaml.Unmarshal(data, cfg); err != nil {
+		return nil, err
+	}
+
+	// Validate path overrides
+	if err := validatePathOverrides(cfg); err != nil {
 		return nil, err
 	}
 
@@ -134,25 +140,34 @@ func FindConfigFile(startDir string) string {
 	}
 }
 
-// ThresholdsForPath returns the appropriate thresholds for a given file path.
-func (c *Config) ThresholdsForPath(filePath string) Thresholds {
-	// Normalize path separators
+// normalizePath standardizes a file path for override matching.
+// Converts to forward slashes and strips leading relative path prefixes.
+func normalizePath(filePath string) string {
 	normalizedPath := filepath.ToSlash(filePath)
-
 	// Strip leading ../ sequences (for when running from subdirectory)
 	for strings.HasPrefix(normalizedPath, "../") {
 		normalizedPath = normalizedPath[3:]
 	}
 	// Strip leading ./
-	normalizedPath = strings.TrimPrefix(normalizedPath, "./")
+	return strings.TrimPrefix(normalizedPath, "./")
+}
+
+// matchesOverride checks if a normalized file path matches an override path.
+// Handles both relative paths (docs/guide.md) and absolute paths
+// (/home/runner/work/repo/docs/guide.md).
+func matchesOverride(normalizedPath, overridePath string) bool {
+	overridePath = filepath.ToSlash(overridePath)
+	return strings.HasPrefix(normalizedPath, overridePath) ||
+		strings.Contains(normalizedPath, "/"+overridePath)
+}
+
+// ThresholdsForPath returns the appropriate thresholds for a given file path.
+func (c *Config) ThresholdsForPath(filePath string) Thresholds {
+	normalizedPath := normalizePath(filePath)
 
 	// Check overrides in order (first match wins)
 	for _, override := range c.Overrides {
-		overridePath := filepath.ToSlash(override.Path)
-		// Check if override path appears anywhere in the file path
-		// This handles both relative paths (docs/guide.md) and
-		// absolute paths (/home/runner/work/repo/docs/guide.md)
-		if strings.HasPrefix(normalizedPath, overridePath) || strings.Contains(normalizedPath, "/"+overridePath) {
+		if matchesOverride(normalizedPath, override.Path) {
 			// Merge with defaults - override only specified values
 			return mergeThresholds(c.Thresholds, override.Thresholds)
 		}
@@ -194,4 +209,44 @@ func mergeThresholds(base, override Thresholds) Thresholds {
 		result.MaxDashDensity = override.MaxDashDensity
 	}
 	return result
+}
+
+// IsExcluded returns true if the file path matches an exclude override.
+// Uses the same path matching logic as ThresholdsForPath() for consistency.
+func (c *Config) IsExcluded(filePath string) bool {
+	normalizedPath := normalizePath(filePath)
+
+	// Check overrides in order (first match wins)
+	for _, override := range c.Overrides {
+		if !override.Exclude {
+			continue // Only check exclude overrides
+		}
+
+		if matchesOverride(normalizedPath, override.Path) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// validatePathOverrides validates that exclude and custom thresholds are not both set.
+func validatePathOverrides(cfg *Config) error {
+	for i, override := range cfg.Overrides {
+		if override.Exclude && !isZeroThresholds(override.Thresholds) {
+			return fmt.Errorf(
+				"overrides[%d]: cannot specify both exclude:true and threshold values for path '%s'. "+
+					"Use exclude:true alone to skip checks, or remove exclude to apply custom thresholds",
+				i, override.Path,
+			)
+		}
+	}
+	return nil
+}
+
+// isZeroThresholds returns true if all threshold fields are zero (unspecified).
+func isZeroThresholds(t Thresholds) bool {
+	return t.MaxGrade == 0 && t.MaxARI == 0 && t.MaxFog == 0 &&
+		t.MinEase == 0 && t.MaxLines == 0 && t.MinWords == 0 &&
+		t.MinAdmonitions == 0 && t.MaxDashDensity == 0
 }

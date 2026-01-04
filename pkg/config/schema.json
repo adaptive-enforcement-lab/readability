@@ -122,6 +122,10 @@
               "README.md"
             ]
           },
+          "exclude": {
+            "type": "boolean",
+            "description": "Exclude matching files from threshold checks (analyzed but never fail)"
+          },
           "thresholds": {
             "properties": {
               "max_grade": {

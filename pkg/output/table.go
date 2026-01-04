@@ -72,22 +72,9 @@ func writeSummary(m mw, results []*analyzer.Result) {
 	m.println("---")
 	m.printf("Summary: %d files analyzed\n", len(results))
 
-	passed := 0
-	failed := 0
-	totalWords := 0
-	totalLines := 0
+	passed, failed, excluded, totalWords, totalLines := aggregateCounts(results)
 
-	for _, r := range results {
-		if r.Status == "pass" {
-			passed++
-		} else {
-			failed++
-		}
-		totalWords += r.Structural.Words
-		totalLines += r.Structural.Lines
-	}
-
-	m.printf("  Passed: %d | Failed: %d\n", passed, failed)
+	m.printf("  Passed: %d | Failed: %d | Excluded: %d\n", passed, failed, excluded)
 	m.printf("  Total: %d words, %d lines\n", totalWords, totalLines)
 }
 

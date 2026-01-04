@@ -756,6 +756,24 @@ func TestCountFailures(t *testing.T) {
 			minAdm:   1,
 			expected: failureStats{failed: 1, tooLong: 1, lowReadability: 1, missingAdmonitions: 1},
 		},
+		{
+			name: "excluded files don't count as failures",
+			results: []*analyzer.Result{
+				{
+					Status:      "excluded",
+					Structural:  analyzer.Structural{Lines: 500},
+					Readability: analyzer.Readability{FleschKincaidGrade: 18},
+					Admonitions: analyzer.Admonitions{Count: 0},
+				},
+				{
+					Status:      "pass",
+					Structural:  analyzer.Structural{Lines: 50},
+					Readability: analyzer.Readability{FleschKincaidGrade: 10},
+				},
+			},
+			minAdm:   1,
+			expected: failureStats{failed: 0}, // Excluded files don't count
+		},
 	}
 
 	for _, tt := range tests {

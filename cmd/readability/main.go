@@ -258,6 +258,10 @@ func countFailures(results []*analyzer.Result, cfg *config.Config) failureStats 
 	minAdm := cfg.Thresholds.MinAdmonitions
 
 	for _, r := range results {
+		// Excluded files are counted but never cause --check to fail
+		if r.Status == "excluded" {
+			continue
+		}
 		if r.Status != "fail" {
 			continue
 		}
