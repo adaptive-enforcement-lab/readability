@@ -3,6 +3,7 @@ package output
 import (
 	"fmt"
 	"io"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -23,21 +24,23 @@ func (m mw) printf(format string, a ...any) {
 	_, _ = fmt.Fprintf(m.w, format, a...)
 }
 
-// cleanPath strips relative path prefixes for cleaner display.
+// cleanPath normalizes a path for cleaner display.
+// Uses the same normalization as config.normalizePath for consistency.
 func cleanPath(path string) string {
+	// Normalize path separators to forward slashes
+	path = filepath.ToSlash(path)
 	// Strip leading ../ sequences
 	for strings.HasPrefix(path, "../") {
 		path = path[3:]
 	}
 	// Strip leading ./
-	path = strings.TrimPrefix(path, "./")
-	return path
+	return strings.TrimPrefix(path, "./")
 }
 
 // Markdown writes full results as a GitHub-flavored markdown report.
 func Markdown(w io.Writer, results []*analyzer.Result) {
 	m := mw{w}
-	passed, failed, totalWords, totalLines := aggregateCounts(results)
+	passed, failed, excluded, totalWords, totalLines := aggregateCounts(results)
 
 	// Summary table
 	m.println("| Metric | Value |")
@@ -45,6 +48,7 @@ func Markdown(w io.Writer, results []*analyzer.Result) {
 	m.printf("| Files | %d |\n", len(results))
 	m.printf("| Passed | %d |\n", passed)
 	m.printf("| Failed | %d |\n", failed)
+	m.printf("| Excluded | %d |\n", excluded)
 	m.printf("| Words | %d |\n", totalWords)
 	m.printf("| Lines | %d |\n", totalLines)
 	m.printf("| Reading time | %d min |\n", (totalWords+199)/200)
@@ -67,9 +71,13 @@ func Markdown(w io.Writer, results []*analyzer.Result) {
 	for _, r := range sorted {
 		status := "✅"
 		issues := ""
-		if r.Status == "fail" {
+		switch r.Status {
+		case "fail":
 			status = "❌"
 			issues = identifyIssues(r)
+		case "excluded":
+			status = "⊘"
+			issues = "Excluded"
 		}
 		readTime := readingTime(r.Structural.Words)
 		m.printf("| %s | %s | %d | %s | %.1f | %.1f | %.1f | %s |\n",
@@ -131,7 +139,7 @@ func identifyIssues(r *analyzer.Result) string {
 // Summary writes only an aggregate summary in markdown format.
 func Summary(w io.Writer, results []*analyzer.Result) {
 	m := mw{w}
-	passed, failed, totalWords, totalLines := aggregateCounts(results)
+	passed, failed, excluded, totalWords, totalLines := aggregateCounts(results)
 
 	// Overall status
 	if failed == 0 {
@@ -147,6 +155,7 @@ func Summary(w io.Writer, results []*analyzer.Result) {
 	m.printf("| Files | %d |\n", len(results))
 	m.printf("| Passed | %d |\n", passed)
 	m.printf("| Failed | %d |\n", failed)
+	m.printf("| Excluded | %d |\n", excluded)
 	m.printf("| Words | %d |\n", totalWords)
 	m.printf("| Lines | %d |\n", totalLines)
 	m.printf("| Reading time | %d min |\n", (totalWords+199)/200)
@@ -188,7 +197,7 @@ func Summary(w io.Writer, results []*analyzer.Result) {
 // This is the recommended format for CI integration.
 func Report(w io.Writer, results []*analyzer.Result) {
 	m := mw{w}
-	passed, failed, totalWords, totalLines := aggregateCounts(results)
+	passed, failed, excluded, totalWords, totalLines := aggregateCounts(results)
 
 	m.println("## Documentation Readability")
 	m.println()
@@ -207,6 +216,7 @@ func Report(w io.Writer, results []*analyzer.Result) {
 	m.printf("| Files | %d |\n", len(results))
 	m.printf("| Passed | %d |\n", passed)
 	m.printf("| Failed | %d |\n", failed)
+	m.printf("| Excluded | %d |\n", excluded)
 	m.printf("| Words | %d |\n", totalWords)
 	m.printf("| Lines | %d |\n", totalLines)
 	m.printf("| Reading time | ~%d min |\n", (totalWords+199)/200)
@@ -246,11 +256,14 @@ func Report(w io.Writer, results []*analyzer.Result) {
 	m.println("</details>")
 }
 
-func aggregateCounts(results []*analyzer.Result) (passed, failed, totalWords, totalLines int) {
+func aggregateCounts(results []*analyzer.Result) (passed, failed, excluded, totalWords, totalLines int) {
 	for _, r := range results {
-		if r.Status == "pass" {
+		switch r.Status {
+		case "pass":
 			passed++
-		} else {
+		case "excluded":
+			excluded++
+		default: // "fail" or other
 			failed++
 		}
 		totalWords += r.Structural.Words

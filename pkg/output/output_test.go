@@ -398,13 +398,16 @@ func TestAggregateCounts(t *testing.T) {
 		{Status: "fail", Structural: analyzer.Structural{Words: 150, Lines: 30}},
 	}
 
-	passed, failed, totalWords, totalLines := aggregateCounts(results)
+	passed, failed, excluded, totalWords, totalLines := aggregateCounts(results)
 
 	if passed != 2 {
 		t.Errorf("Passed = %d, want 2", passed)
 	}
 	if failed != 1 {
 		t.Errorf("Failed = %d, want 1", failed)
+	}
+	if excluded != 0 {
+		t.Errorf("Excluded = %d, want 0", excluded)
 	}
 	if totalWords != 450 {
 		t.Errorf("TotalWords = %d, want 450", totalWords)

@@ -103,7 +103,7 @@ func (a *Analyzer) Analyze(path string, content []byte) (*Result, error) {
 	}
 
 	result.Diagnostics = a.collectDiagnostics(result)
-	result.Status = a.determineStatus(result.Diagnostics)
+	result.Status = a.determineStatus(result)
 
 	return result, nil
 }
@@ -122,12 +122,6 @@ func (a *Analyzer) AnalyzeDirectory(dir string) ([]*Result, error) {
 		}
 
 		if !strings.HasSuffix(strings.ToLower(path), ".md") {
-			return nil
-		}
-
-		// Skip common files that shouldn't be analyzed
-		base := filepath.Base(path)
-		if base == "CHANGELOG.md" || base == "CONTRIBUTING.md" {
 			return nil
 		}
 
@@ -249,15 +243,22 @@ func (a *Analyzer) collectDiagnostics(r *Result) []Diagnostic {
 	return diagnostics
 }
 
-// determineStatus returns pass/fail based on diagnostics.
-func (a *Analyzer) determineStatus(diagnostics []Diagnostic) string {
-	for _, d := range diagnostics {
+// determineStatus returns pass/fail/excluded based on diagnostics and exclusion config.
+// Priority: excluded > fail > pass
+func (a *Analyzer) determineStatus(r *Result) string {
+	// Check if file is excluded (highest priority)
+	if a.Config != nil && a.Config.IsExcluded(r.File) {
+		return "excluded"
+	}
+
+	// Check diagnostics for errors
+	for _, d := range r.Diagnostics {
 		if d.Severity == SeverityError {
 			return "fail"
 		}
 	}
 	// Warnings also cause failure (to maintain backward compatibility)
-	for _, d := range diagnostics {
+	for _, d := range r.Diagnostics {
 		if d.Severity == SeverityWarning {
 			return "fail"
 		}

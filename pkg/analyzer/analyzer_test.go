@@ -266,7 +266,21 @@ func TestAnalyzeFile_NotFound(t *testing.T) {
 }
 
 func TestAnalyzeDirectory(t *testing.T) {
-	// Create temp directory with markdown files
+	tmpDir := setupTestDirectory(t)
+	cfg := setupTestConfig(t, tmpDir)
+
+	a := NewWithConfig(cfg)
+	results, err := a.AnalyzeDirectory(tmpDir)
+	if err != nil {
+		t.Fatalf("AnalyzeDirectory() error = %v", err)
+	}
+
+	verifyResultCount(t, results)
+	verifyExcludedFiles(t, results)
+}
+
+func setupTestDirectory(t *testing.T) string {
+	t.Helper()
 	tmpDir := t.TempDir()
 
 	files := map[string]string{
@@ -274,8 +288,8 @@ func TestAnalyzeDirectory(t *testing.T) {
 		"doc2.md":          "# Doc 2\n\nContent two.",
 		"subdir/doc3.md":   "# Doc 3\n\nContent three.",
 		"README.md":        "# README\n\nThis is readme.",
-		"CHANGELOG.md":     "# Changelog\n\nChanges here.",         // Should be skipped
-		"CONTRIBUTING.md":  "# Contributing\n\nHow to contribute.", // Should be skipped
+		"CHANGELOG.md":     "# Changelog\n\nChanges here.",         // Should be excluded
+		"CONTRIBUTING.md":  "# Contributing\n\nHow to contribute.", // Should be excluded
 		"not_markdown.txt": "This is not markdown.",
 	}
 
@@ -289,23 +303,63 @@ func TestAnalyzeDirectory(t *testing.T) {
 		}
 	}
 
-	a := New()
-	results, err := a.AnalyzeDirectory(tmpDir)
+	return tmpDir
+}
+
+func setupTestConfig(t *testing.T, tmpDir string) *config.Config {
+	t.Helper()
+	configContent := `thresholds:
+  max_grade: 16
+overrides:
+  - path: CHANGELOG.md
+    exclude: true
+  - path: CONTRIBUTING.md
+    exclude: true
+`
+	configPath := filepath.Join(tmpDir, ".readability.yml")
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	cfg, err := config.Load(configPath)
 	if err != nil {
-		t.Fatalf("AnalyzeDirectory() error = %v", err)
+		t.Fatalf("Failed to load config: %v", err)
+	}
+	return cfg
+}
+
+func verifyResultCount(t *testing.T, results []*Result) {
+	t.Helper()
+	// Should have doc1.md, doc2.md, subdir/doc3.md, README.md, CHANGELOG.md, CONTRIBUTING.md
+	// Should NOT have not_markdown.txt (not a .md file) or .readability.yml
+	if len(results) != 6 {
+		t.Errorf("Expected 6 results, got %d", len(results))
+		for _, r := range results {
+			t.Logf("  - %s (status: %s)", r.File, r.Status)
+		}
+	}
+}
+
+func verifyExcludedFiles(t *testing.T, results []*Result) {
+	t.Helper()
+	excludedFiles := map[string]bool{
+		"CHANGELOG.md":    false,
+		"CONTRIBUTING.md": false,
 	}
 
-	// Should have doc1.md, doc2.md, subdir/doc3.md, README.md
-	// Should NOT have CHANGELOG.md, CONTRIBUTING.md, not_markdown.txt
-	if len(results) != 4 {
-		t.Errorf("Expected 4 results, got %d", len(results))
-	}
-
-	// Verify CHANGELOG.md and CONTRIBUTING.md are excluded
 	for _, r := range results {
 		base := filepath.Base(r.File)
-		if base == "CHANGELOG.md" || base == "CONTRIBUTING.md" {
-			t.Errorf("Should not include %s", base)
+		if _, shouldBeExcluded := excludedFiles[base]; shouldBeExcluded {
+			excludedFiles[base] = true
+			if r.Status != "excluded" {
+				t.Errorf("%s status = %q, want %q", base, r.Status, "excluded")
+			}
+		}
+	}
+
+	for file, found := range excludedFiles {
+		if !found {
+			t.Errorf("%s not found in results", file)
 		}
 	}
 }
@@ -464,7 +518,11 @@ func TestDetermineStatus(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := a.determineStatus(tt.diagnostics)
+			result := &Result{
+				File:        "test.md",
+				Diagnostics: tt.diagnostics,
+			}
+			got := a.determineStatus(result)
 			if got != tt.want {
 				t.Errorf("determineStatus() = %q, want %q", got, tt.want)
 			}
