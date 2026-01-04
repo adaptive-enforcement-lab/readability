@@ -18,19 +18,10 @@ concurrency:
 permissions: {}
 
 jobs:
-  # Run CI first - release only proceeds if CI passes
-  ci:
-    name: CI
-    uses: ./.github/workflows/ci.yml
-    secrets: inherit
-    permissions:
-      contents: read
-      security-events: write
-
+  # Run release-please first to determine if release should be created
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
-    needs: ci
     permissions:
       contents: write
       pull-requests: write
@@ -63,10 +54,20 @@ jobs:
           echo "| Version | ${{ steps.release.outputs.version || '-' }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Tag | ${{ steps.release.outputs.tag_name || '-' }} |" >> "$GITHUB_STEP_SUMMARY"
 
+  # Run CI after release-please - build only proceeds if CI passes
+  ci:
+    name: CI
+    needs: release-please
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+    permissions:
+      contents: read
+      security-events: write
+
   build-binaries:
     name: Build Binaries
     runs-on: ubuntu-latest
-    needs: release-please
+    needs: [release-please, ci]
     permissions:
       contents: read
     if: needs.release-please.outputs.release_created == 'true'
@@ -321,7 +322,7 @@ jobs:
   publish-container:
     name: Publish Container
     runs-on: ubuntu-latest
-    needs: [release-please, build-binaries]
+    needs: [release-please, ci, build-binaries]
     if: needs.release-please.outputs.release_created == 'true'
     permissions:
       contents: read
