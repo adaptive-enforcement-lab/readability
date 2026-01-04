@@ -221,3 +221,127 @@ func TestDiagnostic_PathCleaning(t *testing.T) {
 		t.Errorf("Expected clean path 'docs/example.md', got %q", output)
 	}
 }
+
+func TestDiagnostic_SkipsExcludedFiles(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:   "docs/included.md",
+			Status: "fail",
+			Diagnostics: []analyzer.Diagnostic{
+				{Line: 1, Severity: analyzer.SeverityError, Rule: "test", Message: "included file error"},
+			},
+		},
+		{
+			File:   "docs/excluded.md",
+			Status: "excluded",
+			Diagnostics: []analyzer.Diagnostic{
+				{Line: 1, Severity: analyzer.SeverityError, Rule: "test", Message: "excluded file error"},
+				{Line: 2, Severity: analyzer.SeverityWarning, Rule: "test", Message: "excluded file warning"},
+			},
+		},
+		{
+			File:   "docs/another-included.md",
+			Status: "fail",
+			Diagnostics: []analyzer.Diagnostic{
+				{Line: 1, Severity: analyzer.SeverityWarning, Rule: "test", Message: "another included file warning"},
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	Diagnostic(&buf, results)
+
+	output := buf.String()
+	lines := strings.Split(strings.TrimSpace(output), "\n")
+
+	// Should only have 2 diagnostics from non-excluded files
+	if len(lines) != 2 {
+		t.Errorf("Expected 2 lines (excluded file diagnostics should be skipped), got %d: %q", len(lines), output)
+	}
+
+	// Verify excluded file diagnostics are not present
+	if strings.Contains(output, "excluded.md") {
+		t.Errorf("Excluded file diagnostics should not appear in output, got %q", output)
+	}
+
+	// Verify included file diagnostics are present
+	if !strings.Contains(output, "docs/included.md") {
+		t.Errorf("Expected included file diagnostics, got %q", output)
+	}
+	if !strings.Contains(output, "docs/another-included.md") {
+		t.Errorf("Expected another included file diagnostics, got %q", output)
+	}
+}
+
+func TestDiagnosticSummary_SkipsExcludedFiles(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:   "docs/included.md",
+			Status: "fail",
+			Diagnostics: []analyzer.Diagnostic{
+				{Severity: analyzer.SeverityError, Rule: "test", Message: "error 1"},
+				{Severity: analyzer.SeverityWarning, Rule: "test", Message: "warning 1"},
+			},
+		},
+		{
+			File:   "docs/excluded.md",
+			Status: "excluded",
+			Diagnostics: []analyzer.Diagnostic{
+				{Severity: analyzer.SeverityError, Rule: "test", Message: "excluded error 1"},
+				{Severity: analyzer.SeverityError, Rule: "test", Message: "excluded error 2"},
+				{Severity: analyzer.SeverityWarning, Rule: "test", Message: "excluded warning 1"},
+				{Severity: analyzer.SeverityInfo, Rule: "test", Message: "excluded info 1"},
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	DiagnosticSummary(&buf, results)
+
+	output := buf.String()
+
+	// Should only count diagnostics from non-excluded files (1 error + 1 warning = 2)
+	if !strings.Contains(output, "2 issue(s)") {
+		t.Errorf("Expected total count '2 issue(s)' (excluded files should not count), got %q", output)
+	}
+	if !strings.Contains(output, "1 error(s)") {
+		t.Errorf("Expected '1 error(s)' (excluded errors should not count), got %q", output)
+	}
+	if !strings.Contains(output, "1 warning(s)") {
+		t.Errorf("Expected '1 warning(s)' (excluded warnings should not count), got %q", output)
+	}
+
+	// Should not mention info (only in excluded file)
+	if strings.Contains(output, "info") {
+		t.Errorf("Expected no info count (only in excluded file), got %q", output)
+	}
+}
+
+func TestDiagnosticSummary_AllExcluded(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:   "docs/excluded1.md",
+			Status: "excluded",
+			Diagnostics: []analyzer.Diagnostic{
+				{Severity: analyzer.SeverityError, Rule: "test", Message: "error"},
+			},
+		},
+		{
+			File:   "docs/excluded2.md",
+			Status: "excluded",
+			Diagnostics: []analyzer.Diagnostic{
+				{Severity: analyzer.SeverityWarning, Rule: "test", Message: "warning"},
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	DiagnosticSummary(&buf, results)
+
+	output := buf.String()
+
+	// When all files are excluded, should show "No issues found"
+	if !strings.Contains(output, "No issues found") {
+		t.Errorf("Expected 'No issues found' when all files are excluded, got %q", output)
+	}
+}
