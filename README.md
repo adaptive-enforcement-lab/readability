@@ -98,6 +98,14 @@ thresholds:
   min_admonitions: 1  # Require at least one MkDocs admonition
 
 overrides:
+  # Exclude files from threshold checks (still analyzed, never fail)
+  - path: docs/includes/
+    exclude: true                 # Skip snippet files
+
+  - path: CHANGELOG.md
+    exclude: true                 # Changelogs often have extreme scores
+
+  # Custom thresholds for specific paths
   - path: docs/api/
     thresholds:
       max_grade: 14           # Allow more complexity for API docs
@@ -127,6 +135,32 @@ readability --validate-config
 pipx install check-jsonschema
 check-jsonschema --schemafile docs/schemas/config.json .readability.yml
 ```
+
+### Excluding Files
+
+The `exclude` field allows you to skip threshold checks for specific files while still analyzing them. Excluded files:
+
+- **Appear in output** with status "excluded"
+- **Never fail** `--check` mode (exit code 0)
+- **Include full metrics** (lines, words, readability scores)
+- **Count in summary** as "Excluded: N"
+
+**Use cases:**
+- Snippet/include files (abbreviations, glossaries)
+- Auto-generated content (changelogs, API references)
+- Files with intentionally extreme readability (legal text, specifications)
+
+**Example:**
+```yaml
+overrides:
+  - path: docs/includes/
+    exclude: true
+
+  - path: CHANGELOG.md
+    exclude: true
+```
+
+**Note:** You cannot use both `exclude: true` and custom `thresholds` in the same override. They are mutually exclusive.
 
 ## Action Inputs
 

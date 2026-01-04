@@ -126,6 +126,70 @@ overrides:
       max_grade: 8
 ```
 
+### Excluding Files from Checks
+
+Use `exclude: true` to skip checks for specific files. The tool still analyzes these files but they never fail.
+
+```yaml
+# yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
+---
+overrides:
+  # Exclude snippet files
+  - path: docs/includes/
+    exclude: true
+
+  # Exclude auto-generated files
+  - path: CHANGELOG.md
+    exclude: true
+
+  # Exclude legal text
+  - path: docs/legal/
+    exclude: true
+```
+
+**What happens when you exclude a file:**
+
+- Still analyzed (metrics are computed)
+- Shows status "excluded" in reports
+- Counts in summary as "Excluded: N"
+- Never fails `--check` mode (exit code always 0)
+
+**When to use exclude:**
+
+| File Type | Reason |
+|-----------|--------|
+| `docs/includes/` | Snippet files not meant to stand alone |
+| `CHANGELOG.md` | Auto-generated lists have extreme scores |
+| `docs/api/` | API reference too terse for formulas |
+| `docs/legal/` | Legal text is intentionally complex |
+
+!!! warning "Cannot Combine with Thresholds"
+    You cannot use both `exclude: true` and `thresholds` together. Pick one.
+
+    Valid options:
+
+    - Skip all checks with `exclude: true`
+    - Apply custom limits with `thresholds`
+
+    Example:
+
+    ```yaml
+    # ❌ Invalid
+    - path: docs/api/
+      exclude: true
+      thresholds:
+        max_grade: 20
+
+    # ✅ Valid
+    - path: docs/includes/
+      exclude: true
+
+    # ✅ Valid
+    - path: docs/api/
+      thresholds:
+        max_grade: 20
+    ```
+
 ### How Path Matching Works
 
 - Paths match from the start (prefix matching)
@@ -139,12 +203,16 @@ overrides:
 # yaml-language-server: $schema=https://readability.adaptive-enforcement-lab.com/latest/schemas/config.json
 ---
 overrides:
-  # Specific path first
+  # Specific exclusion first
+  - path: docs/api/internal/
+    exclude: true
+
+  # Specific path second
   - path: docs/api/advanced/
     thresholds:
       max_grade: 18
 
-  # General path second
+  # General path third
   - path: docs/api/
     thresholds:
       max_grade: 16
