@@ -3,9 +3,12 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"os"
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 
 // TestGetCompiledSchema_CorruptedJSON tests error handling for corrupted embedded schema
@@ -122,4 +125,142 @@ func TestFormatSchemaError_NonValidationError(t *testing.T) {
 	if !strings.Contains(err.Error(), "schema validation failed") {
 		t.Errorf("Expected 'schema validation failed' error, got: %v", err)
 	}
+}
+
+// TestInstanceLocationToYAMLPath tests YAML path conversion
+func TestInstanceLocationToYAMLPath(t *testing.T) {
+	tests := []struct {
+		name string
+		loc  []string
+		want string
+	}{
+		{"empty", []string{}, "(root)"},
+		{"single", []string{"thresholds"}, "thresholds"},
+		{"nested", []string{"overrides", "0", "thresholds", "max_grade"}, "overrides.0.thresholds.max_grade"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := instanceLocationToYAMLPath(tt.loc)
+			if got != tt.want {
+				t.Errorf("instanceLocationToYAMLPath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+// TestGetSuggestion tests all suggestion patterns
+func TestGetSuggestion(t *testing.T) {
+	tests := []struct {
+		errMsg string
+		want   string
+	}{
+		{"got string, want number", "Remove quotes around numeric values"},
+		{"got string, want integer", "Remove quotes around numeric values"},
+		{"additional properties not allowed", "Check for typos in field names - unknown properties are not allowed"},
+		{"missing property", "This field is required and cannot be omitted"},
+		{"missing properties", "This field is required and cannot be omitted"},
+		{"got array, want object", "This should be a YAML object with nested fields"},
+		{"got string, want array", "This should be a YAML array (list)"},
+		{"maximum: 100", "Value exceeds the allowed maximum"},
+		{"minimum: 0", "Value is below the allowed minimum"},
+		{"unknown error", ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.errMsg, func(t *testing.T) {
+			got := getSuggestion(tt.errMsg)
+			if got != tt.want {
+				t.Errorf("getSuggestion(%q) = %q, want %q", tt.errMsg, got, tt.want)
+			}
+		})
+	}
+}
+
+// TestValidateConfig tests the public ValidateConfig function
+func TestValidateConfig(t *testing.T) {
+	t.Run("valid config", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		configPath := tmpDir + "/valid.yml"
+		content := `thresholds:
+  max_grade: 16
+`
+		if err := writeTestFile(configPath, content); err != nil {
+			t.Fatal(err)
+		}
+
+		err := ValidateConfig(configPath)
+		if err != nil {
+			t.Errorf("ValidateConfig() unexpected error: %v", err)
+		}
+	})
+
+	t.Run("file not found", func(t *testing.T) {
+		err := ValidateConfig("/nonexistent/file.yml")
+		if err == nil {
+			t.Error("Expected error for non-existent file")
+		}
+	})
+
+	t.Run("invalid YAML", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		configPath := tmpDir + "/invalid.yml"
+		content := `{invalid yaml`
+		if err := writeTestFile(configPath, content); err != nil {
+			t.Fatal(err)
+		}
+
+		err := ValidateConfig(configPath)
+		if err == nil {
+			t.Error("Expected error for invalid YAML")
+		}
+	})
+
+	t.Run("invalid schema", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		configPath := tmpDir + "/schema-invalid.yml"
+		content := `thresholds:
+  max_grade: "not a number"
+`
+		if err := writeTestFile(configPath, content); err != nil {
+			t.Fatal(err)
+		}
+
+		err := ValidateConfig(configPath)
+		if err == nil {
+			t.Error("Expected schema validation error")
+		}
+	})
+}
+
+// TestFlattenValidationErrors tests nested error flattening
+func TestFlattenValidationErrors(t *testing.T) {
+	// Create nested validation errors
+	leaf1 := &jsonschema.ValidationError{
+		InstanceLocation: []string{"field1"},
+	}
+	leaf2 := &jsonschema.ValidationError{
+		InstanceLocation: []string{"field2"},
+	}
+	parent := &jsonschema.ValidationError{
+		InstanceLocation: []string{"root"},
+		Causes:           []*jsonschema.ValidationError{leaf1, leaf2},
+	}
+
+	result := flattenValidationErrors(parent)
+	if len(result) != 2 {
+		t.Errorf("Expected 2 flattened errors, got %d", len(result))
+	}
+
+	// Verify only leaf errors are returned (not parent)
+	for _, err := range result {
+		if err == parent {
+			t.Error("Parent error should not be in flattened results")
+		}
+	}
+}
+
+// Helper function to write test files
+func writeTestFile(path, content string) error {
+	return os.WriteFile(path, []byte(content), 0644)
 }
