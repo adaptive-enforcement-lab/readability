@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/adaptive-enforcement-lab/readability/compare/v3.0.0...v3.0.1) (2026-01-04)
+
+
+### Bug Fixes
+
+* skip excluded files in diagnostic output ([#223](https://github.com/adaptive-enforcement-lab/readability/issues/223)) ([2a9e324](https://github.com/adaptive-enforcement-lab/readability/commit/2a9e324ee01bd989b78805369070c98eeac41308))
+
 ## [3.0.0](https://github.com/adaptive-enforcement-lab/readability/compare/v2.0.0...v3.0.0) (2026-01-04)
 
 
