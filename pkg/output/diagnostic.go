@@ -22,6 +22,11 @@ func Diagnostic(w io.Writer, results []*analyzer.Result) {
 	})
 
 	for _, r := range sorted {
+		// Skip excluded files - they are analyzed but diagnostics are suppressed
+		if r.Status == "excluded" {
+			continue
+		}
+
 		path := cleanPath(r.File)
 		for _, d := range r.Diagnostics {
 			col := d.Column
@@ -46,6 +51,11 @@ func DiagnosticSummary(w io.Writer, results []*analyzer.Result) {
 
 	var errors, warnings, infos int
 	for _, r := range results {
+		// Skip excluded files - they don't contribute to diagnostic counts
+		if r.Status == "excluded" {
+			continue
+		}
+
 		for _, d := range r.Diagnostics {
 			switch d.Severity {
 			case analyzer.SeverityError:
