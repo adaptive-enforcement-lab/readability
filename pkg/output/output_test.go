@@ -205,6 +205,40 @@ func TestTable_MultipleSummary(t *testing.T) {
 	}
 }
 
+func TestTable_WithExcluded(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:   "doc1.md",
+			Status: "pass",
+			Structural: analyzer.Structural{
+				Lines: 50,
+				Words: 200,
+			},
+		},
+		{
+			File:   "doc2.md",
+			Status: "excluded",
+			Structural: analyzer.Structural{
+				Lines: 100,
+				Words: 400,
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	Table(&buf, results, false)
+
+	output := buf.String()
+
+	// Should show excluded count
+	if !strings.Contains(output, "Excluded: 1") {
+		t.Errorf("Summary should show excluded count")
+	}
+	if !strings.Contains(output, "Passed: 1") {
+		t.Errorf("Summary should show passed count")
+	}
+}
+
 func TestReadabilityLabel(t *testing.T) {
 	tests := []struct {
 		score float64
@@ -295,6 +329,55 @@ func TestMarkdown_Output(t *testing.T) {
 	}
 }
 
+func TestMarkdown_WithExcluded(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:   "doc1.md",
+			Status: "pass",
+			Structural: analyzer.Structural{
+				Lines: 50,
+				Words: 200,
+			},
+			Readability: analyzer.Readability{
+				FleschKincaidGrade: 8.5,
+				FleschReadingEase:  65.0,
+				ARI:                9.0,
+			},
+		},
+		{
+			File:   "doc2.md",
+			Status: "excluded",
+			Structural: analyzer.Structural{
+				Lines: 100,
+				Words: 400,
+			},
+			Readability: analyzer.Readability{
+				FleschKincaidGrade: 15.5,
+				FleschReadingEase:  35.0,
+				ARI:                16.0,
+			},
+		},
+	}
+
+	var buf bytes.Buffer
+	Markdown(&buf, results)
+
+	output := buf.String()
+
+	// Check summary includes excluded count
+	if !strings.Contains(output, "| Excluded | 1 |") {
+		t.Errorf("Expected '| Excluded | 1 |' in summary")
+	}
+	// Check excluded emoji
+	if !strings.Contains(output, "⊘") {
+		t.Errorf("Expected ⊘ for excluded file")
+	}
+	// Check excluded label in issues column
+	if !strings.Contains(output, "| ⊘ | doc2.md |") {
+		t.Errorf("Expected excluded file row with ⊘ emoji")
+	}
+}
+
 func TestSummary_AllPass(t *testing.T) {
 	results := []*analyzer.Result{
 		{
@@ -337,6 +420,34 @@ func TestSummary_WithFailures(t *testing.T) {
 	}
 	if !strings.Contains(output, "Failed Files") {
 		t.Errorf("Expected 'Failed Files' section")
+	}
+}
+
+func TestSummary_WithExcluded(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:        "good.md",
+			Status:      "pass",
+			Structural:  analyzer.Structural{Lines: 50, Words: 200},
+			Readability: analyzer.Readability{FleschReadingEase: 75.0},
+		},
+		{
+			File:        "excluded.md",
+			Status:      "excluded",
+			Structural:  analyzer.Structural{Lines: 100, Words: 400},
+			Readability: analyzer.Readability{FleschReadingEase: 25.0},
+		},
+	}
+
+	var buf bytes.Buffer
+	Summary(&buf, results)
+
+	output := buf.String()
+	if !strings.Contains(output, "All files pass") {
+		t.Errorf("Expected 'All files pass' when only excluded files don't pass")
+	}
+	if !strings.Contains(output, "| Excluded | 1 |") {
+		t.Errorf("Expected excluded count in summary")
 	}
 }
 
@@ -391,6 +502,34 @@ func TestReport_WithFailures(t *testing.T) {
 	}
 }
 
+func TestReport_WithExcluded(t *testing.T) {
+	results := []*analyzer.Result{
+		{
+			File:        "good.md",
+			Status:      "pass",
+			Structural:  analyzer.Structural{Lines: 50, Words: 200},
+			Readability: analyzer.Readability{FleschReadingEase: 65.0},
+		},
+		{
+			File:        "excluded.md",
+			Status:      "excluded",
+			Structural:  analyzer.Structural{Lines: 100, Words: 400},
+			Readability: analyzer.Readability{FleschReadingEase: 25.0},
+		},
+	}
+
+	var buf bytes.Buffer
+	Report(&buf, results)
+
+	output := buf.String()
+	if !strings.Contains(output, "All files pass") {
+		t.Errorf("Expected 'All files pass' when only excluded files present")
+	}
+	if !strings.Contains(output, "| Excluded | 1 |") {
+		t.Errorf("Expected excluded count in summary")
+	}
+}
+
 func TestAggregateCounts(t *testing.T) {
 	results := []*analyzer.Result{
 		{Status: "pass", Structural: analyzer.Structural{Words: 100, Lines: 20}},
@@ -408,6 +547,32 @@ func TestAggregateCounts(t *testing.T) {
 	}
 	if excluded != 0 {
 		t.Errorf("Excluded = %d, want 0", excluded)
+	}
+	if totalWords != 450 {
+		t.Errorf("TotalWords = %d, want 450", totalWords)
+	}
+	if totalLines != 90 {
+		t.Errorf("TotalLines = %d, want 90", totalLines)
+	}
+}
+
+func TestAggregateCounts_WithExcluded(t *testing.T) {
+	results := []*analyzer.Result{
+		{Status: "pass", Structural: analyzer.Structural{Words: 100, Lines: 20}},
+		{Status: "excluded", Structural: analyzer.Structural{Words: 200, Lines: 40}},
+		{Status: "fail", Structural: analyzer.Structural{Words: 150, Lines: 30}},
+	}
+
+	passed, failed, excluded, totalWords, totalLines := aggregateCounts(results)
+
+	if passed != 1 {
+		t.Errorf("Passed = %d, want 1", passed)
+	}
+	if failed != 1 {
+		t.Errorf("Failed = %d, want 1", failed)
+	}
+	if excluded != 1 {
+		t.Errorf("Excluded = %d, want 1", excluded)
 	}
 	if totalWords != 450 {
 		t.Errorf("TotalWords = %d, want 450", totalWords)
