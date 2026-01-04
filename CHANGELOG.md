@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.3...v2.0.0) (2026-01-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Removed hardcoded CHANGELOG.md and CONTRIBUTING.md skip logic. These files must now be explicitly excluded in .readability.yml or they will be analyzed and may fail threshold checks. Add the following to your config to preserve the old behavior:
+
+### Features
+
+* add exclude field to path overrides ([#216](https://github.com/adaptive-enforcement-lab/readability/issues/216)) ([#218](https://github.com/adaptive-enforcement-lab/readability/issues/218)) ([e913d3b](https://github.com/adaptive-enforcement-lab/readability/commit/e913d3beae7d880a8f5be0147ffc5fca84b0730b))
+
+
+### Code Refactoring
+
+* run release-please before CI in release workflow ([#219](https://github.com/adaptive-enforcement-lab/readability/issues/219)) ([7e64800](https://github.com/adaptive-enforcement-lab/readability/commit/7e64800019df79ad5700895a0c94181b1eb24ee2))
+
 ## [1.14.3](https://github.com/adaptive-enforcement-lab/readability/compare/v1.14.2...v1.14.3) (2026-01-03)
 
 
