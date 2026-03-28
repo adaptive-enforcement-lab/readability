@@ -6,6 +6,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/adaptive-enforcement-lab/readability.svg)](https://pkg.go.dev/github.com/adaptive-enforcement-lab/readability)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11610/badge)](https://www.bestpractices.dev/projects/11610)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/adaptive-enforcement-lab/readability/badge)](https://scorecard.dev/viewer/?uri=github.com/adaptive-enforcement-lab/readability)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadaptive-enforcement-lab%2Freadability.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fadaptive-enforcement-lab%2Freadability?ref=badge_shield)
 
 Documentation readability analyzer - GitHub Action and CLI tool for measuring content quality metrics.
 
@@ -202,3 +203,6 @@ overrides:
 ## License
 
 MIT
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fadaptive-enforcement-lab%2Freadability.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fadaptive-enforcement-lab%2Freadability?ref=badge_large)
