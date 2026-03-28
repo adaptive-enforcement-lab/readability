@@ -84,12 +84,12 @@ func formatSchemaError(err error) error {
 		yamlPath := instanceLocationToYAMLPath(e.InstanceLocation)
 		errMsg := e.Error()
 
-		buf.WriteString(fmt.Sprintf("  • %s\n", yamlPath))
-		buf.WriteString(fmt.Sprintf("    %s\n", errMsg))
+		fmt.Fprintf(&buf, "  • %s\n", yamlPath)
+		fmt.Fprintf(&buf, "    %s\n", errMsg)
 
 		// Add suggestion if possible
 		if suggestion := getSuggestion(errMsg); suggestion != "" {
-			buf.WriteString(fmt.Sprintf("    Suggestion: %s\n", suggestion))
+			fmt.Fprintf(&buf, "    Suggestion: %s\n", suggestion)
 		}
 		buf.WriteString("\n")
 	}
