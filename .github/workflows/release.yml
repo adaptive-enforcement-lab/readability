@@ -33,7 +33,7 @@ jobs:
       minor: ${{ steps.release.outputs.minor }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
@@ -86,13 +86,13 @@ jobs:
             goarch: amd64
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6
+      - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6
         with:
           go-version: "1.25"
 
@@ -129,7 +129,7 @@ jobs:
       hashes: ${{ steps.hash.outputs.hashes }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
@@ -235,15 +235,15 @@ jobs:
       (needs.release-please.outputs.release_created == 'true' || inputs.force_docs == true)
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: "3.14"
 
@@ -288,11 +288,11 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
 
@@ -336,11 +336,11 @@ jobs:
       image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Download pre-built binaries
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
@@ -359,7 +359,7 @@ jobs:
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
 
       - name: Log in to Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
