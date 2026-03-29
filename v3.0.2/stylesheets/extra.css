@@ -1,0 +1,21 @@
+/* Custom styles for Readability documentation */
+
+/* Mermaid dark mode compatibility */
+.md-typeset .mermaid {
+  text-align: center;
+}
+
+/* Cards grid for landing page */
+.md-typeset .grid.cards > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  padding: 0;
+}
+
+.md-typeset .grid.cards > ul > li {
+  list-style: none;
+  border: 1px solid var(--md-typeset-table-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
