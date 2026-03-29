@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.2](https://github.com/adaptive-enforcement-lab/readability/compare/v3.0.1...v3.0.2) (2026-03-28)
+
+
+### Maintenance
+
+* consolidate renovate dependency updates ([#239](https://github.com/adaptive-enforcement-lab/readability/issues/239)) ([71c59e4](https://github.com/adaptive-enforcement-lab/readability/commit/71c59e482c7a5e9845f91187943ed2d7f5996bdd))
+* **deps:** update aquasecurity/trivy-action digest to 57a97c7 ([#240](https://github.com/adaptive-enforcement-lab/readability/issues/240)) ([d2708a5](https://github.com/adaptive-enforcement-lab/readability/commit/d2708a561ea5456eb6e8bca0a6e21cd409ba6716))
+* **deps:** update codecov/codecov-action action to v6 ([#249](https://github.com/adaptive-enforcement-lab/readability/issues/249)) ([03d9e0f](https://github.com/adaptive-enforcement-lab/readability/commit/03d9e0fe0b4a6b7d8b59620aaf89a92bf16dec56))
+* **deps:** update codecov/codecov-action digest to 75cd116 ([#241](https://github.com/adaptive-enforcement-lab/readability/issues/241)) ([5105036](https://github.com/adaptive-enforcement-lab/readability/commit/5105036a35c5ded0e4e1f87033096baac4698b14))
+* **deps:** update dependency cairosvg to v2.9.0 ([#246](https://github.com/adaptive-enforcement-lab/readability/issues/246)) ([2243322](https://github.com/adaptive-enforcement-lab/readability/commit/22433222e1f8af7ea95a3f80f9cada3d5b56ce24))
+* **deps:** update dependency go to 1.26 ([#247](https://github.com/adaptive-enforcement-lab/readability/issues/247)) ([b32f8e8](https://github.com/adaptive-enforcement-lab/readability/commit/b32f8e83f9e6507d360b8283888f2739be4d38cb))
+* **deps:** update dependency mike to v2.1.4 ([#244](https://github.com/adaptive-enforcement-lab/readability/issues/244)) ([348ed57](https://github.com/adaptive-enforcement-lab/readability/commit/348ed574a7566e6ed9c9fede86de52031dcc2bde))
+* **deps:** update dependency mkdocs-material to v9.7.6 ([#245](https://github.com/adaptive-enforcement-lab/readability/issues/245)) ([2b48499](https://github.com/adaptive-enforcement-lab/readability/commit/2b484993599e9cff0929583c65bc067fbe386489))
+* **deps:** update docker/build-push-action action to v7 ([#250](https://github.com/adaptive-enforcement-lab/readability/issues/250)) ([8bb6689](https://github.com/adaptive-enforcement-lab/readability/commit/8bb6689e8da2cb391639ae9afdabb4077ca77327))
+* **deps:** update docker/login-action action to v4 ([#251](https://github.com/adaptive-enforcement-lab/readability/issues/251)) ([11da306](https://github.com/adaptive-enforcement-lab/readability/commit/11da306817743f1e91eff14d6aa3d849373fa33d))
+* **deps:** update docker/metadata-action action to v6 ([#252](https://github.com/adaptive-enforcement-lab/readability/issues/252)) ([7eaf5d0](https://github.com/adaptive-enforcement-lab/readability/commit/7eaf5d0357aad00a25fb839607439ac1b31b0f45))
+* **deps:** update docker/setup-buildx-action action to v4 ([#253](https://github.com/adaptive-enforcement-lab/readability/issues/253)) ([8db2869](https://github.com/adaptive-enforcement-lab/readability/commit/8db2869ab53f9de18a97b16ee41aa5ea76e0ab24))
+* **deps:** update docker/setup-qemu-action action to v4 ([#254](https://github.com/adaptive-enforcement-lab/readability/issues/254)) ([4923e07](https://github.com/adaptive-enforcement-lab/readability/commit/4923e07519a7ce19efd73188f879175b8b22b8e6))
+* **deps:** update github artifact actions ([#255](https://github.com/adaptive-enforcement-lab/readability/issues/255)) ([2e264f7](https://github.com/adaptive-enforcement-lab/readability/commit/2e264f768883fdff3b23cc22579c6e5f061d01d4))
+* **deps:** update sigstore/cosign-installer action to v4.1.1 ([#248](https://github.com/adaptive-enforcement-lab/readability/issues/248)) ([3385e03](https://github.com/adaptive-enforcement-lab/readability/commit/3385e03c90f0e8ed2dfd5a041e1a6abe97b99c3a))
+
 ## [3.0.1](https://github.com/adaptive-enforcement-lab/readability/compare/v3.0.0...v3.0.1) (2026-01-04)
 
 
