@@ -221,6 +221,24 @@ jobs:
       upload-assets: true
       upload-tag-name: ${{ needs.release-please.outputs.tag_name }}
 
+  # Generate SLSA Level 3 provenance attestation for the container image
+  # NOTE: Must use version tag (not SHA) for slsa-verifier compatibility
+  container-provenance:
+    name: Container SLSA Provenance
+    needs: [release-please, publish-container]
+    if: needs.release-please.outputs.release_created == 'true'
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.1.0
+    with:
+      image: ${{ needs.publish-container.outputs.image }}
+      digest: ${{ needs.publish-container.outputs.digest }}
+    secrets:
+      registry-username: ${{ github.actor }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+
   build-docs:
     name: Build Documentation
     runs-on: ubuntu-latest
@@ -387,7 +405,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          provenance: true
+          provenance: false
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
