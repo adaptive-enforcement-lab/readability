@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.0](https://github.com/adaptive-enforcement-lab/readability/compare/v3.0.2...v3.1.0) (2026-04-24)
+
+
+### Features
+
+* upgrade container image to SLSA Build L3 provenance ([#264](https://github.com/adaptive-enforcement-lab/readability/issues/264)) ([2ce5c32](https://github.com/adaptive-enforcement-lab/readability/commit/2ce5c3201ec8e0e00b11b6bb3387550f95cfaf9c))
+
+
+### Maintenance
+
+* consolidate renovate dependency updates ([#265](https://github.com/adaptive-enforcement-lab/readability/issues/265)) ([704624f](https://github.com/adaptive-enforcement-lab/readability/commit/704624fac919cd09d63df79aebdcc73dfa137097))
+* **deps:** update docker/login-action digest to 4907a6d ([#236](https://github.com/adaptive-enforcement-lab/readability/issues/236)) ([0e2aef9](https://github.com/adaptive-enforcement-lab/readability/commit/0e2aef9961a21cbf413058d77da93c6fe1c2c672))
+* **deps:** update trufflesecurity/trufflehog digest to 761be88 ([#229](https://github.com/adaptive-enforcement-lab/readability/issues/229)) ([2574002](https://github.com/adaptive-enforcement-lab/readability/commit/257400297b1e1853c3c6116da9b6807f4523fc67))
+
 ## [3.0.2](https://github.com/adaptive-enforcement-lab/readability/compare/v3.0.1...v3.0.2) (2026-03-28)
 
 
