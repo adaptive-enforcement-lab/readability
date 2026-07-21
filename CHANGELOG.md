@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.2](https://github.com/adaptive-enforcement-lab/readability/compare/v3.1.1...v3.1.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* **ci:** authenticate release-please with the CORE App token ([#295](https://github.com/adaptive-enforcement-lab/readability/issues/295)) ([63c19a1](https://github.com/adaptive-enforcement-lab/readability/commit/63c19a118048bdfd77200dc64b4d12e001488e63))
+
+
+### Maintenance
+
+* consolidate renovate dependency updates ([#293](https://github.com/adaptive-enforcement-lab/readability/issues/293)) ([d4ef2b4](https://github.com/adaptive-enforcement-lab/readability/commit/d4ef2b45300612b15550cb690b69b96e6e203339))
+
 ## [3.1.1](https://github.com/adaptive-enforcement-lab/readability/compare/v3.1.0...v3.1.1) (2026-07-21)
 
 
