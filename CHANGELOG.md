@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/adaptive-enforcement-lab/readability/compare/v3.1.0...v3.1.1) (2026-07-21)
+
+
+### Maintenance
+
+* consolidate renovate dependency updates ([#291](https://github.com/adaptive-enforcement-lab/readability/issues/291)) ([132e904](https://github.com/adaptive-enforcement-lab/readability/commit/132e904e680d727e07f34ae59c779cff3ebf37e2))
+
 ## [3.1.0](https://github.com/adaptive-enforcement-lab/readability/compare/v3.0.2...v3.1.0) (2026-04-24)
 
 
